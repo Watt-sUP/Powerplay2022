@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Turela {
 
     public DcMotor motortur;
-    private int[] positions = {coxitii nu stiu coaie};
+    private int positions[] = {100, 350, 500, 720};
 
     public Turela(HardwareMap hardwareMap) {
         motortur = hardwareMap.dcMotor.get(Config.turela);
@@ -21,7 +21,7 @@ public class Turela {
     public void setToPosition(int position) {
         motortur.setTargetPosition(positions[position]);
         motortur.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        if (position != 0) motortur.setPower(0.2);
+        if (position) motortur.setPower(0.2);
         else motortur.setPower(0.2);
     }
 

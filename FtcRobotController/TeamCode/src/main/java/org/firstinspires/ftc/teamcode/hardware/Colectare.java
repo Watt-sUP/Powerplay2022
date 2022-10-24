@@ -7,47 +7,19 @@ import org.firstinspires.ftc.robotcore.external.State;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Colectare {
-
-    public Servo servo;
-    private double departe = 0.99, aproape = 0.05;
-    private static double stransPos = 0.25, desfacutPos = 0.53, desfacutMorePos = 0.65;
-    private State state;
+    private static double stransPos = 0.25, desfacutPos = 0.5, desfacutMorePos = 0.65;
     private StateDeget stateDeget;
     public Servo deget;
 
-    private enum State {
-
-        Departe,
-        Aproape,
-    }
-
     private enum StateDeget {
-
         Desfacut,
-        Strans,
+        Strans
     }
 
     public Colectare(HardwareMap hardwareMap) {
-        servo = hardwareMap.servo.get(Config.sersus);
-        state = State.Aproape;
-        servo.setPosition(aproape);
         stateDeget = StateDeget.Desfacut;
         deget = hardwareMap.servo.get(Config.deget);
         deget.setPosition(desfacutPos);
-    }
-
-    public double getServoPosition() {
-        return servo.getPosition();
-    }
-
-    public void inchis() {
-        servo.setPosition(aproape);
-        state = State.Aproape;
-    }
-
-    public void deschis() {
-        servo.setPosition(departe);
-        state = State.Departe;
     }
 
     public void strange() {
@@ -62,22 +34,18 @@ public class Colectare {
 
     public void toggleDeget() {
         if(stateDeget == StateDeget.Desfacut) strange();
-        else desface();
+        else if (stateDeget != StateDeget.Desfacut) desface();
+    }
+
+    // Desfacut mai mult
+    public void desfaceMore() {
+        deget.setPosition(desfacutMorePos);
+        stateDeget = StateDeget.Desfacut;
     }
 
     public void toggleDegetMore() {
         if(stateDeget == StateDeget.Desfacut) strange();
-        else desfaceMore();
-    }
-
-    public void toggleCupa() {
-        if(state == State.Aproape) departe();
-        else inchis();
-    }
-
-    public void desfaceMore() {
-        deget.setPosition(desfacutMorePos);
-        stateDeget = StateDeget.Desfacut;
+        else if (stateDeget != StateDeget.Desfacut) desfaceMore();
     }
 
 
