@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.Range;
 
 
 import org.firstinspires.ftc.teamcode.gamepad.Button;
+import org.firstinspires.ftc.teamcode.gamepad.GamepadEx;
 import org.firstinspires.ftc.teamcode.hardware.Config;
 import org.firstinspires.ftc.teamcode.hardware.Mugurel;
 
@@ -24,6 +25,8 @@ public class lll extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Mugurel(hardwareMap);
+        GamepadEx l = new GamepadEx(gamepad1);
+        GamepadEx b = new GamepadEx(gamepad2);
 
         DcMotor frontLeftMotor = hardwareMap.dcMotor.get(Config.left_front);
         DcMotor backLeftMotor = hardwareMap.dcMotor.get(Config.left_back);
@@ -79,39 +82,38 @@ public class lll extends LinearOpMode {
             backRightMotor.setPower(Range.clip(backRightPower, -powerLimit, powerLimit));
 
 
-            // robot.deget(gamepad2.pula_mea);
-            robot.glisiera(gamepad2.dpad_up, gamepad2.dpad_down, gamepad2.b, gamepad2.right_bumper, gamepad2.left_bumper);
-            robot.turela(gamepad2.dpad_right, gamepad2.dpad_left, gamepad2.a, gamepad2.x, gamepad2.y);
+            // robot.deget(gamepad2.);
+            glisiera(l.dpad_up, l.dpad_down, l.b, l.right_bumper, l.left_bumper);
+            turela(b.dpad_right, b.dpad_left, b.a, b.x, b.y);
 
             idle();
         }
         robot.glisiera.motor.setPower(0);
-        robot.turela.motor.setPower(0);
+        robot.turela.motortur.setPower(0);
     }
 
-   private void deget(Button deget) {
+
+    private void deget(Button deget) {
        if (deget.pressed())
            robot.deget.toggleDeget();
     }
 
-    private void turela(Button pos_up, Button pos_down, Button b, Button addB, Button subB) {
+    private void turela(Button pos_up, Button pos_down, Button b, Button addA, Button subA) {
         if(pos_up.pressed()) {
-            pos_turela++;
-            if(pos_turela > 4)
-                pos_turela = 4;
+            pos_turela=pos_turela + 1;
+            if(pos_turela > 4) pos_turela = 4;
             robot.turela.setToPosition(pos_turela);
         }
 
         if(pos_down.pressed()) {
-            pos_turela--;
-            if(pos_turela < 0)
-                pos_turela = 0;
+            pos_turela=pos_turela - 1;
+            if(pos_turela < 0) pos_turela = 0;
             robot.turela.setToPosition(pos_turela);
         }
 
-        if(addB.pressed())
+        if(addA.pressed())
             robot.turela.modifyPosition(200);
-        if(subB.pressed())
+        if(subA.pressed())
             robot.turela.modifyPosition(-200);
     }
 
@@ -136,8 +138,8 @@ public class lll extends LinearOpMode {
             robot.glisiera.modifyPosition(-200);
     }
 
-    private void deget(Button cupa) {
-        if (cupa.pressed())
-            robot.deget.toggleCupa();
-    }
+   // private void deget(Button cupa) {
+    //    if (cupa.pressed())
+    //        robot.deget.toggleCupa();
+   // }
 }
