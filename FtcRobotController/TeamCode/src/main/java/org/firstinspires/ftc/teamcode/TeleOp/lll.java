@@ -38,9 +38,11 @@ public class lll extends LinearOpMode {
 
         waitForStart();
         while (opModeIsActive()) {
+            l.update();
+            b.update();
 
-            double acceleration = gamepad1.left_stick_y;
-            double strafe = gamepad1.left_stick_x * -1.1;
+            double acceleration = -gamepad1.left_stick_y;
+            double strafe = gamepad1.left_stick_x * 1.1;
             double rotation = gamepad1.right_stick_x;
 
             double powerLimit = 1.0;
@@ -54,7 +56,8 @@ public class lll extends LinearOpMode {
             if (gamepad1.y && !faceIsHeld) {
                 faceIsHeld = true;
                 faceChanged = !faceChanged;
-            } else if (!gamepad1.y) faceIsHeld = false;
+            }
+            else if (!gamepad1.y) faceIsHeld = false;
 
             if (!faceChanged) {
                 frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -63,7 +66,8 @@ public class lll extends LinearOpMode {
                 backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
                 rotation = rotation * (-1);
-            } else {
+            }
+            else {
                 frontRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
                 backRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
                 frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -81,17 +85,15 @@ public class lll extends LinearOpMode {
             frontRightMotor.setPower(Range.clip(frontRightPower, -powerLimit, powerLimit));
             backRightMotor.setPower(Range.clip(backRightPower, -powerLimit, powerLimit));
 
-
-            // robot.deget(gamepad2.);
-            glisiera(l.dpad_up, l.dpad_down, l.b, l.right_bumper, l.left_bumper);
-            turela(b.dpad_right, b.dpad_left, b.a, b.x, b.y);
+            deget(l.b);
+            glisiera(l.dpad_up, l.dpad_down, b.right_bumper, l.right_bumper, l.left_bumper);
+            turela(l.dpad_right, l.dpad_left, b.a, b.x, b.y);
 
             idle();
         }
         robot.glisiera.motor.setPower(0);
         robot.turela.motortur.setPower(0);
     }
-
 
     private void deget(Button deget) {
        if (deget.pressed())
@@ -138,8 +140,4 @@ public class lll extends LinearOpMode {
             robot.glisiera.modifyPosition(-200);
     }
 
-   // private void deget(Button cupa) {
-    //    if (cupa.pressed())
-    //        robot.deget.toggleCupa();
-   // }
 }
