@@ -41,17 +41,17 @@ public class lll extends LinearOpMode {
             l.update();
             b.update();
 
-            double acceleration = -gamepad1.left_stick_y;
+            double acceleration = gamepad1.left_stick_y;
             double strafe = gamepad1.left_stick_x * 1.1;
-            double rotation = gamepad1.right_stick_x;
+            double rotation = gamepad1.right_stick_x * -1;
 
             double powerLimit = 1.0;
             if (gamepad1.left_trigger >= 0.3)
                 powerLimit = 0.4;
             else if (gamepad1.right_trigger >= 0.3)
-                powerLimit = 0.3;
+                powerLimit = 0.175;
             else
-                powerLimit = 1.0;
+                powerLimit = 0.8;
 
             if (gamepad1.y && !faceIsHeld) {
                 faceIsHeld = true;
@@ -85,9 +85,9 @@ public class lll extends LinearOpMode {
             frontRightMotor.setPower(Range.clip(frontRightPower, -powerLimit, powerLimit));
             backRightMotor.setPower(Range.clip(backRightPower, -powerLimit, powerLimit));
 
-            deget(l.b);
-            glisiera(l.dpad_up, l.dpad_down, b.right_bumper, l.right_bumper, l.left_bumper);
-            turela(l.dpad_right, l.dpad_left, b.a, b.x, b.y);
+            deget(b.a);
+            glisiera(b.y, b.x, l.right_bumper, b.right_bumper, b.left_bumper);
+            turela(b.dpad_up, b.dpad_down, l.dpad_right, b.dpad_right, b.dpad_left);
 
             idle();
         }
@@ -95,35 +95,43 @@ public class lll extends LinearOpMode {
         robot.turela.motortur.setPower(0);
     }
 
-    private void deget(Button deget) {
-       if (deget.pressed())
+   private void deget(Button y) {
+      if (y.pressed())
            robot.deget.toggleDeget();
-    }
+  }
 
     private void turela(Button pos_up, Button pos_down, Button b, Button addA, Button subA) {
-        if(pos_up.pressed()) {
-            pos_turela=pos_turela + 1;
-            if(pos_turela > 4) pos_turela = 4;
-            robot.turela.setToPosition(pos_turela);
-        }
+        //if (pos_up.pressed()) {
+           // pos_turela = pos_turela + 1;
+          //  if (pos_turela > 4) pos_turela = 4;
+        //    robot.turela.setToPosition(pos_turela);
+      //  }
 
-        if(pos_down.pressed()) {
-            pos_turela=pos_turela - 1;
-            if(pos_turela < 0) pos_turela = 0;
-            robot.turela.setToPosition(pos_turela);
-        }
-
+        //  if(pos_down.pressed()) {
+        //    pos_turela=pos_turela - 1;
+        //  if(pos_turela < 0) pos_turela = 0;
+        //robot.turela.setToPosition(pos_turela);
+    //}
+//pos_up=dpad_up pos_down=dpad_down addA=dpad_right subA=dpad_left
         if(addA.pressed())
-            robot.turela.modifyPosition(200);
+        {pos_turela= 1;
+          robot.turela.setToPosition(pos_turela);}
         if(subA.pressed())
-            robot.turela.modifyPosition(-200);
+        { pos_turela = 3;
+          robot.turela.setToPosition(pos_turela);}
+        if(pos_down.pressed())
+        {pos_turela = 2;
+            robot.turela.setToPosition(pos_turela);}
+        if(pos_up.pressed())
+        {pos_turela = 4;
+            robot.turela.setToPosition(pos_turela);}
     }
 
     private void glisiera(Button pos_up, Button pos_down, Button b, Button addB, Button subB) {
         if(pos_up.pressed()) {
             pos_glisiera++;
-            if(pos_glisiera > 4)
-                pos_glisiera = 4;
+            if(pos_glisiera > 5)
+                pos_glisiera = 5;
             robot.glisiera.setToPosition(pos_glisiera);
         }
 
@@ -135,9 +143,11 @@ public class lll extends LinearOpMode {
         }
 
         if(addB.pressed())
-            robot.glisiera.modifyPosition(200);
+        {   pos_glisiera = 5;
+        robot.glisiera.setToPosition(pos_glisiera);}
         if(subB.pressed())
-            robot.glisiera.modifyPosition(-200);
+        {   pos_glisiera = 0;
+            robot.glisiera.setToPosition(pos_glisiera);}
     }
 
 }

@@ -13,6 +13,7 @@ public class Mugurel {
     public Mugurel(HardwareMap hm) {
         glisiera = new Glisiere(hm);
         turela = new Turela(hm);
+        deget = new Colectare(hm);
       //  wheels = new DeadWheels(hm);
     }
 

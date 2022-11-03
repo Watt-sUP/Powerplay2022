@@ -7,7 +7,7 @@ import org.firstinspires.ftc.robotcore.external.State;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Colectare {
-    private static double stransPos = -0.2, desfacutPos = 0.2, desfacutMorePos = 0.65;
+    private static double stransPos = 0, desfacutPos = 0.05, desfacutMorePos = 0.65;
     private StateDeget stateDeget;
     public Servo deget;
 

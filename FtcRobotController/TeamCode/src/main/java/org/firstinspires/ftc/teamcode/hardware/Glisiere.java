@@ -10,7 +10,7 @@ public class Glisiere {
 
     public DcMotor motor;
     public DcMotor motor2;
-    private int[] positions = {0, 500, 1000, 2000, 3000};
+    private int[] positions = {0, 250, 500, 1360, 2240, 3020};
 
     public Glisiere(HardwareMap hardwareMap) {
 
@@ -30,8 +30,8 @@ public class Glisiere {
     public void setToPosition(int position) {
         motor.setTargetPosition(positions[position]);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        if(position != 0) motor.setPower(0.7);
-        else motor.setPower(0.7);
+        if(position != 0) motor.setPower(1);
+        else motor.setPower(1);
 
         //motor2.setTargetPosition(positions[position]);
        /// motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -42,7 +42,7 @@ public class Glisiere {
     public void setToTicks(int ticks) {
         motor.setTargetPosition(ticks);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor.setPower(0.7);
+        motor.setPower(1);
 
         //motor2.setTargetPosition(ticks);
         //motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
