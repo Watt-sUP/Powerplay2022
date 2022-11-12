@@ -56,8 +56,7 @@ public class lll extends LinearOpMode {
             if (gamepad1.y && !faceIsHeld) {
                 faceIsHeld = true;
                 faceChanged = !faceChanged;
-            }
-            else if (!gamepad1.y) faceIsHeld = false;
+            } else if (!gamepad1.y) faceIsHeld = false;
 
             if (!faceChanged) {
                 frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -66,8 +65,7 @@ public class lll extends LinearOpMode {
                 backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
                 rotation = rotation * (-1);
-            }
-            else {
+            } else {
                 frontRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
                 backRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
                 frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -95,59 +93,65 @@ public class lll extends LinearOpMode {
         robot.turela.motortur.setPower(0);
     }
 
-   private void deget(Button y) {
-      if (y.pressed())
-           robot.deget.toggleDeget();
-  }
+    private void deget(Button y) {
+        if (y.pressed())
+            robot.deget.toggleDeget();
+    }
 
     private void turela(Button pos_up, Button pos_down, Button b, Button addA, Button subA) {
         //if (pos_up.pressed()) {
-           // pos_turela = pos_turela + 1;
-          //  if (pos_turela > 4) pos_turela = 4;
+        // pos_turela = pos_turela + 1;
+        //  if (pos_turela > 4) pos_turela = 4;
         //    robot.turela.setToPosition(pos_turela);
-      //  }
+        //  }
 
         //  if(pos_down.pressed()) {
         //    pos_turela=pos_turela - 1;
         //  if(pos_turela < 0) pos_turela = 0;
         //robot.turela.setToPosition(pos_turela);
-    //}
-//pos_up=dpad_up pos_down=dpad_down addA=dpad_right subA=dpad_left
-        if(addA.pressed())
-        {pos_turela= 1;
-          robot.turela.setToPosition(pos_turela);}
-        if(subA.pressed())
-        { pos_turela = 3;
-          robot.turela.setToPosition(pos_turela);}
-        if(pos_down.pressed())
-        {pos_turela = 2;
-            robot.turela.setToPosition(pos_turela);}
-        if(pos_up.pressed())
-        {pos_turela = 4;
-            robot.turela.setToPosition(pos_turela);}
+        //}
+        //pos_up=dpad_up pos_down=dpad_down addA=dpad_right subA=dpad_left
+        if (addA.pressed()) {
+            pos_turela = 1;
+            robot.turela.setToPosition(pos_turela);
+        }
+        if (subA.pressed()) {
+            pos_turela = 3;
+            robot.turela.setToPosition(pos_turela);
+        }
+        if (pos_down.pressed()) {
+            pos_turela = 2;
+            robot.turela.setToPosition(pos_turela);
+        }
+        if (pos_up.pressed()) {
+            pos_turela = 4;
+            robot.turela.setToPosition(pos_turela);
+        }
     }
 
     private void glisiera(Button pos_up, Button pos_down, Button b, Button addB, Button subB) {
-        if(pos_up.pressed()) {
+        if (pos_up.pressed()) {
             pos_glisiera++;
-            if(pos_glisiera > 5)
+            if (pos_glisiera > 5)
                 pos_glisiera = 5;
             robot.glisiera.setToPosition(pos_glisiera);
         }
 
-        if(pos_down.pressed()) {
+        if (pos_down.pressed()) {
             pos_glisiera--;
-            if(pos_glisiera < 0)
+            if (pos_glisiera < 0)
                 pos_glisiera = 0;
             robot.glisiera.setToPosition(pos_glisiera);
         }
 
-        if(addB.pressed())
-        {   pos_glisiera = 5;
-        robot.glisiera.setToPosition(pos_glisiera);}
-        if(subB.pressed())
-        {   pos_glisiera = 0;
-            robot.glisiera.setToPosition(pos_glisiera);}
+        if (addB.pressed()) {
+            pos_glisiera = 5;
+            robot.glisiera.setToPosition(pos_glisiera);
+        }
+        if (subB.pressed()) {
+            pos_glisiera = 0;
+            robot.glisiera.setToPosition(pos_glisiera);
+        }
     }
 
 }

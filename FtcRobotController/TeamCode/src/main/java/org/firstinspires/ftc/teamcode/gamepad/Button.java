@@ -7,11 +7,12 @@ public class Button {
     private boolean isPressed = false;
     private boolean pending = false;
 
-    Button() { }
+    Button() {
+    }
 
     public void update(boolean value) {
         raw = value;
-        if(value) {
+        if (value) {
             if (!isPressed) {
                 toggle = !toggle;
                 isPressed = true;

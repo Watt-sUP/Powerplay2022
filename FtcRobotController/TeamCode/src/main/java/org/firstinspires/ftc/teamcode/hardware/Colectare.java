@@ -33,7 +33,7 @@ public class Colectare {
     }
 
     public void toggleDeget() {
-        if(stateDeget == StateDeget.Desfacut) strange();
+        if (stateDeget == StateDeget.Desfacut) strange();
         else if (stateDeget != StateDeget.Desfacut) desface();
     }
 
@@ -44,7 +44,7 @@ public class Colectare {
     }
 
     public void toggleDegetMore() {
-        if(stateDeget == StateDeget.Desfacut) strange();
+        if (stateDeget == StateDeget.Desfacut) strange();
         else if (stateDeget != StateDeget.Desfacut) desfaceMore();
     }
 

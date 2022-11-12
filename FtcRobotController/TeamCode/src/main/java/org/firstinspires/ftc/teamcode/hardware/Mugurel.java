@@ -14,7 +14,7 @@ public class Mugurel {
         glisiera = new Glisiere(hm);
         turela = new Turela(hm);
         deget = new Colectare(hm);
-      //  wheels = new DeadWheels(hm);
+        //  wheels = new DeadWheels(hm);
     }
 
 
