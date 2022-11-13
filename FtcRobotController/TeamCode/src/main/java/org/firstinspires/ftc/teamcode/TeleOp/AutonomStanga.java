@@ -16,25 +16,30 @@ public class AutonomStanga extends LinearOpMode{
     private Mugurel robot;
     private int pos_glisiera = 0;
     private int pos_turela = 0;
-
+    private DcMotor frontLeftMotor;
 
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Mugurel(hardwareMap);
-        DcMotor frontLeftMotor = hardwareMap.dcMotor.get(Config.left_front);
+         frontLeftMotor = hardwareMap.dcMotor.get(Config.left_front);
         DcMotor backLeftMotor = hardwareMap.dcMotor.get(Config.left_back);
         DcMotor frontRightMotor = hardwareMap.dcMotor.get(Config.right_front);
         DcMotor backRightMotor = hardwareMap.dcMotor.get(Config.right_back);
+
+        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeftMotor.setTargetPosition(0);
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
 
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         waitForStart();
 
-        frontRightMotor.setPower(0.3);
-        frontLeftMotor.setPower(0.3);
-        backLeftMotor.setPower(0.3);
-        backRightMotor.setPower(0.3);
+        frontRightMotor.setPower(0.3); //frontRightMotor.setTargetPosition();
+        frontLeftMotor.setPower(0.3);//frontLeftMotor.setTargetPosition();
+        backLeftMotor.setPower(0.3);//backLeftMotor.setTargetPosition();
+        backRightMotor.setPower(0.3);//backRightMotor.setTargetPosition();
         sleep(3000);
 
         pos_glisiera = 5;
