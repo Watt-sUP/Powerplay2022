@@ -69,7 +69,7 @@ public class AutonomDreapta extends LinearOpMode {
         robot.glisiera.setToPosition(pos_glisiera);
         sleep(100);
 
-        pos_turela = 1;
+        pos_turela = 3;
         robot.turela.setToPosition(pos_turela);
         sleep(100);
 
@@ -109,7 +109,7 @@ public class AutonomDreapta extends LinearOpMode {
         backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         sleep(100);
 
-        pos_turela = 3;
+        pos_turela = 1;
         robot.turela.setToPosition(pos_turela);
         sleep(100);
 
@@ -124,7 +124,7 @@ public class AutonomDreapta extends LinearOpMode {
         robot.glisiera.setToPosition(pos_glisiera);
         sleep(100);
 
-        pos_turela = 1;
+        pos_turela = 3;
         robot.turela.setToPosition(pos_turela);
         sleep(100);
 
