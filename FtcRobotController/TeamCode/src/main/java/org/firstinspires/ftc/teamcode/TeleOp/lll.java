@@ -46,12 +46,12 @@ public class lll extends LinearOpMode {
             double rotation = gamepad1.right_stick_x * -1;
 
             double powerLimit = 1.0;
-            if (gamepad1.left_trigger >= 0.3)
+            if (gamepad1.right_trigger >= 0.3)
+                powerLimit = 0.2;
+            else if (gamepad1.right_bumper)
                 powerLimit = 0.4;
-            else if (gamepad1.right_trigger >= 0.3)
-                powerLimit = 0.175;
             else
-                powerLimit = 0.8;
+                powerLimit = 1.0;
 
             if (gamepad1.y && !faceIsHeld) {
                 faceIsHeld = true;
@@ -84,7 +84,7 @@ public class lll extends LinearOpMode {
             backRightMotor.setPower(Range.clip(backRightPower, -powerLimit, powerLimit));
 
             deget(b.a);
-            glisiera(b.y, b.x, l.right_bumper, b.right_bumper, b.left_bumper);
+            glisiera(b.y, b.x, b.b, b.right_bumper, b.left_bumper);
             turela(b.dpad_up, b.dpad_down, l.dpad_right, b.dpad_right, b.dpad_left);
 
             idle();
@@ -135,6 +135,9 @@ public class lll extends LinearOpMode {
             if (pos_glisiera > 5)
                 pos_glisiera = 5;
             robot.glisiera.setToPosition(pos_glisiera);
+        }
+        if (b.pressed()) {
+            robot.glisiera.modifyPosition(- 100);
         }
 
         if (pos_down.pressed()) {

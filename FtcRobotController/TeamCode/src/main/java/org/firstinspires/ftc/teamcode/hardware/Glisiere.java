@@ -20,7 +20,8 @@ public class Glisiere {
         motor.setTargetPosition(0);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        motor2 = hardwareMap.dcMotor.get(Config.glisiera);
+
+        motor2 = hardwareMap.dcMotor.get(Config.glisiera1);
         motor2.setDirection(DcMotorSimple.Direction.REVERSE);
         motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor2.setTargetPosition(0);
@@ -36,7 +37,7 @@ public class Glisiere {
         motor2.setTargetPosition(positions[position]);
         motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         if(position != 0) motor2.setPower(1);
-         else motor2.setPower(1);
+        else motor2.setPower(1);
     }
 
     public void setToTicks(int ticks) {
@@ -61,8 +62,6 @@ public class Glisiere {
 
     public double getPosition() {
         return motor.getCurrentPosition();
-
-        // return motor2.getCurrentPosition();
     }
 
     public int getTicks() {

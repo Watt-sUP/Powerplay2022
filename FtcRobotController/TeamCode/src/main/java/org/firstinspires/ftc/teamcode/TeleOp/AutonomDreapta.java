@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.hardware.Config;
 import org.firstinspires.ftc.teamcode.hardware.Mugurel;
-
+@Disabled
 @Autonomous(name = "Autonom Dreapta", group = "auto")
 public class AutonomDreapta extends LinearOpMode {
     private boolean deget = true;
@@ -67,22 +68,22 @@ public class AutonomDreapta extends LinearOpMode {
 
         pos_glisiera = 5;
         robot.glisiera.setToPosition(pos_glisiera);
-        sleep(100);
+        sleep(1000);
 
         pos_turela = 3;
         robot.turela.setToPosition(pos_turela);
-        sleep(100);
+        sleep(1000);
 
         robot.deget.toggleDeget();
         sleep(100);
 
-        frontRightMotor.setTargetPosition(-1000);
+        frontRightMotor.setTargetPosition(-300);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontLeftMotor.setTargetPosition(-1000);
+        frontLeftMotor.setTargetPosition(-300);
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setTargetPosition(-1000);
+        backLeftMotor.setTargetPosition(-300);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setTargetPosition(-1000);
+        backRightMotor.setTargetPosition(-300);
         backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         sleep(1000);
 
@@ -93,13 +94,13 @@ public class AutonomDreapta extends LinearOpMode {
         sleep(100);
 
 
-        frontRightMotor.setTargetPosition(-1000);
+        frontRightMotor.setTargetPosition(-400);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontLeftMotor.setTargetPosition(1000);
+        frontLeftMotor.setTargetPosition(400);
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setTargetPosition(-1000);
+        backLeftMotor.setTargetPosition(-400);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setTargetPosition(1000);
+        backRightMotor.setTargetPosition(400);
         backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         sleep(3000);
 
@@ -111,30 +112,30 @@ public class AutonomDreapta extends LinearOpMode {
 
         pos_turela = 1;
         robot.turela.setToPosition(pos_turela);
-        sleep(100);
+        sleep(500);
 
         pos_glisiera = 3;
         robot.glisiera.setToPosition(pos_glisiera);
-        sleep(100);
+        sleep(500);
 
         robot.deget.toggleDeget();
-        sleep(100);
+        sleep(500);
 
         pos_glisiera = 5;
         robot.glisiera.setToPosition(pos_glisiera);
-        sleep(100);
+        sleep(500);
 
         pos_turela = 3;
         robot.turela.setToPosition(pos_turela);
-        sleep(100);
+        sleep(500);
 
-        frontRightMotor.setTargetPosition(1000);
+        frontRightMotor.setTargetPosition(400);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontLeftMotor.setTargetPosition(-1000);
+        frontLeftMotor.setTargetPosition(-400);
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setTargetPosition(1000);
+        backLeftMotor.setTargetPosition(400);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setTargetPosition(-1000);
+        backRightMotor.setTargetPosition(-400);
         backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         sleep(3000);
 
@@ -144,13 +145,13 @@ public class AutonomDreapta extends LinearOpMode {
         backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         sleep(100);
 
-        frontRightMotor.setTargetPosition(1000);
+        frontRightMotor.setTargetPosition(300);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontLeftMotor.setTargetPosition(1000);
+        frontLeftMotor.setTargetPosition(300);
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setTargetPosition(1000);
+        backLeftMotor.setTargetPosition(300);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setTargetPosition(1000);
+        backRightMotor.setTargetPosition(300);
         backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         sleep(3000);
 
