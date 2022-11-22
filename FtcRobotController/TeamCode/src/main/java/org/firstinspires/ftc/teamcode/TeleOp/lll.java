@@ -1,4 +1,5 @@
-package org.firstinspires.ftc.teamcode.teleOp;
+package org.firstinspires.ftc.teamcode.TeleOp;
+
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -19,6 +20,7 @@ public class lll extends LinearOpMode {
     private boolean faceChanged = false, faceIsHeld = false;
     private boolean deget = true;
     private Mugurel robot;
+    private int offset, max_offset;
     private int pos_glisiera = 0;
     private int pos_turela = 0;
 
@@ -40,6 +42,9 @@ public class lll extends LinearOpMode {
         while (opModeIsActive()) {
             l.update();
             b.update();
+            offset = robot.glisiera.getOffset();
+            if (max_offset < offset)
+                max_offset = offset;
 
             double acceleration = gamepad1.left_stick_y;
             double strafe = gamepad1.left_stick_x * 1.1;
@@ -86,6 +91,12 @@ public class lll extends LinearOpMode {
             deget(b.a);
             glisiera(b.y, b.x, b.b, b.right_bumper, b.left_bumper);
             turela(b.dpad_up, b.dpad_down, l.dpad_right, b.dpad_right, b.dpad_left);
+
+            telemetry.addData("Ticks 1:",  robot.glisiera.getTicks());
+            telemetry.addData("Ticks 2:",  robot.glisiera.getTickss());
+            telemetry.addData("Current Offset:", offset);
+            telemetry.addData("Max Offset:", max_offset);
+            telemetry.update();
 
             idle();
         }

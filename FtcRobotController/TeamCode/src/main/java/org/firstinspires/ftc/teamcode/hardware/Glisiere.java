@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.hardware;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import java.lang.Math.*;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -31,8 +32,8 @@ public class Glisiere {
     public void setToPosition(int position) {
         motor.setTargetPosition(positions[position]);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        if (position != 0) motor.setPower(1);
-        else motor.setPower(1);
+        if (position != 0) motor.setPower(0.98);
+        else motor.setPower(0.98);
 
         motor2.setTargetPosition(positions[position]);
         motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -43,7 +44,7 @@ public class Glisiere {
     public void setToTicks(int ticks) {
         motor.setTargetPosition(ticks);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor.setPower(1);
+        motor.setPower(0.98);
 
         motor2.setTargetPosition(ticks);
         motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -53,9 +54,9 @@ public class Glisiere {
     public void modifyPosition(int ticks) {
         motor.setTargetPosition(motor.getCurrentPosition() + ticks);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor.setPower(0.2);
+        motor.setPower(0.2 * 0.98);
 
-        motor2.setTargetPosition(motor.getCurrentPosition() + ticks);
+        motor2.setTargetPosition(motor2.getCurrentPosition() + ticks);
         motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor2.setPower(0.2);
     }
@@ -66,7 +67,12 @@ public class Glisiere {
 
     public int getTicks() {
         return motor.getCurrentPosition();
+    }
+    public int getTickss() {
+         return motor2.getCurrentPosition();
+    }
 
-        // return motor2.getCurrentPosition();
+    public int getOffset() {
+        return Math.abs(motor.getCurrentPosition() - motor2.getCurrentPosition());
     }
 }
