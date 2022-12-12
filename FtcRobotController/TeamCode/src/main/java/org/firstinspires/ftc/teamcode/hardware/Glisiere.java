@@ -11,7 +11,7 @@ public class Glisiere {
 
     public DcMotor motor;
     public DcMotor motor2;
-    private int[] positions = {0, 250, 500, 1360, 2240, 3020};
+    private int[] positions = {0, 350, 500, 944, 1541, 2250};
 
     public Glisiere(HardwareMap hardwareMap) {
 

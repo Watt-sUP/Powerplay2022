@@ -52,10 +52,10 @@ public class Turelamodif extends LinearOpMode {
     private void turela(Button pos_up, Button pos_down, Button b, Button addA, Button subA) {
 //pos_up=dpad_up pos_down=dpad_down addA=dpad_right subA=dpad_left
         if (pos_down.pressed()) {
-            robot.turela.modifyPosition(+ 100);
+            robot.turela.modifyPosition(+ 50);
         } ;
         if (pos_up.pressed()) {
-            robot.turela.modifyPosition( -100);
+            robot.turela.modifyPosition( -50);
         } ;
     }
 

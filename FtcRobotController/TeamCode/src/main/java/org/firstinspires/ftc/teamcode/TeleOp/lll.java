@@ -56,7 +56,7 @@ public class lll extends LinearOpMode {
             else if (gamepad1.right_bumper)
                 powerLimit = 0.4;
             else
-                powerLimit = 1.0;
+                powerLimit = 0.9;
 
             if (gamepad1.y && !faceIsHeld) {
                 faceIsHeld = true;
@@ -101,6 +101,7 @@ public class lll extends LinearOpMode {
             idle();
         }
         robot.glisiera.motor.setPower(0);
+        robot.glisiera.motor2.setPower(0);
         robot.turela.motortur.setPower(0);
     }
 
@@ -158,6 +159,10 @@ public class lll extends LinearOpMode {
             robot.glisiera.setToPosition(pos_glisiera);
         }
 
+//        if (manualModifier >= 0.1 || manualModifier <= 0.1) {
+//            robot.glisiera.motor.setPower(Range.clip(manualModifier, -0.33, 0.33));
+//            robot.glisiera.motor2.setPower(Range.clip(manualModifier, -0.33, 0.33));
+//        }
         if (addB.pressed()) {
             pos_glisiera = 5;
             robot.glisiera.setToPosition(pos_glisiera);
