@@ -65,8 +65,10 @@ public class TrajectoryRight extends LinearOpMode {
                         detected_obj = recognition.getLabel();
                     }
             }
-            telemetry.addData("Last detected", (detected_obj != null) ? detected_obj : "N/A");
-            telemetry.addData("Last confidence", last_confidence);
+            if (last_confidence <= 1)
+                last_confidence = last_confidence * 100;
+            telemetry.addData("Last detected object", (detected_obj != null) ? detected_obj : "N/A");
+            telemetry.addLine("Last confidence: " + (int) last_confidence + "%");
             telemetry.update();
         }
 
