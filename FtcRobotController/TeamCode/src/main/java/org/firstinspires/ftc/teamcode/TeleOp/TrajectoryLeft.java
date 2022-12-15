@@ -74,7 +74,8 @@ public class TrajectoryLeft extends LinearOpMode {
             telemetry.update();
         }
 
-        tfod.deactivate();
+        if (tfod != null)
+            tfod.deactivate();
 
         Colectare deget = new Colectare(hardwareMap);
         Glisiere glis = new Glisiere(hardwareMap);
