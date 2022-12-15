@@ -14,12 +14,11 @@ import org.firstinspires.ftc.teamcode.gamepad.GamepadEx;
 import org.firstinspires.ftc.teamcode.hardware.Config;
 import org.firstinspires.ftc.teamcode.hardware.Mugurel;
 
-@TeleOp(name = "Salam adevaratu", group = "Testing")
-public class lll extends LinearOpMode {
+@TeleOp(name = "Salam adevaratu", group = "TeleOp")
+public class Controlat extends LinearOpMode {
 
     //Declaratii
     private boolean faceChanged = false, faceIsHeld = false;
-    private boolean deget = true;
     private Mugurel robot;
     private int offset, max_offset;
     private int pos_glisiera = 0;
@@ -95,8 +94,6 @@ public class lll extends LinearOpMode {
             glisiera(b.y, b.x, b.b, b.right_bumper, b.left_bumper);
             turela(b.dpad_up, b.dpad_down, l.dpad_right, b.dpad_right, b.dpad_left);
 
-            telemetry.addData("Ticks 1:",  robot.glisiera.getTicks());
-            telemetry.addData("Ticks 2:",  robot.glisiera.getTickss());
             telemetry.addData("Current Offset:", offset);
             telemetry.addData("Max Offset:", max_offset);
             telemetry.update();

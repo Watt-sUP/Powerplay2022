@@ -20,7 +20,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 @Config
-@Autonomous(name = "Traiectorie Dreapta")
+@Autonomous(name = "Traiectorie Dreapta", group = "auto")
 public class TrajectoryRight extends LinearOpMode {
 
     private VuforiaLocalizer vuforia;
@@ -121,7 +121,6 @@ public class TrajectoryRight extends LinearOpMode {
         glis.setToTicks(1000);
         drive.followTrajectorySequence(testTraj);
     }
-// 5 25 45
 
     private void initVuforia() {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();

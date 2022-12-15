@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.gamepad.Button;
 import org.firstinspires.ftc.teamcode.gamepad.GamepadEx;
 
 
-@TeleOp(name = "Turelamodif", group = "Testing")
+@TeleOp(name = "Restaurare Turela", group = "TeleOp")
 public class Turelamodif extends LinearOpMode {
     private Mugurel robot;
     @Override
@@ -39,19 +39,19 @@ public class Turelamodif extends LinearOpMode {
     private void glisiera(Button pos_down, Button pos_up, Button a, Button b) {
         if (pos_down.pressed()) {
             robot.glisiera.modifyPosition(+ 100);
-        } ;
+        }
         if (pos_up.pressed()) {
             robot.glisiera.modifyPosition( -100);
-        } ;
+        }
     }
     private void turela(Button pos_up, Button pos_down, Button b, Button addA, Button subA) {
 //pos_up=dpad_up pos_down=dpad_down addA=dpad_right subA=dpad_left
         if (pos_down.pressed()) {
             robot.turela.modifyPosition(+ 50);
-        } ;
+        }
         if (pos_up.pressed()) {
             robot.turela.modifyPosition( -50);
-        } ;
+        }
     }
 
 

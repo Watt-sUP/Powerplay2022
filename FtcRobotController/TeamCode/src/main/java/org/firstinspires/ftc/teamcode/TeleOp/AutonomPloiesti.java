@@ -14,8 +14,8 @@ import org.firstinspires.ftc.teamcode.hardware.Config;
 
 import java.util.List;
 
-@Autonomous(name = "Autonom blueside", group = "auto")
-public class parcar extends LinearOpMode {
+@Autonomous(name = "Autonom Ploiesti", group = "auto")
+public class AutonomPloiesti extends LinearOpMode {
 
     private static final String TFOD_MODEL_ASSET = "/sdcard/FIRST/tflitemodels/modelSCT.tflite";
     private String detected_obj = null;
