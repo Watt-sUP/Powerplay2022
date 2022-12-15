@@ -19,13 +19,13 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import java.util.List;
 
 @Config
-@Autonomous(name = "Test Traiectorie")
-public class TraiectorieTest extends LinearOpMode {
+@Autonomous(name = "Traiectorie Dreapta")
+public class TrajectoryRight extends LinearOpMode {
 
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
 
-    private static final String TFOD_MODEL_ASSET = "/sdcard/FIRST/tflitemodels/modelSCT.tflite";
+    private static final String TFOD_MODEL_ASSET = "/sdcard/FIRST/tflitemodels/modelSCT_2.tflite";
     private String detected_obj = null;
     private double confidence, last_confidence = 0.0;
     private static final String[] LABELS = {
@@ -49,7 +49,7 @@ public class TraiectorieTest extends LinearOpMode {
 
         if (tfod != null) {
             tfod.activate();
-            tfod.setZoom(1.0, 16.0 / 9.0);
+            tfod.setZoom(1.4, 16.0 / 9.0);
         }
 
         while (!isStarted() && tfod != null) {
@@ -113,8 +113,8 @@ public class TraiectorieTest extends LinearOpMode {
                 // .waitSeconds(2)
                 .build();
 
-        glis.setToTicks(1000);
         sleep(400);
+        glis.setToTicks(1000);
         drive.followTrajectorySequence(testTraj);
     }
 // 5 25 45
