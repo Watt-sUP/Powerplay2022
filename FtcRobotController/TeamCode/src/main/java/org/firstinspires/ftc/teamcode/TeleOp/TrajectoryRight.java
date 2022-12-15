@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.hardware.Glisiere;
 import org.firstinspires.ftc.teamcode.hardware.Turela;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 @Config
@@ -28,6 +29,7 @@ public class TrajectoryRight extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "/sdcard/FIRST/tflitemodels/modelSCT_2.tflite";
     private String detected_obj = null;
     private double confidence, last_confidence = 0.0;
+    private static final DecimalFormat df = new DecimalFormat("0.00");
     private static final String[] LABELS = {
             "Circle",
             "Square",
@@ -68,7 +70,7 @@ public class TrajectoryRight extends LinearOpMode {
             if (last_confidence <= 1)
                 last_confidence = last_confidence * 100;
             telemetry.addData("Last detected object", (detected_obj != null) ? detected_obj : "N/A");
-            telemetry.addLine("Last confidence: " + (int) last_confidence + "%");
+            telemetry.addLine("Last confidence: " + df.format(last_confidence) + "%");
             telemetry.update();
         }
 
