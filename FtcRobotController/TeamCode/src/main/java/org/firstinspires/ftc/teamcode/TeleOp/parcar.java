@@ -45,7 +45,7 @@ public class parcar extends LinearOpMode {
 
         if (tfod != null) {
             tfod.activate();
-            tfod.setZoom(1.35, 16.0/9.0);
+            tfod.setZoom(1.0, 16.0/9.0);
         }
 
         while (!isStarted() && tfod != null) {

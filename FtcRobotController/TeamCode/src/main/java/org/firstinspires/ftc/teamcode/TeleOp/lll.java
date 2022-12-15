@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 
@@ -29,6 +30,7 @@ public class lll extends LinearOpMode {
         robot = new Mugurel(hardwareMap);
         GamepadEx l = new GamepadEx(gamepad1);
         GamepadEx b = new GamepadEx(gamepad2);
+        Servo odoServo = hardwareMap.get(Servo.class, "ODO");
 
         DcMotor frontLeftMotor = hardwareMap.dcMotor.get(Config.left_front);
         DcMotor backLeftMotor = hardwareMap.dcMotor.get(Config.left_back);
@@ -37,6 +39,7 @@ public class lll extends LinearOpMode {
 
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        odoServo.setPosition(0.6);
 
         waitForStart();
         while (opModeIsActive()) {
@@ -56,7 +59,7 @@ public class lll extends LinearOpMode {
             else if (gamepad1.right_bumper)
                 powerLimit = 0.4;
             else
-                powerLimit = 0.9;
+                powerLimit = 1;
 
             if (gamepad1.y && !faceIsHeld) {
                 faceIsHeld = true;
@@ -111,18 +114,6 @@ public class lll extends LinearOpMode {
     }
 
     private void turela(Button pos_up, Button pos_down, Button b, Button addA, Button subA) {
-        //if (pos_up.pressed()) {
-        // pos_turela = pos_turela + 1;
-        //  if (pos_turela > 4) pos_turela = 4;
-        //    robot.turela.setToPosition(pos_turela);
-        //  }
-
-        //  if(pos_down.pressed()) {
-        //    pos_turela=pos_turela - 1;
-        //  if(pos_turela < 0) pos_turela = 0;
-        //robot.turela.setToPosition(pos_turela);
-        //}
-        //pos_up=dpad_up pos_down=dpad_down addA=dpad_right subA=dpad_left
         if (addA.pressed()) {
             pos_turela = 1;
             robot.turela.setToPosition(pos_turela);

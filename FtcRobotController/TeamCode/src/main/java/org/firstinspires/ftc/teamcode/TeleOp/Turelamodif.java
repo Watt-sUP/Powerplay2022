@@ -4,20 +4,15 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.Range;
 
 
 import org.firstinspires.ftc.teamcode.hardware.Mugurel;
 import org.firstinspires.ftc.teamcode.gamepad.Button;
 import org.firstinspires.ftc.teamcode.gamepad.GamepadEx;
-import org.firstinspires.ftc.teamcode.hardware.Config;
 
 
 @TeleOp(name = "Turelamodif", group = "Testing")
 public class Turelamodif extends LinearOpMode {
-    private int pos_turela = 0;
     private Mugurel robot;
     @Override
     public void runOpMode() throws InterruptedException {
