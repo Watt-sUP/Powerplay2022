@@ -27,6 +27,7 @@ public class TrajectoryRight extends LinearOpMode {
     private TFObjectDetector tfod;
 
     private static final String TFOD_MODEL_ASSET = "/sdcard/FIRST/tflitemodels/modelSCT_2.tflite";
+    public static double ZOOM = 1.7, CONFIDENCE = 0.33;
     private String detected_obj = null;
     private double confidence, last_confidence = 0.0;
     private static final DecimalFormat df = new DecimalFormat("0.00");
@@ -38,9 +39,9 @@ public class TrajectoryRight extends LinearOpMode {
 
     public static int FORWARD = 50;
     public static int STRAFE = 24;
-    public static int SPEED_LIMIT = 45;
+    public static int SPEED_LIMIT = 45, TURN_LIMIT = 4;
     private static final String VUFORIA_KEY = org.firstinspires.ftc.teamcode.hardware.Config.VuforiaKey;
-    public static double DEGET_TIME = 5, FORWARD_OFFSET = 5, BACK_OFFSET = 7.75, PARK_DIST = 25, GLIS_OFFSET = 1.5, TURN = -90;
+    public static double DEGET_TIME = 6.5, FORWARD_OFFSET = 10, BACK_OFFSET = 12, PARK_DIST = 25, GLIS_OFFSET = 1.5, TURN = 90;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -51,7 +52,7 @@ public class TrajectoryRight extends LinearOpMode {
 
         if (tfod != null) {
             tfod.activate();
-            tfod.setZoom(1.4, 16.0 / 9.0);
+            tfod.setZoom(ZOOM, 16.0 / 9.0);
         }
 
         while (!isStarted() && tfod != null) {
@@ -74,7 +75,8 @@ public class TrajectoryRight extends LinearOpMode {
             telemetry.update();
         }
 
-        tfod.deactivate();
+        if (tfod != null)
+            tfod.deactivate();
 
         Colectare deget = new Colectare(hardwareMap);
         Glisiere glis = new Glisiere(hardwareMap);
@@ -83,7 +85,7 @@ public class TrajectoryRight extends LinearOpMode {
         if (detected_obj == "Square")
             PARK_DIST = 5;
         else if (detected_obj == "Triangle")
-            PARK_DIST = 45;
+            PARK_DIST = 47;
         else if (detected_obj == "Circle")
             PARK_DIST = 25;
 
@@ -92,33 +94,33 @@ public class TrajectoryRight extends LinearOpMode {
                         SampleMecanumDrive.getVelocityConstraint(SPEED_LIMIT, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(SPEED_LIMIT)
                 )
+                .setTurnConstraint(TURN_LIMIT, TURN_LIMIT)
                 .forward(FORWARD)
                 .addTemporalMarker(0.2, 0, () -> {
                     glis.setToPosition(5);
-                    tur.setToTicks(1000);
                 })
                 .addTemporalMarker(DEGET_TIME, () -> {
                     deget.toggleDeget();
                 })
-                .strafeLeft(STRAFE)
-                .back(BACK_OFFSET)
+                .turn(Math.toRadians(TURN))
+                .forward(STRAFE)
+                .strafeLeft(BACK_OFFSET)
                 .waitSeconds(1.5)
-                .forward(FORWARD_OFFSET)
+                .strafeRight(FORWARD_OFFSET)
                 .addDisplacementMarker(() -> {
                     deget.toggleDeget();
                     tur.setToTicks(0);
                 })
-                // .turn(Math.toRadians(TURN))
-                .strafeRight(PARK_DIST)
+                .back(PARK_DIST)
                 .addTemporalMarker(DEGET_TIME + GLIS_OFFSET, () -> {
                     glis.setToTicks(0);
                 })
                 .resetConstraints()
-                // .waitSeconds(2)
+                .resetTurnConstraint()
                 .build();
 
         sleep(400);
-        glis.setToTicks(1000);
+        glis.setToPosition(1);
         drive.followTrajectorySequence(testTraj);
     }
 
@@ -135,7 +137,7 @@ public class TrajectoryRight extends LinearOpMode {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.2f;
+        tfodParameters.minResultConfidence = (float) CONFIDENCE;
         tfodParameters.isModelTensorFlow2 = true;
         tfodParameters.inputSize = 320;
         tfodParameters.useObjectTracker = false;

@@ -1,35 +1,43 @@
 package com.example.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
+import com.noahbres.meepmeep.roadrunner.SampleMecanumDrive;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
-
 
 public class MeepMeepTesting {
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(800);
+        MeepMeep mm = new MeepMeep(640);
 
-        RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
-                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+        RoadRunnerBotEntity bot = new DefaultBotBuilder(mm)
+                .setConstraints(55.57470216843153, 55.57470216843153, 5.315093760821346, 5.315093760821346, 10.513)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(0, 0, 0))
-                                .forward(30)
-                                .turn(Math.toRadians(90))
-                                .forward(30)
-                                .turn(Math.toRadians(90))
-                                .forward(30)
-                                .turn(Math.toRadians(90))
-                                .forward(30)
-                                .turn(Math.toRadians(90))
+                        drive.trajectorySequenceBuilder(new Pose2d(-36, -61, Math.toRadians(90)))
+                                .setConstraints(
+                                        SampleMecanumDrive.getVelocityConstraint(45, 5.315093760821346, 10.513),
+                                        SampleMecanumDrive.getAccelerationConstraint(45)
+                                )
+                                .splineToSplineHeading(new Pose2d(-12, -23, Math.toRadians(90)), Math.toRadians(60))
+                                .addTemporalMarker(0.2, 0, () -> {
+                                })
+                                .addTemporalMarker(5, () -> {
+                                })
+                                .waitSeconds(1.5)
+                                .lineTo(new Vector2d(-12, -12))
+                                .addDisplacementMarker(() -> {
+                                })
+                                .addTemporalMarker(6.5, () -> {
+                                })
+                                .resetConstraints()
+                                // .waitSeconds(2)
                                 .build()
                 );
 
-        meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
+        mm.setBackground(MeepMeep.Background.FIELD_POWERPLAY_KAI_DARK)
                 .setDarkMode(true)
-                .setBackgroundAlpha(0.95f)
-                .addEntity(myBot)
+                .addEntity(bot)
                 .start();
     }
 }
