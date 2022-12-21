@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.TeleOp;
+package org.firstinspires.ftc.teamcode.autonom;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -20,8 +20,8 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 @Config
-@Autonomous(name = "Traiectorie Stanga", group = "auto")
-public class TrajectoryLeft extends LinearOpMode {
+@Autonomous(name = "Traiectorie Dreapta", group = "auto")
+public class TrajectoryRight extends LinearOpMode {
 
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
@@ -41,7 +41,7 @@ public class TrajectoryLeft extends LinearOpMode {
     public static int STRAFE = 24;
     public static int SPEED_LIMIT = 45, TURN_LIMIT = 4;
     private static final String VUFORIA_KEY = org.firstinspires.ftc.teamcode.hardware.Config.VuforiaKey;
-    public static double DEGET_TIME = 6.5, FORWARD_OFFSET = 10, BACK_OFFSET = 12, PARK_DIST = 25, GLIS_OFFSET = 1.5, TURN = -90;
+    public static double DEGET_TIME = 6.5, FORWARD_OFFSET = 10, BACK_OFFSET = 12, PARK_DIST = 25, GLIS_OFFSET = 1.5, TURN = 90;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -83,9 +83,9 @@ public class TrajectoryLeft extends LinearOpMode {
         Turela tur = new Turela(hardwareMap);
 
         if (detected_obj == "Square")
-            PARK_DIST = 47;
-        else if (detected_obj == "Triangle")
             PARK_DIST = 5;
+        else if (detected_obj == "Triangle")
+            PARK_DIST = 47;
         else if (detected_obj == "Circle")
             PARK_DIST = 25;
 
@@ -104,9 +104,9 @@ public class TrajectoryLeft extends LinearOpMode {
                 })
                 .turn(Math.toRadians(TURN))
                 .forward(STRAFE)
-                .strafeRight(BACK_OFFSET)
+                .strafeLeft(BACK_OFFSET)
                 .waitSeconds(1.5)
-                .strafeLeft(FORWARD_OFFSET)
+                .strafeRight(FORWARD_OFFSET)
                 .addDisplacementMarker(() -> {
                     deget.toggleDeget();
                     tur.setToTicks(0);
