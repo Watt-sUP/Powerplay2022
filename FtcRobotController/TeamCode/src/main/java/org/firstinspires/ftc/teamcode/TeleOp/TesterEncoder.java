@@ -32,33 +32,24 @@ public class TesterEncoder extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
-            if(gamepad2.a) {
-                frontRightMotor.setPower(0.5);
-                frontRightMotor.setTargetPosition(538);
-                frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            if(gamepad2.a)
+                test_encoder(frontRightMotor);
 
-            }
+            if(gamepad2.b)
+                test_encoder(frontLeftMotor);
 
-            if(gamepad2.b) {
-                frontLeftMotor.setPower(0.5);
-                frontLeftMotor.setTargetPosition(538);
-                frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            if(gamepad2.y)
+                test_encoder(backLeftMotor);
 
-            }
-
-            if(gamepad2.y) {
-                backLeftMotor.setPower(0.5);
-                backLeftMotor.setTargetPosition(538);
-                backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            }
-
-            if(gamepad2.x) {
-                backRightMotor.setPower(0.5);
-                backRightMotor.setTargetPosition(538);
-                backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            }
+            if(gamepad2.x)
+                test_encoder(backRightMotor);
         }
+    }
+
+    public void test_encoder(DcMotor motor)
+    {
+        motor.setPower(0.5);
+        motor.setTargetPosition(538);
+        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 }

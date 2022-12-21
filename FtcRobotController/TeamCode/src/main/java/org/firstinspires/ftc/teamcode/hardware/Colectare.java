@@ -7,7 +7,7 @@ import org.firstinspires.ftc.robotcore.external.State;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Colectare {
-    private static double stransPos = 0, desfacutPos = 0.05, desfacutMorePos = 0.65;
+    private static double stransPos = 0, desfacutPos = 0.05;
     private StateDeget stateDeget;
     public Servo deget;
 
@@ -36,17 +36,4 @@ public class Colectare {
         if (stateDeget == StateDeget.Desfacut) strange();
         else if (stateDeget != StateDeget.Desfacut) desface();
     }
-
-    // Desfacut mai mult
-    public void desfaceMore() {
-        deget.setPosition(desfacutMorePos);
-        stateDeget = StateDeget.Desfacut;
-    }
-
-    public void toggleDegetMore() {
-        if (stateDeget == StateDeget.Desfacut) strange();
-        else if (stateDeget != StateDeget.Desfacut) desfaceMore();
-    }
-
-
 }

@@ -12,14 +12,16 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.hardware.Config;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 @Autonomous(name = "Autonom Ploiesti", group = "auto")
 public class AutonomPloiesti extends LinearOpMode {
 
     private static final String TFOD_MODEL_ASSET = "/sdcard/FIRST/tflitemodels/modelSCT.tflite";
+    private DecimalFormat df = new DecimalFormat("0.00");
     private String detected_obj = null;
-    private double confidence;
+    private double confidence, last_confidence;
     private static final String[] LABELS = {
             "Circle",
             "Square",
@@ -49,18 +51,23 @@ public class AutonomPloiesti extends LinearOpMode {
         }
 
         while (!isStarted() && tfod != null) {
+            if(isStopRequested())
+                return;
+
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             confidence = 0.0;
             if (updatedRecognitions != null) {
                 for (Recognition recognition : updatedRecognitions)
                     if (recognition.getConfidence() > confidence) {
                         confidence = recognition.getConfidence();
+                        last_confidence = confidence;
                         detected_obj = recognition.getLabel();
                    }
             }
             telemetry.addData("Last detected", (detected_obj != null) ? detected_obj : "N/A");
-            telemetry.addData("Confidence", confidence);
-            telemetry.update();        }
+            telemetry.addData("Confidence", df.format(last_confidence));
+            telemetry.update();
+        }
 
         tfod.deactivate();
         if (detected_obj  == "Triangle") {

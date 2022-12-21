@@ -17,6 +17,12 @@ public class Mugurel {
         //  wheels = new DeadWheels(hm);
     }
 
+    public void shutdown_motors()
+    {
+        glisiera.motor.setPower(0);
+        glisiera.motor2.setPower(0);
+        turela.motortur.setPower(0);
+    }
 
     public void glisiera(boolean dpad_up, boolean dpad_down, boolean b, boolean right_bumper, boolean left_bumper) {
     }

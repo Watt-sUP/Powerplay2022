@@ -71,7 +71,7 @@ public class TrajectoryRight extends LinearOpMode {
             if (last_confidence <= 1)
                 last_confidence = last_confidence * 100;
             telemetry.addData("Last detected object", (detected_obj != null) ? detected_obj : "N/A");
-            telemetry.addLine("Last confidence: " + df.format(last_confidence) + "%");
+            telemetry.addLine("Detection confidence: " + df.format(last_confidence) + "%");
             telemetry.update();
         }
 
