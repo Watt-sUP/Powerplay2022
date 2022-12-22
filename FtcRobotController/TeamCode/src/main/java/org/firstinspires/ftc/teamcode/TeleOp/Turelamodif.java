@@ -27,8 +27,8 @@ public class Turelamodif extends LinearOpMode {
             l.update();
             b.update();
 
-            init_turela(b.a, b.b);
-            init_glisiera(b.x, b.y);
+            update_turela(b.a, b.b);
+            update_glisiera(b.x, b.y);
             telemetry.addData("Turela ticks:", robot.turela.getTicks());
             telemetry.addData("Glisiera ticks:", robot.glisiera.getTicks());
             telemetry.update();
@@ -38,7 +38,7 @@ public class Turelamodif extends LinearOpMode {
         robot.shutdown_motors();
     }
 
-    private void init_glisiera(Button pos_down, Button pos_up) {
+    private void update_glisiera(Button pos_down, Button pos_up) {
         if (pos_down.pressed()) {
             robot.glisiera.modifyPosition(+ 100);
         }
@@ -47,7 +47,7 @@ public class Turelamodif extends LinearOpMode {
         }
     }
 
-    private void init_turela(Button pos_up, Button pos_down) {
+    private void update_turela(Button pos_up, Button pos_down) {
         if (pos_down.pressed())
             robot.turela.modifyPosition(+ 50);
 

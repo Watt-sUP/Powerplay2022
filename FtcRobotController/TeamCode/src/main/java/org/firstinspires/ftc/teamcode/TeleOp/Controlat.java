@@ -46,9 +46,9 @@ public class Controlat extends LinearOpMode {
             if (offset > max_offset)
                 max_offset = offset;
 
-            double acceleration = gamepad1.left_stick_y;
+            double acceleration = -gamepad1.left_stick_y;
             double strafe = gamepad1.left_stick_x * 1.1;
-            double rotation = gamepad1.right_stick_x * -1;
+            double rotation = gamepad1.right_stick_x;
 
             double powerLimit;
             if (gamepad1.right_trigger >= 0.3)

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonom.apriltag;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -12,7 +13,8 @@ import org.openftc.easyopencv.OpenCvInternalCamera2;
 
 import java.util.ArrayList;
 
-@TeleOp
+@Disabled
+@TeleOp(name = "OpenCV Test", group = "Testing")
 public class AutonomousInit extends LinearOpMode
 {
     OpenCvCamera camera;
@@ -28,8 +30,7 @@ public class AutonomousInit extends LinearOpMode
 
     double tagsize = 0.166;
 
-    // TODO: Get the IDs for each of the tags
-    int LEFT = -1, MID = -1, RIGHT = -1;
+    int LEFT = 0, MID = 1, RIGHT = 2;
 
     AprilTagDetection tagOfInterest = null;
 
@@ -47,13 +48,15 @@ public class AutonomousInit extends LinearOpMode
             @Override
             public void onOpened()
             {
-                camera.startStreaming(800,448, OpenCvCameraRotation.SIDEWAYS_LEFT);
+                camera.startStreaming(1280,720, OpenCvCameraRotation.SIDEWAYS_LEFT);
             }
 
             @Override
             public void onError(int errorCode)
             {
                 telemetry.addLine("An error occurred while opening camera\nError code: " + errorCode);
+                telemetry.update();
+                return;
             }
         });
 
