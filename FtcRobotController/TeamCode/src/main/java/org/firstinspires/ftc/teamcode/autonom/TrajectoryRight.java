@@ -5,10 +5,6 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.autonom.apriltag.AprilTagDetectionPipeline;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -22,9 +18,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera2;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 @Config
 @Autonomous(name = "Traiectorie Dreapta", group = "auto")
@@ -32,8 +26,6 @@ public class TrajectoryRight extends LinearOpMode {
 
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
-
-    static final double FEET_PER_METER = 3.28084;
 
     // NOTE: Ignore the stuff below, it's used for 3D tracking which isn't necessary
     double fx = 578.272;
@@ -48,6 +40,7 @@ public class TrajectoryRight extends LinearOpMode {
     public static int FORWARD = 50;
     public static int STRAFE = 24;
     public static int SPEED_LIMIT = 45, TURN_LIMIT = 4;
+    public static boolean DEBUG_TRAJ = false;
     public static double DEGET_TIME = 6.5, FORWARD_OFFSET = 10, BACK_OFFSET = 12, PARK_DIST = 25, GLIS_OFFSET = 1.5, TURN = 90;
 
     @Override
@@ -70,7 +63,6 @@ public class TrajectoryRight extends LinearOpMode {
             public void onError(int errorCode) {
                 telemetry.addLine("An error occurred while opening camera\nError code: " + errorCode);
                 telemetry.update();
-                return;
             }
         });
 
@@ -117,14 +109,14 @@ public class TrajectoryRight extends LinearOpMode {
         }
 
         if (tagOfInterest.id == 0)
-            PARK_DIST = 2;
+            PARK_DIST = 1e-6;
         else if (tagOfInterest.id == 1)
             PARK_DIST = 25;
         else if (tagOfInterest.id == 2)
             PARK_DIST = 47;
         else return;
 
-        TrajectorySequence testTraj = drive.trajectorySequenceBuilder(new Pose2d())
+        TrajectorySequence autonTraj = drive.trajectorySequenceBuilder(new Pose2d())
                 .setConstraints(
                         SampleMecanumDrive.getVelocityConstraint(SPEED_LIMIT, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(SPEED_LIMIT)
@@ -154,9 +146,40 @@ public class TrajectoryRight extends LinearOpMode {
                 .resetTurnConstraint()
                 .build();
 
-        sleep(400);
+        TrajectorySequence testTraj = drive.trajectorySequenceBuilder(new Pose2d(35, -61, Math.toRadians(90)))
+                .setConstraints(
+                        SampleMecanumDrive.getVelocityConstraint(45, 5.315093760821346, 10.513),
+                        SampleMecanumDrive.getAccelerationConstraint(45)
+                )
+                .setTurnConstraint(4, 4)
+                .forward(50)
+                .addTemporalMarker(0.2, 0, () -> glis.setToPosition(5))
+                .turn(Math.toRadians(90))
+                .forward(24)
+                .strafeLeft(12)
+                .waitSeconds(1.5)
+                .addTemporalMarker(() -> deget.toggleDeget())
+                .waitSeconds(0.3)
+                .strafeRight(11)
+                .addTemporalMarker(() -> glis.setToTicks(0))
+                .back(47)
+                .resetConstraints()
+                .resetTurnConstraint()
+                .build();
+
+        sleep(500);
         glis.setToPosition(1);
-        drive.followTrajectorySequence(testTraj);
+
+        if (DEBUG_TRAJ) {
+            telemetry.addLine("Running testing trajectory...");
+            telemetry.update();
+            drive.followTrajectorySequence(testTraj);
+        }
+        else {
+            telemetry.addLine("Running default trajectory...");
+            telemetry.update();
+            drive.followTrajectorySequence(autonTraj);
+        }
     }
 
     String getPosition(int id)
@@ -168,6 +191,6 @@ public class TrajectoryRight extends LinearOpMode {
         else if (id == 2)
             return "Right";
 
-        return "Unknown";
+        return "A strange bug has appeared!";
     }
 }
