@@ -27,7 +27,7 @@ public class Controlat extends LinearOpMode {
         robot = new Mugurel(hardwareMap);
         GamepadEx l = new GamepadEx(gamepad1);
         GamepadEx b = new GamepadEx(gamepad2);
-        Servo odoServo = hardwareMap.get(Servo.class, "ODO");
+        Servo odoServo = hardwareMap.get(Servo.class, Config.odometry_servo);
 
         DcMotor frontLeftMotor = hardwareMap.dcMotor.get(Config.left_front);
         DcMotor backLeftMotor = hardwareMap.dcMotor.get(Config.left_back);
