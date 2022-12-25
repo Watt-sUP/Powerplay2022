@@ -160,7 +160,7 @@ public class TrajectoryLeft extends LinearOpMode {
                 .forward(24)
                 .strafeRight(12)
                 .waitSeconds(1.5)
-                .addTemporalMarker(() -> deget.toggleDeget())
+                .addTemporalMarker(deget::toggleDeget)
                 .waitSeconds(0.3)
                 .strafeLeft(11)
                 .addTemporalMarker(() -> glis.setToTicks(0))
