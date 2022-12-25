@@ -82,6 +82,7 @@ public class AssistedFeedforwardTuner extends LinearOpMode {
             RobotLog.setGlobalErrorMsg("Feedforward constants usually don't need to be tuned " +
                     "when using the built-in drive motor velocity PID.");
         }
+        telemetry.setMsTransmissionInterval(50);
 
         str_dict.put(Change.INCREASE, "increased");
         str_dict.put(Change.DECREASE, "decreased");

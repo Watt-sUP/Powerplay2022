@@ -35,7 +35,7 @@ public class Turelamodif extends LinearOpMode {
             idle();
 
         }
-        robot.shutdown_motors();
+        robot.shutdown_system_motors();
     }
 
     private void update_glisiera(Button pos_down, Button pos_up) {

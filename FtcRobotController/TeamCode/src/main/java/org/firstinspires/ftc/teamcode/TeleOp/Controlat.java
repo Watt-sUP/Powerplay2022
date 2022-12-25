@@ -79,7 +79,7 @@ public class Controlat extends LinearOpMode {
 
             idle();
         }
-        robot.shutdown_motors();
+        robot.shutdown_system_motors();
     }
 
     private void deget(Button y) {
