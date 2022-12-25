@@ -21,6 +21,7 @@ public class Turelamodif extends LinearOpMode {
         GamepadEx b = new GamepadEx(gamepad2);
         robot = new Mugurel(hardwareMap);
 
+        telemetry.setMsTransmissionInterval(50);
         waitForStart();
 
         while (opModeIsActive()) {

@@ -8,22 +8,17 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.hardware.Config;
 import org.firstinspires.ftc.teamcode.hardware.DriveMotors;
 
-import java.text.DecimalFormat;
-
-@TeleOp(name = "IMU Angle Test", group = "Testing")
-public class IMUTest extends LinearOpMode {
+@TeleOp
+public class FieldCentricControlTest extends LinearOpMode {
 
     BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu");
-    Servo odometry_servo = hardwareMap.servo.get(Config.odometry_servo);
     BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-
-    DecimalFormat df = new DecimalFormat("0.00");
+    Servo odometry_servo = hardwareMap.servo.get(Config.odometry_servo);
 
     @Override
     public void runOpMode() throws InterruptedException {
-
         DriveMotors driveMotors = new DriveMotors(hardwareMap);
-        driveMotors.reverse_motors("Right");
+        driveMotors.reverse_motors("right");
         odometry_servo.setPosition(0.6);
 
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
@@ -32,16 +27,8 @@ public class IMUTest extends LinearOpMode {
         telemetry.setMsTransmissionInterval(50);
         waitForStart();
 
-        if(isStopRequested())
-            return;
-
-        while (opModeIsActive()) {
+        // TODO: Determine which angle represents the heading
+        while (opModeIsActive())
             driveMotors.update_motor_speed(gamepad1, null);
-
-            telemetry.addData("IMU first angle:", -imu.getAngularOrientation().firstAngle);
-            telemetry.addData("IMU second angle:", imu.getAngularOrientation().secondAngle);
-            telemetry.addData("IMU third angle:", imu.getAngularOrientation().thirdAngle);
-            telemetry.update();
-        }
     }
 }
