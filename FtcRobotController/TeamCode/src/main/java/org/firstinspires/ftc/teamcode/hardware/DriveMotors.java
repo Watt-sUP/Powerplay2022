@@ -20,25 +20,38 @@ public class DriveMotors {
     }
 
     public void reverse_motors(String side) {
-        if (side.toLowerCase() == "left") {
+        if (side == "left") {
             frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
             backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        } else if (side.toLowerCase() == "right") {
+        } else if (side == "right") {
             frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
             backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         }
     }
 
-    public void update_motor_speed(@NonNull Gamepad gamepad, @Nullable Double limit) {
+    public void update_motor_speed(@NonNull Gamepad gamepad, @Nullable Double limit, @Nullable Double botHeading) {
         double accel = -gamepad.left_stick_y;
         double strafe = gamepad.left_stick_x * 1.1;
-        double rotation = gamepad.left_stick_x;
-
+        double rotation = gamepad.right_stick_x;
+        double FL_power = 0.0, BL_power = 0.0, FR_power = 0.0, BR_power = 0.0;
         double denominator = Math.max(Math.abs(accel) + Math.abs(strafe) + Math.abs(rotation), 1);
-        double FL_power = (accel + strafe + rotation) / denominator;
-        double BL_power = (accel - strafe + rotation) / denominator;
-        double FR_power = (accel - strafe - rotation) / denominator;
-        double BR_power = (accel + strafe - rotation) / denominator;
+
+        if (botHeading != null) {
+            double rotX = strafe * Math.cos(botHeading) - accel * Math.sin(botHeading);
+            double rotY = strafe * Math.sin(botHeading) + accel * Math.cos(botHeading);
+
+            FL_power = (rotY + rotX + rotation) / denominator;
+            BL_power = (rotY - rotX + rotation) / denominator;
+            FR_power = (rotY - rotX - rotation) / denominator;
+            BR_power = (rotY + rotX - rotation) / denominator;
+        }
+
+        else if (botHeading == null) {
+            FL_power = (accel + strafe + rotation) / denominator;
+            BL_power = (accel - strafe + rotation) / denominator;
+            FR_power = (accel - strafe - rotation) / denominator;
+            BR_power = (accel + strafe - rotation) / denominator;
+        }
 
         if (limit != null) {
             FL_power = Range.clip(FL_power, -limit, limit);

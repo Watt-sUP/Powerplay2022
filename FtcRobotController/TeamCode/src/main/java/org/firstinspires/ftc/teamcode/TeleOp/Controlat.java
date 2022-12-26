@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 
+import androidx.annotation.Nullable;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -24,19 +26,14 @@ public class Controlat extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+
         robot = new Mugurel(hardwareMap);
         GamepadEx l = new GamepadEx(gamepad1);
         GamepadEx b = new GamepadEx(gamepad2);
         Servo odoServo = hardwareMap.get(Servo.class, Config.odometry_servo);
 
-        DcMotor frontLeftMotor = hardwareMap.dcMotor.get(Config.left_front);
-        DcMotor backLeftMotor = hardwareMap.dcMotor.get(Config.left_back);
-        DcMotor frontRightMotor = hardwareMap.dcMotor.get(Config.right_front);
-        DcMotor backRightMotor = hardwareMap.dcMotor.get(Config.right_back);
-
-        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        odoServo.setPosition(0.6);
+        robot.driveMotors.reverse_motors("right");
+        odoServo.setPosition(Config.odo_pos);
 
         waitForStart();
         while (opModeIsActive()) {
@@ -46,30 +43,16 @@ public class Controlat extends LinearOpMode {
             if (offset > max_offset)
                 max_offset = offset;
 
-            double acceleration = -gamepad1.left_stick_y;
-            double strafe = gamepad1.left_stick_x * 1.1;
-            double rotation = gamepad1.right_stick_x;
-
-            double powerLimit;
+            @Nullable Double powerLimit;
             if (gamepad1.right_trigger >= 0.3)
                 powerLimit = 0.2;
             else if (gamepad1.right_bumper)
                 powerLimit = 0.4;
             else
-                powerLimit = 1;
-
-            double denominator = Math.max(Math.abs(acceleration) + Math.abs(strafe) + Math.abs(rotation), 1);
-            double frontLeftPower = (acceleration + strafe + rotation) / denominator;
-            double backLeftPower = (acceleration - strafe + rotation) / denominator;
-            double frontRightPower = (acceleration - strafe - rotation) / denominator;
-            double backRightPower = (acceleration + strafe - rotation) / denominator;
-
-            frontLeftMotor.setPower(Range.clip(frontLeftPower, -powerLimit, powerLimit));
-            backLeftMotor.setPower(Range.clip(backLeftPower, -powerLimit, powerLimit));
-            frontRightMotor.setPower(Range.clip(frontRightPower, -powerLimit, powerLimit));
-            backRightMotor.setPower(Range.clip(backRightPower, -powerLimit, powerLimit));
+                powerLimit = null;
 
             deget(b.a);
+            robot.driveMotors.update_motor_speed(gamepad1, powerLimit, null);
             glisiera(b.y, b.x, b.b, b.right_bumper, b.left_bumper);
             turela(b.dpad_up, b.dpad_down, b.dpad_right, b.dpad_left);
 
@@ -128,5 +111,4 @@ public class Controlat extends LinearOpMode {
             robot.glisiera.setToPosition(pos_glisiera);
         }
     }
-
 }

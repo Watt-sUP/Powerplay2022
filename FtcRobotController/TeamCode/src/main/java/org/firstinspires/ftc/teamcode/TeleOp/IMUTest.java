@@ -12,21 +12,19 @@ import java.text.DecimalFormat;
 
 @TeleOp(name = "IMU Angle Test", group = "Testing")
 public class IMUTest extends LinearOpMode {
-
-    BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu");
-    Servo odometry_servo = hardwareMap.servo.get(Config.odometry_servo);
-    BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-
     DecimalFormat df = new DecimalFormat("0.00");
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         DriveMotors driveMotors = new DriveMotors(hardwareMap);
-        driveMotors.reverse_motors("Right");
-        odometry_servo.setPosition(0.6);
+        Servo odometry_servo = hardwareMap.servo.get(Config.odometry_servo);
+        BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu");
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        driveMotors.reverse_motors("right");
+        odometry_servo.setPosition(Config.odo_pos);
 
-        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         imu.initialize(parameters);
 
         telemetry.setMsTransmissionInterval(50);
@@ -36,11 +34,11 @@ public class IMUTest extends LinearOpMode {
             return;
 
         while (opModeIsActive()) {
-            driveMotors.update_motor_speed(gamepad1, null);
+            driveMotors.update_motor_speed(gamepad1, null, null);
 
-            telemetry.addData("IMU first angle:", -imu.getAngularOrientation().firstAngle);
-            telemetry.addData("IMU second angle:", imu.getAngularOrientation().secondAngle);
-            telemetry.addData("IMU third angle:", imu.getAngularOrientation().thirdAngle);
+            telemetry.addData("Bot heading", df.format(imu.getAngularOrientation().firstAngle));
+            telemetry.addData("IMU second angle", df.format(imu.getAngularOrientation().secondAngle));
+            telemetry.addData("IMU third angle", df.format(imu.getAngularOrientation().thirdAngle));
             telemetry.update();
         }
     }
