@@ -3,15 +3,12 @@ package org.firstinspires.ftc.teamcode.hardware;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import java.lang.Math.*;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Glisiere {
 
     public DcMotor motor;
     public DcMotor motor2;
-    private int[] positions = {0, 300, 500, 944, 1541, 2250};
+    private final int[] positions = {0, 300, 500, 944, 1541, 2250};
 
     public Glisiere(HardwareMap hardwareMap) {
 
@@ -64,12 +61,8 @@ public class Glisiere {
     public double getPosition() {
         return motor.getCurrentPosition();
     }
-
     public int getTicks() {
         return motor.getCurrentPosition();
-    }
-    public int getTickss() {
-         return motor2.getCurrentPosition();
     }
 
     public int getOffset() {

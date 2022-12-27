@@ -14,14 +14,15 @@ import org.firstinspires.ftc.teamcode.hardware.Config;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Objects;
 
 @Autonomous(name = "Autonom Ploiesti", group = "auto")
 public class AutonomPloiesti extends LinearOpMode {
 
     private static final String TFOD_MODEL_ASSET = "/sdcard/FIRST/tflitemodels/modelSCT.tflite";
-    private DecimalFormat df = new DecimalFormat("0.00");
+    private final DecimalFormat df = new DecimalFormat("0.00");
     private String detected_obj = null;
-    private double confidence, last_confidence;
+    private double last_confidence;
     private static final String[] LABELS = {
             "Circle",
             "Square",
@@ -55,7 +56,7 @@ public class AutonomPloiesti extends LinearOpMode {
                 return;
 
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-            confidence = 0.0;
+            double confidence = 0.0;
             if (updatedRecognitions != null) {
                 for (Recognition recognition : updatedRecognitions)
                     if (recognition.getConfidence() > confidence) {
@@ -64,20 +65,24 @@ public class AutonomPloiesti extends LinearOpMode {
                         detected_obj = recognition.getLabel();
                    }
             }
+
             telemetry.addData("Last detected", (detected_obj != null) ? detected_obj : "N/A");
             telemetry.addData("Confidence", df.format(last_confidence));
             telemetry.update();
         }
 
-        tfod.deactivate();
-        if (detected_obj  == "Triangle") {
+
+        if (tfod != null)
+            tfod.deactivate();
+
+        if (Objects.equals(detected_obj, "Triangle")) {
             frontRightMotor.setPower(-0.4);
             frontLeftMotor.setPower(0.4);
             backLeftMotor.setPower(-0.4);
             backRightMotor.setPower(0.4);
             sleep(1200);
         }
-        else if (detected_obj == "Square") {
+        else if (Objects.equals(detected_obj, "Square")) {
             frontRightMotor.setPower(0.4);
             frontLeftMotor.setPower(-0.4);
             backLeftMotor.setPower(0.4);

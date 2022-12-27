@@ -33,7 +33,7 @@ public class TrajectoryRight extends LinearOpMode {
     double cx = 402.145;
     double cy = 221.506;
 
-    double tagsize = 0.166;
+    double tagSize = 0.166;
 
     AprilTagDetection tagOfInterest = null;
 
@@ -49,7 +49,7 @@ public class TrajectoryRight extends LinearOpMode {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createInternalCamera2(OpenCvInternalCamera2.CameraDirection.BACK, cameraMonitorViewId);
-        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
+        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagSize, fx, fy, cx, cy);
 
         camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
         camera.setPipeline(aprilTagDetectionPipeline);
@@ -146,7 +146,7 @@ public class TrajectoryRight extends LinearOpMode {
                 .resetTurnConstraint()
                 .build();
 
-        TrajectorySequence testTraj = drive.trajectorySequenceBuilder(new Pose2d(35, -61, Math.toRadians(90)))
+        TrajectorySequence testTraj = drive.trajectorySequenceBuilder(new Pose2d())
                 .setConstraints(
                         SampleMecanumDrive.getVelocityConstraint(45, 5.315093760821346, 10.513),
                         SampleMecanumDrive.getAccelerationConstraint(45)

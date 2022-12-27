@@ -46,14 +46,10 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
     private FtcDashboard dashboard = FtcDashboard.getInstance();
 
-    private SampleMecanumDrive drive;
-
     enum Mode {
         DRIVER_MODE,
         TUNING_MODE
     }
-
-    private Mode mode;
 
     private static MotionProfile generateProfile(boolean movingForward) {
         MotionState start = new MotionState(movingForward ? 0 : DISTANCE, 0, 0, 0);
@@ -70,9 +66,8 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
-        drive = new SampleMecanumDrive(hardwareMap);
-
-        mode = Mode.TUNING_MODE;
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        Mode mode = Mode.TUNING_MODE;
 
         NanoClock clock = NanoClock.system();
 

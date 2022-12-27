@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Turela {
 
     public DcMotor motortur;
-    private int[] POSITIONS = {0, -1000, -2030, 1000, 0};
+    private final int[] POSITIONS = {0, -1000, -2030, 1000, 0};
 
     public Turela(HardwareMap hardwareMap) {
         motortur = hardwareMap.dcMotor.get(Config.turela);

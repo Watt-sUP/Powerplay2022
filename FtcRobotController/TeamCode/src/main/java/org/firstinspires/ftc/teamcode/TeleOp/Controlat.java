@@ -5,11 +5,7 @@ import androidx.annotation.Nullable;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
-
 
 import org.firstinspires.ftc.teamcode.gamepad.Button;
 import org.firstinspires.ftc.teamcode.gamepad.GamepadEx;
@@ -20,9 +16,8 @@ import org.firstinspires.ftc.teamcode.hardware.Mugurel;
 public class Controlat extends LinearOpMode {
 
     private Mugurel robot;
-    private int offset, max_offset;
+    private int max_offset;
     private int pos_glisiera = 0;
-    private int pos_turela = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -39,7 +34,8 @@ public class Controlat extends LinearOpMode {
         while (opModeIsActive()) {
             l.update();
             b.update();
-            offset = robot.glisiera.getOffset();
+
+            int offset = robot.glisiera.getOffset();
             if (offset > max_offset)
                 max_offset = offset;
 
@@ -71,22 +67,17 @@ public class Controlat extends LinearOpMode {
     }
 
     private void turela(Button pos_up, Button pos_down, Button addA, Button subA) {
-        if (addA.pressed()) {
-            pos_turela = 1;
-            robot.turela.setToPosition(pos_turela);
-        }
-        if (subA.pressed()) {
-            pos_turela = 3;
-            robot.turela.setToPosition(pos_turela);
-        }
-        if (pos_down.pressed()) {
-            pos_turela = 2;
-            robot.turela.setToPosition(pos_turela);
-        }
-        if (pos_up.pressed()) {
-            pos_turela = 4;
-            robot.turela.setToPosition(pos_turela);
-        }
+        if (addA.pressed())
+            robot.turela.setToPosition(1);
+
+        if (subA.pressed())
+            robot.turela.setToPosition(3);
+
+        if (pos_down.pressed())
+            robot.turela.setToPosition(2);
+
+        if (pos_up.pressed())
+            robot.turela.setToPosition(4);
     }
 
     private void glisiera(Button pos_up, Button pos_down, Button b, Button addB, Button subB) {
@@ -94,6 +85,7 @@ public class Controlat extends LinearOpMode {
             pos_glisiera++;
             robot.glisiera.setToPosition(pos_glisiera);
         }
+
         if (b.pressed())
             robot.glisiera.modifyPosition(-100);
 

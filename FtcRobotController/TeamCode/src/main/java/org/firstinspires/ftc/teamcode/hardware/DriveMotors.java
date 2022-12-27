@@ -9,10 +9,12 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
+import java.util.Objects;
+
 public class DriveMotors {
     DcMotor frontLeft, frontRight, backLeft, backRight;
 
-    public DriveMotors(HardwareMap hardwareMap) {
+    public DriveMotors(@NonNull HardwareMap hardwareMap) {
         frontLeft = hardwareMap.dcMotor.get(Config.left_front);
         frontRight = hardwareMap.dcMotor.get(Config.right_front);
         backLeft = hardwareMap.dcMotor.get(Config.left_back);
@@ -20,10 +22,10 @@ public class DriveMotors {
     }
 
     public void reverse_motors(String side) {
-        if (side == "left") {
+        if (Objects.equals(side, "left")) {
             frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
             backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        } else if (side == "right") {
+        } else if (Objects.equals(side, "right")) {
             frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
             backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         }
@@ -33,7 +35,7 @@ public class DriveMotors {
         double accel = -gamepad.left_stick_y;
         double strafe = gamepad.left_stick_x * 1.1;
         double rotation = gamepad.right_stick_x;
-        double FL_power = 0.0, BL_power = 0.0, FR_power = 0.0, BR_power = 0.0;
+        double FL_power, BL_power, FR_power, BR_power;
         double denominator = Math.max(Math.abs(accel) + Math.abs(strafe) + Math.abs(rotation), 1);
 
         if (botHeading != null) {
@@ -46,7 +48,7 @@ public class DriveMotors {
             BR_power = (rotY + rotX - rotation) / denominator;
         }
 
-        else if (botHeading == null) {
+        else {
             FL_power = (accel + strafe + rotation) / denominator;
             BL_power = (accel - strafe + rotation) / denominator;
             FR_power = (accel - strafe - rotation) / denominator;

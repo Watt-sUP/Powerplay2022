@@ -3,11 +3,8 @@ package org.firstinspires.ftc.teamcode.hardware;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.State;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 public class Colectare {
-    private static double stransPos = 0, desfacutPos = 0.05;
+    private final double desfacutPos = 0.05;
     private StateDeget stateDeget;
     public Servo deget;
 
@@ -23,6 +20,7 @@ public class Colectare {
     }
 
     public void strange() {
+        double stransPos = 0;
         deget.setPosition(stransPos);
         stateDeget = StateDeget.Strans;
     }
@@ -34,6 +32,6 @@ public class Colectare {
 
     public void toggleDeget() {
         if (stateDeget == StateDeget.Desfacut) strange();
-        else if (stateDeget != StateDeget.Desfacut) desface();
+        else desface();
     }
 }

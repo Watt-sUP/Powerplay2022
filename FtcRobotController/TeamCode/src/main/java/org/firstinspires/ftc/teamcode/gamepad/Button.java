@@ -7,9 +7,6 @@ public class Button {
     private boolean isPressed = false;
     private boolean pending = false;
 
-    Button() {
-    }
-
     public void update(boolean value) {
         raw = value;
         if (value) {

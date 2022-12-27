@@ -4,20 +4,15 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.gamepad.GamepadEx;
 import org.firstinspires.ftc.teamcode.hardware.Config;
-import org.firstinspires.ftc.teamcode.hardware.Mugurel;
 
 @Disabled
 @TeleOp(name = "Encoder tester", group = "Testing")
 public class TesterEncoder extends LinearOpMode {
 
-    private Mugurel robot;
     @Override
     public void runOpMode() {
-        robot = new Mugurel(hardwareMap);
 
         DcMotor frontLeftMotor = hardwareMap.dcMotor.get(Config.left_front);
         DcMotor backLeftMotor = hardwareMap.dcMotor.get(Config.left_back);
