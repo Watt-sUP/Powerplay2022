@@ -9,8 +9,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
-import java.util.Objects;
-
 public class DriveMotors {
     DcMotor frontLeft, frontRight, backLeft, backRight;
 
@@ -22,10 +20,10 @@ public class DriveMotors {
     }
 
     public void reverse_motors(@NonNull String side) {
-        if (Objects.equals(side.toLowerCase(), "left")) {
+        if (side.equalsIgnoreCase("left")) {
             frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
             backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        } else if (Objects.equals(side.toLowerCase(), "right")) {
+        } else if (side.equalsIgnoreCase("right")) {
             frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
             backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         }

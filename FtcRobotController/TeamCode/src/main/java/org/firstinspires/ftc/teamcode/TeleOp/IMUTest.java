@@ -23,7 +23,7 @@ public class IMUTest extends LinearOpMode {
         Servo odometry_servo = hardwareMap.servo.get(Config.odometry_servo);
         BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        driveMotors.reverse_motors("right");
+        driveMotors.reverse_motors("Right");
         odometry_servo.setPosition(Config.odo_pos);
 
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;

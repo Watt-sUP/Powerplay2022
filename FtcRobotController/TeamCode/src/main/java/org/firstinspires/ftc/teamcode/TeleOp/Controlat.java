@@ -29,7 +29,7 @@ public class Controlat extends LinearOpMode {
         GamepadEx b = new GamepadEx(gamepad2);
         Servo odoServo = hardwareMap.get(Servo.class, Config.odometry_servo);
 
-        robot.driveMotors.reverse_motors("right");
+        robot.driveMotors.reverse_motors("Right");
         odoServo.setPosition(Config.odo_pos);
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
