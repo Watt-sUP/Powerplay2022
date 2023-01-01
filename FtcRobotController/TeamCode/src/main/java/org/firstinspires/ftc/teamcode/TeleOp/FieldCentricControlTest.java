@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -28,15 +30,18 @@ public class FieldCentricControlTest extends LinearOpMode {
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(parameters);
 
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetry.setMsTransmissionInterval(50);
+
         waitForStart();
+        telemetry.clearAll();
 
         while (opModeIsActive()) {
             double botHeading = imu.getAngularOrientation().firstAngle;
 
             driveMotors.update_motor_speed(gamepad1, null, botHeading * (-1));
-            telemetry.addData("Bot Heading (Radians)", df.format(botHeading));
-            telemetry.addData("Bot Heading (Degrees)", df.format(Math.toDegrees(botHeading)));
+            telemetry.addData("Bot Orientation (Radians)", df.format(botHeading));
+            telemetry.addData("Bot Orientation (Degrees)", df.format(Math.toDegrees(botHeading)));
             telemetry.update();
         }
     }

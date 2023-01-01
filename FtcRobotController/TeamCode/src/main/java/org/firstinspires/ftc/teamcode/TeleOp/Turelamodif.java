@@ -1,19 +1,20 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 
-
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-
-import org.firstinspires.ftc.teamcode.hardware.Mugurel;
 import org.firstinspires.ftc.teamcode.gamepad.Button;
 import org.firstinspires.ftc.teamcode.gamepad.GamepadEx;
+import org.firstinspires.ftc.teamcode.hardware.Mugurel;
 
 
 @TeleOp(name = "Restaurare Turela", group = "TeleOp")
 public class Turelamodif extends LinearOpMode {
     private Mugurel robot;
+
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -21,6 +22,7 @@ public class Turelamodif extends LinearOpMode {
         GamepadEx b = new GamepadEx(gamepad2);
         robot = new Mugurel(hardwareMap);
 
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetry.setMsTransmissionInterval(50);
         waitForStart();
 
@@ -30,29 +32,28 @@ public class Turelamodif extends LinearOpMode {
 
             update_turela(b.a, b.b);
             update_glisiera(b.x, b.y);
-            telemetry.addData("Turela ticks:", robot.turela.getTicks());
-            telemetry.addData("Glisiera ticks:", robot.glisiera.getTicks());
-            telemetry.update();
-            idle();
 
+            telemetry.addData("Turela Ticks", robot.turela.getTicks());
+            telemetry.addData("Glisiera Ticks", robot.glisiera.getTicks());
+            telemetry.update();
         }
         robot.shutdown_system_motors();
     }
 
     private void update_glisiera(Button pos_down, Button pos_up) {
-        if (pos_down.pressed()) {
-            robot.glisiera.modifyPosition(+ 100);
-        }
-        if (pos_up.pressed()) {
-            robot.glisiera.modifyPosition( -100);
-        }
+        if (pos_down.pressed())
+            robot.glisiera.modifyPosition(+100);
+
+        if (pos_up.pressed())
+            robot.glisiera.modifyPosition(-100);
+
     }
 
     private void update_turela(Button pos_up, Button pos_down) {
         if (pos_down.pressed())
-            robot.turela.modifyPosition(+ 50);
+            robot.turela.modifyPosition(+50);
 
         if (pos_up.pressed())
-            robot.turela.modifyPosition( -50);
+            robot.turela.modifyPosition(-50);
     }
 }

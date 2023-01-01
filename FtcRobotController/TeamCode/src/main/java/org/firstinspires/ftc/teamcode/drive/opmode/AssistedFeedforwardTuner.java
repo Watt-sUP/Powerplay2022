@@ -50,7 +50,6 @@ public class AssistedFeedforwardTuner extends LinearOpMode {
     private double middle = (values.low + values.high) / 2;
     private boolean use_kA = true;
     private FtcDashboard dashboard = FtcDashboard.getInstance();
-    private SampleMecanumDrive drive;
     private final DecimalFormat df = new DecimalFormat("0.00");
 
     double last_target_velo = 0.0;
@@ -89,7 +88,7 @@ public class AssistedFeedforwardTuner extends LinearOpMode {
         str_dict.put(Change.MAINTAIN, "maintained");
 
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-        drive = new SampleMecanumDrive(hardwareMap);
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         Mode mode = Mode.TUNING_MODE;
 
         NanoClock clock = NanoClock.system();
@@ -203,7 +202,7 @@ public class AssistedFeedforwardTuner extends LinearOpMode {
                         if (change == Change.INCREASE || change == Change.DECREASE)
                             telemetry.addLine("\nThe kA value should be " + str_dict.get(change) + ".");
 
-                        else if (change == Change.MAINTAIN) {
+                        else {
                             telemetry.addLine("\nThe kA value should be" + str_dict.get(Change.MAINTAIN) + ". Make sure you update the kA value in your DriveConstants file.");
                             telemetry.addData("kA Value", kA);
                         }
@@ -217,7 +216,7 @@ public class AssistedFeedforwardTuner extends LinearOpMode {
                             values.low = middle;
                             telemetry.addLine("The new kA value will be set to " + ((values.low + values.high) / 2));
                         }
-                        else if (change == Change.DECREASE) {
+                        else {
                             values.high = middle;
                             telemetry.addLine("The new kA value will be set to " + ((values.low + values.high) / 2));
                         }

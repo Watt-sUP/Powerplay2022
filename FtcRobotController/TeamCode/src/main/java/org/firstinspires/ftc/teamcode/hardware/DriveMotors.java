@@ -21,11 +21,11 @@ public class DriveMotors {
         backRight = hardwareMap.dcMotor.get(Config.right_back);
     }
 
-    public void reverse_motors(String side) {
-        if (Objects.equals(side, "left")) {
+    public void reverse_motors(@NonNull String side) {
+        if (Objects.equals(side.toLowerCase(), "left")) {
             frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
             backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        } else if (Objects.equals(side, "right")) {
+        } else if (Objects.equals(side.toLowerCase(), "right")) {
             frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
             backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         }

@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import androidx.annotation.Nullable;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -30,7 +32,15 @@ public class Controlat extends LinearOpMode {
         robot.driveMotors.reverse_motors("right");
         odoServo.setPosition(Config.odo_pos);
 
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        telemetry.setMsTransmissionInterval(50);
+        telemetry.addLine("Odometry servo lifted to position" + Config.odo_pos);
+        telemetry.addLine("Waiting for start...");
+        telemetry.update();
+
         waitForStart();
+        telemetry.clearAll();
+
         while (opModeIsActive()) {
             l.update();
             b.update();
@@ -52,8 +62,8 @@ public class Controlat extends LinearOpMode {
             glisiera(b.y, b.x, b.b, b.right_bumper, b.left_bumper);
             turela(b.dpad_up, b.dpad_down, b.dpad_right, b.dpad_left);
 
-            telemetry.addData("Current Offset:", offset);
-            telemetry.addData("Max Offset:", max_offset);
+            telemetry.addData("Current Offset", offset);
+            telemetry.addData("Max Offset", max_offset);
             telemetry.update();
 
             idle();
