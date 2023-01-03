@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -19,6 +20,7 @@ public class IMUTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
+        PhotonCore.enable();
         DriveMotors driveMotors = new DriveMotors(hardwareMap);
         Servo odometry_servo = hardwareMap.servo.get(Config.odometry_servo);
         BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu");
@@ -49,5 +51,6 @@ public class IMUTest extends LinearOpMode {
             telemetry.addData("IMU third angle", df.format(imu.getAngularOrientation().thirdAngle));
             telemetry.update();
         }
+        PhotonCore.disable();
     }
 }

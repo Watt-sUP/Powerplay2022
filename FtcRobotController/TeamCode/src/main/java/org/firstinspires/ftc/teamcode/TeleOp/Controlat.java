@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -24,6 +25,7 @@ public class Controlat extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
+        PhotonCore.enable();
         robot = new Mugurel(hardwareMap);
         GamepadEx l = new GamepadEx(gamepad1);
         GamepadEx b = new GamepadEx(gamepad2);
@@ -69,6 +71,7 @@ public class Controlat extends LinearOpMode {
             idle();
         }
         robot.shutdown_system_motors();
+        PhotonCore.disable();
     }
 
     private void deget(Button y) {
