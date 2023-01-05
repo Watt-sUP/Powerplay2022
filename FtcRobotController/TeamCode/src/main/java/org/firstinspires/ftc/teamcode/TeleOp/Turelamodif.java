@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.gamepad.Button;
-import org.firstinspires.ftc.teamcode.gamepad.GamepadEx;
 import org.firstinspires.ftc.teamcode.hardware.Mugurel;
 
 
@@ -18,8 +18,7 @@ public class Turelamodif extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        GamepadEx l = new GamepadEx(gamepad1);
-        GamepadEx b = new GamepadEx(gamepad2);
+        GamepadEx driver2 = new GamepadEx(gamepad2);
         robot = new Mugurel(hardwareMap);
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -27,11 +26,10 @@ public class Turelamodif extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            l.update();
-            b.update();
+            driver2.readButtons();
 
-            update_turela(b.a, b.b);
-            update_glisiera(b.x, b.y);
+            update_turela(driver2);
+            update_glisiera(driver2);
 
             telemetry.addData("Turela Ticks", robot.turela.getTicks());
             telemetry.addData("Glisiera Ticks", robot.glisiera.getTicks());
@@ -40,20 +38,19 @@ public class Turelamodif extends LinearOpMode {
         robot.shutdown_system_motors();
     }
 
-    private void update_glisiera(Button pos_down, Button pos_up) {
-        if (pos_down.pressed())
+    private void update_glisiera(GamepadEx gamepad) {
+        if (gamepad.wasJustPressed(GamepadKeys.Button.X))
             robot.glisiera.modifyPosition(+100);
 
-        if (pos_up.pressed())
+        if (gamepad.wasJustPressed(GamepadKeys.Button.Y))
             robot.glisiera.modifyPosition(-100);
-
     }
 
-    private void update_turela(Button pos_up, Button pos_down) {
-        if (pos_down.pressed())
+    private void update_turela(GamepadEx gamepad) {
+        if (gamepad.wasJustPressed(GamepadKeys.Button.B))
             robot.turela.modifyPosition(+50);
 
-        if (pos_up.pressed())
+        if (gamepad.wasJustPressed(GamepadKeys.Button.A))
             robot.turela.modifyPosition(-50);
     }
 }

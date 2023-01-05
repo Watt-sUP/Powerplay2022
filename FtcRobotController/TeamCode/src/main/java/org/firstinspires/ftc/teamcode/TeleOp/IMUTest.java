@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -21,15 +24,17 @@ public class IMUTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         PhotonCore.enable();
+        GamepadEx gamepad = new GamepadEx(gamepad1);
+
         DriveMotors driveMotors = new DriveMotors(hardwareMap);
         Servo odometry_servo = hardwareMap.servo.get(Config.odometry_servo);
-        BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu");
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         driveMotors.reverse_motors("Right");
         odometry_servo.setPosition(Config.odo_pos);
 
+        RevIMU imu = new RevIMU(hardwareMap, "imu");
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        imu.initialize(parameters);
+        imu.init(parameters);
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetry.setMsTransmissionInterval(50);
@@ -46,9 +51,15 @@ public class IMUTest extends LinearOpMode {
         while (opModeIsActive()) {
             driveMotors.update_motor_speed(gamepad1, null, null);
 
-            telemetry.addData("Bot heading", df.format(imu.getAngularOrientation().firstAngle));
-            telemetry.addData("IMU second angle", df.format(imu.getAngularOrientation().secondAngle));
-            telemetry.addData("IMU third angle", df.format(imu.getAngularOrientation().thirdAngle));
+            gamepad.readButtons();
+            if (gamepad.wasJustPressed(GamepadKeys.Button.A))
+                imu.reset();
+
+            telemetry.addData("Bot Heading (Relative)", df.format(imu.getHeading()));
+            telemetry.addData("Bot Heading (Absolute)", df.format(imu.getAbsoluteHeading()));
+            telemetry.addData("Acceleration Value", df.format(gamepad.getLeftY()));
+            telemetry.addData("Strafe Value", df.format(gamepad.getLeftX()));
+            telemetry.addData("Rotation Value", df.format(gamepad.getRightX()));
             telemetry.update();
         }
         PhotonCore.disable();

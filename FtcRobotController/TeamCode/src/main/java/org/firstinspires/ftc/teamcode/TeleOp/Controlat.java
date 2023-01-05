@@ -5,13 +5,14 @@ import androidx.annotation.Nullable;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.gamepad.Button;
-import org.firstinspires.ftc.teamcode.gamepad.GamepadEx;
 import org.firstinspires.ftc.teamcode.hardware.Config;
 import org.firstinspires.ftc.teamcode.hardware.Mugurel;
 
@@ -20,15 +21,15 @@ public class Controlat extends LinearOpMode {
 
     private Mugurel robot;
     private int max_offset;
-    private int pos_glisiera = 0;
+    private int pos_glisiera = 0, last_pos_glisiera = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         PhotonCore.enable();
         robot = new Mugurel(hardwareMap);
-        GamepadEx l = new GamepadEx(gamepad1);
-        GamepadEx b = new GamepadEx(gamepad2);
+        GamepadEx driver1 = new GamepadEx(gamepad1);
+        GamepadEx driver2 = new GamepadEx(gamepad2);
         Servo odoServo = hardwareMap.get(Servo.class, Config.odometry_servo);
 
         robot.driveMotors.reverse_motors("Right");
@@ -44,8 +45,8 @@ public class Controlat extends LinearOpMode {
         telemetry.clearAll();
 
         while (opModeIsActive()) {
-            l.update();
-            b.update();
+            driver1.readButtons();
+            driver2.readButtons();
 
             int offset = robot.glisiera.getOffset();
             if (offset > max_offset)
@@ -54,18 +55,20 @@ public class Controlat extends LinearOpMode {
             @Nullable Double powerLimit;
             if (gamepad1.right_trigger >= 0.3)
                 powerLimit = 0.2;
-            else if (gamepad1.right_bumper)
+            else if (driver1.isDown(GamepadKeys.Button.RIGHT_BUMPER))
                 powerLimit = 0.4;
             else
                 powerLimit = null;
 
-            deget(b.a);
+            deget(driver2);
             robot.driveMotors.update_motor_speed(gamepad1, powerLimit, null);
-            glisiera(b.y, b.x, b.b, b.right_bumper, b.left_bumper);
-            turela(b.dpad_up, b.dpad_down, b.dpad_right, b.dpad_left);
+            glisiera(driver2);
+            turela(driver2);
 
             telemetry.addData("Current Offset", offset);
             telemetry.addData("Max Offset", max_offset);
+            telemetry.addData("Current Sliders Position", pos_glisiera);
+            telemetry.addData("Power Limit", (powerLimit == null) ? 1.0 : powerLimit);
             telemetry.update();
 
             idle();
@@ -74,46 +77,45 @@ public class Controlat extends LinearOpMode {
         PhotonCore.disable();
     }
 
-    private void deget(Button y) {
-        if (y.pressed())
+    private void deget(GamepadEx gamepad) {
+        if (gamepad.wasJustPressed(GamepadKeys.Button.A))
             robot.deget.toggleDeget();
     }
 
-    private void turela(Button pos_up, Button pos_down, Button addA, Button subA) {
-        if (addA.pressed())
+    private void turela(GamepadEx gamepad) {
+        if (gamepad.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT))
             robot.turela.setToPosition(1);
 
-        if (subA.pressed())
-            robot.turela.setToPosition(3);
-
-        if (pos_down.pressed())
+        if (gamepad.wasJustPressed(GamepadKeys.Button.DPAD_DOWN))
             robot.turela.setToPosition(2);
 
-        if (pos_up.pressed())
+        if (gamepad.wasJustPressed(GamepadKeys.Button.DPAD_LEFT))
+            robot.turela.setToPosition(3);
+
+        if (gamepad.wasJustPressed(GamepadKeys.Button.DPAD_UP))
             robot.turela.setToPosition(4);
     }
 
-    private void glisiera(Button pos_up, Button pos_down, Button b, Button addB, Button subB) {
-        if (pos_up.pressed() && pos_glisiera < 5) {
+    private void glisiera(GamepadEx gamepad) {
+        if (gamepad.wasJustPressed(GamepadKeys.Button.Y))
             pos_glisiera++;
-            robot.glisiera.setToPosition(pos_glisiera);
-        }
 
-        if (b.pressed())
+        if (gamepad.wasJustPressed(GamepadKeys.Button.X))
+            pos_glisiera--;
+
+        if (gamepad.wasJustPressed(GamepadKeys.Button.B))
             robot.glisiera.modifyPosition(-100);
 
-        if (pos_down.pressed() && pos_glisiera > 0) {
-            pos_glisiera--;
-            robot.glisiera.setToPosition(pos_glisiera);
-        }
-
-        if (addB.pressed()) {
+        if (gamepad.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER))
             pos_glisiera = 5;
-            robot.glisiera.setToPosition(pos_glisiera);
-        }
-        if (subB.pressed()) {
+
+        if (gamepad.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER))
             pos_glisiera = 0;
+
+        pos_glisiera = Range.clip(pos_glisiera, 0, 5);
+        if (pos_glisiera != last_pos_glisiera) {
             robot.glisiera.setToPosition(pos_glisiera);
+            last_pos_glisiera = pos_glisiera;
         }
     }
 }
