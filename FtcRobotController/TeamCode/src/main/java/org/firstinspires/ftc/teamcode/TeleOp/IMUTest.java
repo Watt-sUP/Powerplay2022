@@ -41,7 +41,6 @@ public class IMUTest extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(frontLeft, frontRight, backLeft, backRight);
         GamepadEx gamepad = new GamepadEx(gamepad1);
 
-
         Servo odometry_servo = hardwareMap.servo.get(Config.odometry_servo);
         odometry_servo.setPosition(Config.odo_pos);
 
@@ -79,11 +78,10 @@ public class IMUTest extends LinearOpMode {
                 drive.setMaxSpeed(0.2);
             else if (gamepad.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER))
                 drive.setMaxSpeed(0.4);
-            else
-                drive.setMaxSpeed(1.0);
+            else drive.setMaxSpeed(1.0);
 
-            telemetry.addData("Bot Heading (Relative)", df.format(imu.getHeading()));
-            telemetry.addData("Bot Heading (Absolute)", df.format(imu.getAbsoluteHeading()));
+            telemetry.addData("Bot Heading (Relative)", df.format((imu.getHeading() < 0) ? (imu.getHeading() + 360) : imu.getHeading()));
+            telemetry.addData("Bot Heading (Absolute)", df.format((imu.getAbsoluteHeading() < 0) ? (imu.getAbsoluteHeading() + 360) : imu.getAbsoluteHeading()));
             telemetry.addData("Acceleration Value", df.format(gamepad.getLeftY()));
             telemetry.addData("Strafe Value", df.format(gamepad.getLeftX()));
             telemetry.addData("Rotation Value", df.format(gamepad.getRightX()));
