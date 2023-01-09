@@ -248,8 +248,8 @@ public class AssistedFeedforwardTuner extends LinearOpMode {
     }
 
     public static class kA_values {
-        double low;
-        double high;
+        public double low;
+        public double high;
 
         public kA_values(double low, double high)
         {

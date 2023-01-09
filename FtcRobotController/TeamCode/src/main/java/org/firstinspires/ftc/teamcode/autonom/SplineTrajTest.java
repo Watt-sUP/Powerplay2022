@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class SplineTrajTest extends LinearOpMode {
 
     public static double STRAFE = 24, FORWARD = 38;
-    public static Vector2d SPLINE_END = new Vector2d(59, -12);
+    public static double SPLINE_END_X = 56, SPLINE_END_Y = -12;
 
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -31,11 +31,11 @@ public class SplineTrajTest extends LinearOpMode {
                 .forward(FORWARD)
                 .addTemporalMarker(0.2, 0, () -> {
                 })
-                .waitSeconds(1.5)
+                .waitSeconds(1.7)
                 .addTemporalMarker(() -> {
                 })
                 .waitSeconds(0.3)
-                .splineTo(SPLINE_END, Math.toRadians(0))
+                .splineTo(new Vector2d(SPLINE_END_X, SPLINE_END_Y), Math.toRadians(0))
                 .addTemporalMarker(() -> {
                 })
                 .resetConstraints()

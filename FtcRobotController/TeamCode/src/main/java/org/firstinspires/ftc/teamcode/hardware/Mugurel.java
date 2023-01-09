@@ -8,12 +8,14 @@ public class Mugurel {
     public Turela turela;
     public Colectare deget;
     public DriveMotors driveMotors;
+    public Foarfeca foarfeca;
 
     public Mugurel(HardwareMap hm) {
         glisiera = new Glisiere(hm);
         turela = new Turela(hm);
         deget = new Colectare(hm);
         driveMotors = new DriveMotors(hm);
+        foarfeca = new Foarfeca(hm);
     }
 
     public void shutdown_system_motors()

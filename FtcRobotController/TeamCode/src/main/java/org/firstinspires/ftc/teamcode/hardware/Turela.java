@@ -4,25 +4,36 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import java.util.Hashtable;
+
 public class Turela {
 
     public DcMotor motortur;
-    private final int[] POSITIONS = {0, -1000, -2030, 1000, 0};
+    private Hashtable<Position, Integer> pos_dict;
+
+    public enum Position {
+        FRONT,
+        BACK,
+        LEFT,
+        RIGHT
+    }
 
     public Turela(HardwareMap hardwareMap) {
         motortur = hardwareMap.dcMotor.get(Config.turela);
         motortur.setDirection(DcMotorSimple.Direction.FORWARD);
         motortur.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motortur.setTargetPosition(0);
-        motortur.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        pos_dict = new Hashtable<>();
+        pos_dict.put(Position.FRONT, 0);
+        pos_dict.put(Position.BACK, -2030);
+        pos_dict.put(Position.LEFT, -1000);
+        pos_dict.put(Position.RIGHT, 1000);
     }
 
-    public void setToPosition(int position) {
-        motortur.setTargetPosition(POSITIONS[position]);
+    public void setToPosition(Position position) {
+        motortur.setTargetPosition(pos_dict.get(position));
         motortur.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        if (position != 0) motortur.setPower(1);
-        else motortur.setPower(1);
+        motortur.setPower(1);
     }
 
     public void setToTicks(int ticks) {

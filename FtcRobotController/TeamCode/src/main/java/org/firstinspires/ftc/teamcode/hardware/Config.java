@@ -10,6 +10,7 @@ public class Config {
     public static final String turela = "TUR";
     public static final String deget = "DEG";
     public static final String glisiera1 = "GLI1";
+    public static final String foarfeca = "FOAR";
 
     public static final String odometry_servo = "ODO";
     public static final double odo_pos = 0.9;

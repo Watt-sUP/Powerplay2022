@@ -157,7 +157,7 @@ public class TrajectoryRight extends LinearOpMode {
                 .turn(Math.toRadians(90))
                 .forward(24)
                 .strafeLeft(12)
-                .waitSeconds(1.5)
+                .waitSeconds(1.7)
                 .addTemporalMarker(deget::toggleDeget)
                 .waitSeconds(0.3)
                 .strafeRight(11)

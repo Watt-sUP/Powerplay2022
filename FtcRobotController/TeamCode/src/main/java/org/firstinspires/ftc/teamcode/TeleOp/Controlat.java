@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.hardware.Config;
 import org.firstinspires.ftc.teamcode.hardware.Mugurel;
+import org.firstinspires.ftc.teamcode.hardware.Turela;
 
 @TeleOp(name = "Salam adevaratu", group = "TeleOp")
 public class Controlat extends LinearOpMode {
@@ -65,6 +66,9 @@ public class Controlat extends LinearOpMode {
             glisiera(driver2);
             turela(driver2);
 
+            if (driver2.wasJustPressed(GamepadKeys.Button.LEFT_STICK_BUTTON))
+                robot.foarfeca.toggleFoarfeca();
+
             telemetry.addData("Current Offset", offset);
             telemetry.addData("Max Offset", max_offset);
             telemetry.addData("Current Sliders Position", pos_glisiera);
@@ -83,17 +87,17 @@ public class Controlat extends LinearOpMode {
     }
 
     private void turela(GamepadEx gamepad) {
-        if (gamepad.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT))
-            robot.turela.setToPosition(1);
+        if (gamepad.wasJustPressed(GamepadKeys.Button.DPAD_LEFT))
+            robot.turela.setToPosition(Turela.Position.LEFT);
 
         if (gamepad.wasJustPressed(GamepadKeys.Button.DPAD_DOWN))
-            robot.turela.setToPosition(2);
+            robot.turela.setToPosition(Turela.Position.BACK);
 
-        if (gamepad.wasJustPressed(GamepadKeys.Button.DPAD_LEFT))
-            robot.turela.setToPosition(3);
+        if (gamepad.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT))
+            robot.turela.setToPosition(Turela.Position.RIGHT);
 
         if (gamepad.wasJustPressed(GamepadKeys.Button.DPAD_UP))
-            robot.turela.setToPosition(4);
+            robot.turela.setToPosition(Turela.Position.FRONT);
     }
 
     private void glisiera(GamepadEx gamepad) {
