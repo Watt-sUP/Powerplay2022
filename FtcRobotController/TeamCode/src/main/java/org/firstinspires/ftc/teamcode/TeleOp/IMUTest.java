@@ -26,7 +26,6 @@ public class IMUTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        PhotonCore.enable();
 
         Motor frontLeft = new Motor(hardwareMap, Config.left_front);
         Motor frontRight = new Motor(hardwareMap, Config.right_front);
@@ -51,7 +50,7 @@ public class IMUTest extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetry.setMsTransmissionInterval(50);
-        telemetry.addLine("Odometry servo raised to" + Config.odo_pos);
+        telemetry.addLine("Odometry servo raised to " + Config.odo_pos);
         telemetry.addLine("Waiting for start...");
         telemetry.update();
 
@@ -87,6 +86,5 @@ public class IMUTest extends LinearOpMode {
             telemetry.addData("Rotation Value", df.format(gamepad.getRightX()));
             telemetry.update();
         }
-        PhotonCore.disable();
     }
 }

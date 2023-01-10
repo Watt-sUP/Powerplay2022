@@ -27,7 +27,6 @@ public class Controlat extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        PhotonCore.enable();
         robot = new Mugurel(hardwareMap);
         GamepadEx driver1 = new GamepadEx(gamepad1);
         GamepadEx driver2 = new GamepadEx(gamepad2);
@@ -38,7 +37,7 @@ public class Controlat extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetry.setMsTransmissionInterval(50);
-        telemetry.addLine("Odometry servo lifted to position" + Config.odo_pos);
+        telemetry.addLine("Odometry servo lifted to position " + Config.odo_pos);
         telemetry.addLine("Waiting for start...");
         telemetry.update();
 
@@ -78,7 +77,6 @@ public class Controlat extends LinearOpMode {
             idle();
         }
         robot.shutdown_system_motors();
-        PhotonCore.disable();
     }
 
     private void deget(GamepadEx gamepad) {

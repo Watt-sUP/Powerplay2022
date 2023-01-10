@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import com.arcrobotics.ftclib.hardware.ServoEx;
+import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Foarfeca {
-        private static double stransPos = 0, desfacutPos = 0.6;
-        private StateFoarfeca stateFoarfeca;
-        public Servo foarfeca;
+    private static final double desfacutPos = 0.5;
+    private StateFoarfeca stateFoarfeca;
+    public ServoEx foarfeca;
 
         private enum StateFoarfeca {
             Desfacut,
@@ -15,11 +17,12 @@ public class Foarfeca {
 
         public Foarfeca(HardwareMap hardwareMap) {
             stateFoarfeca = StateFoarfeca.Desfacut;
-            foarfeca = hardwareMap.servo.get(Config.foarfeca);
+            foarfeca = new SimpleServo(hardwareMap, Config.foarfeca, 0, 360);
             foarfeca.setPosition(desfacutPos);
         }
 
         public void strange() {
+            double stransPos = 1;
             foarfeca.setPosition(stransPos);
             stateFoarfeca = StateFoarfeca.Strans;
         }

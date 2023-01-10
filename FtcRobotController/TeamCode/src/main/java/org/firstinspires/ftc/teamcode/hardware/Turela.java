@@ -26,8 +26,8 @@ public class Turela {
         pos_dict = new Hashtable<>();
         pos_dict.put(Position.FRONT, 0);
         pos_dict.put(Position.BACK, -2030);
-        pos_dict.put(Position.LEFT, -1000);
-        pos_dict.put(Position.RIGHT, 1000);
+        pos_dict.put(Position.LEFT, 1000);
+        pos_dict.put(Position.RIGHT, -1000);
     }
 
     public void setToPosition(Position position) {
