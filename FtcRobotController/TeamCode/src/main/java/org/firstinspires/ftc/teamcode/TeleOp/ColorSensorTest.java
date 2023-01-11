@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import android.graphics.Color;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.hardware.SensorColor;
@@ -20,8 +18,6 @@ public class ColorSensorTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         // TODO: Insert Sensor Name
         sensor = new SensorColor(hardwareMap, "name");
-
-        // TODO: Determine HSV Values
         float[] hsv = {-1, -1, -1};
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -29,7 +25,9 @@ public class ColorSensorTest extends LinearOpMode {
 
         waitForStart();
         while (opModeIsActive()) {
+            sensor.RGBtoHSV(sensor.red(), sensor.green(), sensor.blue(), hsv);
             telemetry.addData("RGB Value:", Arrays.asList(sensor.red(), sensor.green(), sensor.blue()));
+            telemetry.addData("HSV Value:", hsv);
             telemetry.update();
         }
     }

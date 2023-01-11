@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.autonom;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.autonom.apriltag.AprilTagDetectionPipeline;
@@ -20,7 +20,7 @@ import org.openftc.easyopencv.OpenCvInternalCamera2;
 
 import java.util.ArrayList;
 
-@Config
+@Disabled
 @Autonomous(name = "Traiectorie Dreapta", group = "auto")
 public class TrajectoryRight extends LinearOpMode {
 

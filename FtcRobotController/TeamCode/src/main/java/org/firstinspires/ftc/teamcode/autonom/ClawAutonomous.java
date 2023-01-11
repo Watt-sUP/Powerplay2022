@@ -21,7 +21,9 @@ public class ClawAutonomous extends LinearOpMode {
         telemetry.setMsTransmissionInterval(60);
         waitForStart();
 
-        // Get cone
+        // Section: Get cone
+        // FIXME: Find claw grab timing
+        // TODO: Determine ticks for each cone
         robot.glisiera.setToPosition(2);
         sleep(600);
         robot.turela.setToPosition(Turela.Position.LEFT);
@@ -31,7 +33,8 @@ public class ClawAutonomous extends LinearOpMode {
         robot.deget.toggleDeget();
         sleep(200);
 
-        // Drop cone
+        // Section: Drop cone
+        // TODO: Determine turela ticks and custom scissors position
         robot.glisiera.setToPosition(4);
         sleep(800);
         robot.turela.setToTicks(TURELA_TICKS);
@@ -41,10 +44,11 @@ public class ClawAutonomous extends LinearOpMode {
         robot.deget.toggleDeget();
         sleep(200);
 
-        // Reset bot
-        robot.foarfeca.toggleFoarfeca();
+        // Section: Reset bot to starting position
+        robot.foarfeca.strange();
         robot.turela.setToPosition(Turela.Position.FRONT);
         sleep(1000);
         robot.glisiera.setToPosition(0);
+        sleep(1000);
     }
 }
