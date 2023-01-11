@@ -60,7 +60,7 @@ public class Controlat extends LinearOpMode {
             else
                 powerLimit = null;
 
-            deget(driver2);
+            deget(driver1);
             robot.driveMotors.update_motor_speed(gamepad1, powerLimit, null);
             glisiera(driver2);
             turela(driver2);
@@ -106,15 +106,15 @@ public class Controlat extends LinearOpMode {
             pos_glisiera--;
 
         if (gamepad.wasJustPressed(GamepadKeys.Button.B))
-            robot.glisiera.modifyPosition(-100);
+            robot.glisiera.modifyPosition(-80);
 
         if (gamepad.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER))
-            pos_glisiera = 5;
+            pos_glisiera = 4;
 
         if (gamepad.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER))
             pos_glisiera = 0;
 
-        pos_glisiera = Range.clip(pos_glisiera, 0, 5);
+        pos_glisiera = Range.clip(pos_glisiera, 0, 4);
         if (pos_glisiera != last_pos_glisiera) {
             robot.glisiera.setToPosition(pos_glisiera);
             last_pos_glisiera = pos_glisiera;

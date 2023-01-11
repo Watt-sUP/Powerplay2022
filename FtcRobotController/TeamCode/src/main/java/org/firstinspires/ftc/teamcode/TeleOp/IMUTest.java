@@ -17,11 +17,9 @@ import org.firstinspires.ftc.teamcode.hardware.Config;
 
 import java.text.DecimalFormat;
 
-@com.acmerobotics.dashboard.config.Config
 @TeleOp(name = "IMU Angle Test", group = "Testing")
 public class IMUTest extends LinearOpMode {
     DecimalFormat df = new DecimalFormat("0.00");
-    public static boolean SQUARE_INPUTS = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -66,7 +64,7 @@ public class IMUTest extends LinearOpMode {
                     gamepad.getLeftX(),
                     gamepad.getLeftY(),
                     gamepad.getRightX(),
-                    SQUARE_INPUTS
+                    false
             );
             gamepad.readButtons();
 
