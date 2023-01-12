@@ -3,12 +3,15 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.util.Angle;
+import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.StandardTrackingWheelLocalizer;
+import org.firstinspires.ftc.teamcode.hardware.Colectare;
+import org.firstinspires.ftc.teamcode.hardware.Foarfeca;
 
 /**
  * Opmode designed to assist the user in tuning the `StandardTrackingWheelLocalizer`'s
@@ -65,10 +68,19 @@ import org.firstinspires.ftc.teamcode.drive.StandardTrackingWheelLocalizer;
 @TeleOp(group = "drive")
 public class TrackingWheelLateralDistanceTuner extends LinearOpMode {
     public static int NUM_TURNS = 10;
+    public static boolean LOAD_IMU = false;
+    private RevIMU imu;
 
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        Foarfeca foarfeca = new Foarfeca(hardwareMap);
+        Colectare deget = new Colectare(hardwareMap);
+
+        if (LOAD_IMU) {
+            imu = new RevIMU(hardwareMap, "imu");
+            imu.init();
+        }
 
         if (!(drive.getLocalizer() instanceof StandardTrackingWheelLocalizer)) {
             RobotLog.setGlobalErrorMsg("StandardTrackingWheelLocalizer is not being set in the "
@@ -76,6 +88,7 @@ public class TrackingWheelLateralDistanceTuner extends LinearOpMode {
                     + "(hardwareMap));\" is called in SampleMecanumDrive.java");
         }
 
+        telemetry.setMsTransmissionInterval(60);
         telemetry.addLine("Prior to beginning the routine, please read the directions "
                 + "located in the comments of the opmode file.");
         telemetry.addLine("Press play to begin the tuning routine.");
@@ -108,6 +121,9 @@ public class TrackingWheelLateralDistanceTuner extends LinearOpMode {
             lastHeading = heading;
 
             telemetry.clearAll();
+
+            if (LOAD_IMU)
+                telemetry.addLine("IMU Heading: " + imu.getHeading());
             telemetry.addLine("Total Heading (deg): " + Math.toDegrees(headingAccumulator));
             telemetry.addLine("Raw Heading (deg): " + Math.toDegrees(heading));
             telemetry.addLine();
@@ -119,6 +135,9 @@ public class TrackingWheelLateralDistanceTuner extends LinearOpMode {
         }
 
         telemetry.clearAll();
+
+        if (LOAD_IMU)
+            telemetry.addLine("IMU final heading: " + imu.getHeading());
         telemetry.addLine("Localizer's total heading: " + Math.toDegrees(headingAccumulator) + "°");
         telemetry.addLine("Effective LATERAL_DISTANCE: " +
                 (headingAccumulator / (NUM_TURNS * Math.PI * 2)) * StandardTrackingWheelLocalizer.LATERAL_DISTANCE);

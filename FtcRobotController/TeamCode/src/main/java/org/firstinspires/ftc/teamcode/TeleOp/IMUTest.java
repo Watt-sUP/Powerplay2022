@@ -12,7 +12,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.hardware.Colectare;
 import org.firstinspires.ftc.teamcode.hardware.Config;
+import org.firstinspires.ftc.teamcode.hardware.Foarfeca;
 
 import java.text.DecimalFormat;
 
@@ -23,6 +25,8 @@ public class IMUTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
+        Foarfeca foarfeca = new Foarfeca(hardwareMap);
+        Colectare deget = new Colectare(hardwareMap);
 
         Motor frontLeft = new Motor(hardwareMap, Config.left_front);
         Motor frontRight = new Motor(hardwareMap, Config.right_front);

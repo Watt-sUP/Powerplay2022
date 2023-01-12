@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Colectare {
-    private final double desfacutPos = 0;
+    private final double desfacutPos = 0.5;
     private StateDeget stateDeget;
     public ServoEx deget;
 
@@ -17,12 +17,12 @@ public class Colectare {
 
     public Colectare(HardwareMap hardwareMap) {
         stateDeget = StateDeget.Desfacut;
-        deget = new SimpleServo(hardwareMap, Config.deget, 0, 360);
+        deget = new SimpleServo(hardwareMap, Config.deget, -360, 360);
         deget.setPosition(desfacutPos);
     }
 
     public void strange() {
-        double stransPos = 0.35;
+        double stransPos = 0;
         deget.setPosition(stransPos);
         stateDeget = StateDeget.Strans;
     }

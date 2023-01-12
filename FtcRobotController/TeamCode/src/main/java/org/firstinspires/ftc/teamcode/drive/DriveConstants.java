@@ -16,16 +16,16 @@ public class DriveConstants {
 
     public static double WHEEL_RADIUS = 1.9685; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 10.513; // in
+    public static double TRACK_WIDTH = 9.99; // in
 
-    public static double kV = 0.01656;
-    public static double kA = 0.0028;
-    public static double kStatic = 0.06992;
+    public static double kV = 0.01515;
+    public static double kA = 0.0027;
+    public static double kStatic = 0.07162;
 
-    public static double MAX_VEL = 55.57470216843153;
-    public static double MAX_ACCEL = 55.57470216843153;
-    public static double MAX_ANG_VEL = 5.315093760821346;
-    public static double MAX_ANG_ACCEL = 5.315093760821346;
+    public static double MAX_VEL = 67.02741442632797;
+    public static double MAX_ACCEL = 67.02741442632797;
+    public static double MAX_ANG_VEL = Math.toRadians(360.09774640238965);
+    public static double MAX_ANG_ACCEL = Math.toRadians(360.09774640238965);
 
 
     public static double encoderTicksToInches(double ticks) {

@@ -21,6 +21,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.hardware.Colectare;
+import org.firstinspires.ftc.teamcode.hardware.Foarfeca;
 
 import java.text.DecimalFormat;
 import java.util.Hashtable;
@@ -81,6 +83,9 @@ public class AssistedFeedforwardTuner extends LinearOpMode {
             RobotLog.setGlobalErrorMsg("Feedforward constants usually don't need to be tuned " +
                     "when using the built-in drive motor velocity PID.");
         }
+        Foarfeca foarfeca = new Foarfeca(hardwareMap);
+        Colectare deget = new Colectare(hardwareMap);
+
         telemetry.setMsTransmissionInterval(50);
 
         str_dict.put(Change.INCREASE, "increased");
