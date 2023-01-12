@@ -1,8 +1,8 @@
 version: 2
 updates:
   - package-ecosystem: "gradle" # See documentation for possible values
-    - directory: "/FtcRobotController" # Location of package manifests
-    - directory: "/FtcRobotController/TeamCode"
-    - directory: "/FtcRobotController/FtcRobotController"
+    directory: "/FtcRobotController" # Location of package manifests
+    directory: "/FtcRobotController/TeamCode"
+    directory: "/FtcRobotController/FtcRobotController"
     schedule:
       interval: "daily"
