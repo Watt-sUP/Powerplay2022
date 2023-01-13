@@ -52,5 +52,11 @@ public class Turelamodif extends LinearOpMode {
 
         if (gamepad.wasJustPressed(GamepadKeys.Button.A))
             robot.turela.modifyPosition(-50);
+
+        if (gamepad.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER))
+            robot.turela.modifyPosition(-20);
+
+        if (gamepad.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER))
+            robot.turela.modifyPosition(+20);
     }
 }

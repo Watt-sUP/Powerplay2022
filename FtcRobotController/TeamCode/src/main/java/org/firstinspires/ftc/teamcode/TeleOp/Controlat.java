@@ -59,17 +59,17 @@ public class Controlat extends LinearOpMode {
             else
                 powerLimit = null;
 
-            deget(driver1);
+            deget(driver2);
             robot.driveMotors.update_motor_speed(gamepad1, powerLimit, null);
             glisiera(driver2);
-            turela(driver2);
+            turela(driver1);
 
             if (driver2.wasJustPressed(GamepadKeys.Button.LEFT_STICK_BUTTON))
                 robot.foarfeca.toggleFoarfeca();
 
-            telemetry.addData("Current Offset", offset);
-            telemetry.addData("Max Offset", max_offset);
-            telemetry.addData("Current Sliders Position", pos_glisiera);
+            telemetry.addData("Current Sliders Offset", offset);
+            telemetry.addData("Max Sliders Offset", max_offset);
+            telemetry.addData("Current Turela Ticks", robot.turela.getTicks());
             telemetry.addData("Power Limit", (powerLimit == null) ? 1.0 : powerLimit);
             telemetry.update();
 
@@ -84,16 +84,14 @@ public class Controlat extends LinearOpMode {
     }
 
     private void turela(GamepadEx gamepad) {
-        if (gamepad.wasJustPressed(GamepadKeys.Button.DPAD_LEFT))
+        robot.turela.glis_position = pos_glisiera;
+        if (gamepad.wasJustPressed(GamepadKeys.Button.X))
             robot.turela.setToPosition(Turela.Position.LEFT);
 
-        if (gamepad.wasJustPressed(GamepadKeys.Button.DPAD_DOWN))
-            robot.turela.setToPosition(Turela.Position.BACK);
-
-        if (gamepad.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT))
+        if (gamepad.wasJustPressed(GamepadKeys.Button.B))
             robot.turela.setToPosition(Turela.Position.RIGHT);
 
-        if (gamepad.wasJustPressed(GamepadKeys.Button.DPAD_UP))
+        if (gamepad.wasJustPressed(GamepadKeys.Button.Y))
             robot.turela.setToPosition(Turela.Position.FRONT);
     }
 

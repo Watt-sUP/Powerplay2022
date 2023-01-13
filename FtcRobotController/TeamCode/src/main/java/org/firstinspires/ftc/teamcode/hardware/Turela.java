@@ -9,6 +9,7 @@ import java.util.Hashtable;
 public class Turela {
 
     public DcMotor motortur;
+    public int glis_position = 1;
     private Hashtable<Position, Integer> pos_dict;
 
     public enum Position {
@@ -30,16 +31,26 @@ public class Turela {
         pos_dict.put(Position.RIGHT, -1000);
     }
 
+    public void setToPosition(Position position, double power) {
+        if (glis_position != 0) {
+            motortur.setTargetPosition(pos_dict.get(position));
+            motortur.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motortur.setPower(power);
+        }
+    }
+
     public void setToPosition(Position position) {
-        motortur.setTargetPosition(pos_dict.get(position));
+        setToPosition(position, 1);
+    }
+
+    public void setToTicks(int ticks, double power) {
+        motortur.setTargetPosition(ticks);
         motortur.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motortur.setPower(1);
+        motortur.setPower(power);
     }
 
     public void setToTicks(int ticks) {
-        motortur.setTargetPosition(ticks);
-        motortur.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motortur.setPower(1);
+        setToTicks(ticks, 1);
     }
 
     public void modifyPosition(int ticks) {

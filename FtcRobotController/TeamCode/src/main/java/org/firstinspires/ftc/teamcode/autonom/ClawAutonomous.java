@@ -45,7 +45,7 @@ public class ClawAutonomous extends LinearOpMode {
         sleep(200);
 
         // Section: Reset bot to starting position
-        robot.foarfeca.strange();
+        robot.foarfeca.intinde();
         robot.turela.setToPosition(Turela.Position.FRONT);
         sleep(1000);
         robot.glisiera.setToPosition(0);
