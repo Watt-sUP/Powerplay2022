@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 @Config
 @Autonomous(name = "Autonom Stanga Bun", group = "auto")
-public class SplineTrajTest extends LinearOpMode {
+public class AutonomStangaBun extends LinearOpMode {
 
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
