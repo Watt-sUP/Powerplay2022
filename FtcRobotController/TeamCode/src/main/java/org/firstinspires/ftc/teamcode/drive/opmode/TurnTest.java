@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -15,6 +16,7 @@ import org.firstinspires.ftc.teamcode.hardware.Foarfeca;
  * This is a simple routine to test turning capabilities.
  */
 @Config
+@Disabled
 @Autonomous(group = "drive")
 public class TurnTest extends LinearOpMode {
     public static int ANGLE = 180; // deg

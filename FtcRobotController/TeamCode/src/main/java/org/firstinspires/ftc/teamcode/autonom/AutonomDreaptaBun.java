@@ -123,14 +123,14 @@ public class AutonomDreaptaBun extends LinearOpMode {
 
         if (tagOfInterest.id == 0) {
             PARK_DIST = 30;
-            ROTATION = -90;
+            ROTATION = 90;
         }
         else if (tagOfInterest.id == 1) {
             PARK_DIST = 3;
             ROTATION = 90;
         }
         else if (tagOfInterest.id == 2) {
-            PARK_DIST = 16;
+            PARK_DIST = -16;
             ROTATION = 90;
         }
         else return;
@@ -142,9 +142,7 @@ public class AutonomDreaptaBun extends LinearOpMode {
                 )
                 .forward(FORWARD)
                 .strafeRight(STRAFE)
-                .addTemporalMarker(-0.25, () -> {
-                    glis.setToPosition(4);
-                })
+                .addTemporalMarker(-0.25, () -> glis.setToPosition(4))
                 .waitSeconds(0.25)
                 .addTemporalMarker(() -> {
                     turela.setToTicks((int) -TURELA_TICKS, PRELOAD.TURELA_POWER);
@@ -158,8 +156,6 @@ public class AutonomDreaptaBun extends LinearOpMode {
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     turela.setToTicks(-CYCLE.CONE_TICKS, 0.7);
-                    foarfeca.setToPosition(0.5);
-
                     glis.setToTicks((int) CYCLE.GLIS_POS);
                 })
                 .waitSeconds(1.5)
@@ -195,6 +191,7 @@ public class AutonomDreaptaBun extends LinearOpMode {
                 .turn(Math.toRadians(ROTATION))
                 .forward(PARK_DIST)
                 .addTemporalMarker(() -> glis.setToPosition(0))
+                .waitSeconds(1)
                 .resetConstraints()
                 .build();
 

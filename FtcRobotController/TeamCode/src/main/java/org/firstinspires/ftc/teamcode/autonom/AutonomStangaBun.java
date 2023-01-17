@@ -40,10 +40,10 @@ public class AutonomStangaBun extends LinearOpMode {
 
     public static double STRAFE = 5, FORWARD = 50, PARK_DIST = 24;
     public static int ROTATION = 0;
-    public static double TURELA_TICKS = -505;
+    public static double TURELA_TICKS = -515;
     public static double SPEED_LIMIT = 40;
 
-    public static Preload PRELOAD = new Preload(0.25, 0.74, 1.25);
+    public static Preload PRELOAD = new Preload(0.33, 0.75, 1.25);
     public static Cycle CYCLE = new Cycle(0.33, 0.96, 960, 450, 70, 1.9);
 
     public void runOpMode() throws InterruptedException {
@@ -122,8 +122,8 @@ public class AutonomStangaBun extends LinearOpMode {
         }
 
         if (tagOfInterest.id == 0) {
-            PARK_DIST = 16;
-            ROTATION = 90;
+            PARK_DIST = -17;
+            ROTATION = -90;
         }
         else if (tagOfInterest.id == 1) {
             PARK_DIST = 3;
@@ -186,6 +186,7 @@ public class AutonomStangaBun extends LinearOpMode {
                     turela.setToTicks((int) TURELA_TICKS, CYCLE.TURELA_POWER);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(3, () -> foarfeca.setToPosition(PRELOAD.FOARFECA_POS))
+                .UNSTABLE_addTemporalMarkerOffset(3 + CYCLE.WAIT_TIME - 0.2, () -> glis.setToTicks(1700))
                 .UNSTABLE_addTemporalMarkerOffset(3 + CYCLE.WAIT_TIME, colectare::desface)
                 .UNSTABLE_addTemporalMarkerOffset(3.5 + CYCLE.WAIT_TIME, () -> {
                     turela.setToPosition(Turela.Position.FRONT, 0.7);
@@ -195,6 +196,7 @@ public class AutonomStangaBun extends LinearOpMode {
                 .turn(Math.toRadians(ROTATION))
                 .forward(PARK_DIST)
                 .addTemporalMarker(() -> glis.setToPosition(0))
+                .waitSeconds(1)
                 .resetConstraints()
                 .build();
 
