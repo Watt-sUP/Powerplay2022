@@ -8,6 +8,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -17,10 +18,12 @@ import org.firstinspires.ftc.teamcode.hardware.Glisiere;
 import org.firstinspires.ftc.teamcode.hardware.TurelaBeta;
 
 @Config
+@Disabled
 @TeleOp
 public class TurelaTuner extends LinearOpMode {
-    // TODO: Tune the Position Coefficient
-    public static double kP = 0.2;
+    // TODO: Tune the Position Coefficient and (optionally kD)
+    public static double kP = 0.2, kD = 0.25;
+    public boolean USE_kD = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
