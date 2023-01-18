@@ -15,3 +15,23 @@ jobs:
       - name: Build Project
         working-directory: ./FtcRobotController
         run: ./gradlew build
+
+  merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if all checks were successful
+        if: github.pull_request.mergeable && github.pull_request.mergeable_state == 'clean'
+
+      - name: Merge pull request
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.pulls.merge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              commit_title: `Merged pull request #${context.issue.number}`,
+              merge_method: 'merge'
+            });

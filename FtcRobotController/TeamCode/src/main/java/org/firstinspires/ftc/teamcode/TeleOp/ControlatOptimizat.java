@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.subsystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.commands.subsystems.TurelaSubsystem;
 import org.firstinspires.ftc.teamcode.hardware.Config;
 
 @TeleOp(name = "Drive Optimizat")
@@ -28,7 +29,10 @@ public class ControlatOptimizat extends CommandOpMode {
                 new Motor(hardwareMap, Config.right_back),
                 gamepad
         );
+        TurelaSubsystem turelaSubsystem = new TurelaSubsystem(new Motor(hardwareMap, Config.turela));
+
         register(driveSystem);
+        register(turelaSubsystem);
         driveSystem.setDefaultCommand(new RunCommand(driveSystem::drive, driveSystem));
         schedule(new RunCommand(() -> driveSystem.getPowerLimit(telemetry)));
 
@@ -39,22 +43,24 @@ public class ControlatOptimizat extends CommandOpMode {
 
             telemetry.update();
         }
-    }
-}
 
-class GamepadTrigger extends Trigger {
-    GamepadEx gamepad;
-    GamepadKeys.Trigger trigger;
-    TriggerReader reader;
-
-    public GamepadTrigger(GamepadEx gamepad, GamepadKeys.Trigger trigger) {
-        this.gamepad = gamepad;
-        this.trigger = trigger;
-        reader = new TriggerReader(this.gamepad, this.trigger);
+        reset();
     }
 
-    @Override
-    public boolean get() {
-        return reader.isDown();
+    static class GamepadTrigger extends Trigger {
+        GamepadEx gamepad;
+        GamepadKeys.Trigger trigger;
+        TriggerReader reader;
+
+        public GamepadTrigger(GamepadEx gamepad, GamepadKeys.Trigger trigger) {
+            this.gamepad = gamepad;
+            this.trigger = trigger;
+            reader = new TriggerReader(this.gamepad, this.trigger);
+        }
+
+        @Override
+        public boolean get() {
+            return reader.isDown();
+        }
     }
 }

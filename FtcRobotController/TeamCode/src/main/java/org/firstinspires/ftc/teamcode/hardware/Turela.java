@@ -10,7 +10,7 @@ public class Turela {
 
     public DcMotor motortur;
     public int glis_position = 1;
-    private Hashtable<Position, Integer> pos_dict;
+    private final Hashtable<Position, Integer> pos_dict;
 
     public enum Position {
         FRONT,
