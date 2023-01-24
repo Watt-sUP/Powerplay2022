@@ -1,25 +1,17 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
-import static java.lang.Thread.sleep;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 import java.util.HashMap;
+import java.util.Map;
 
 public class TurelaBeta {
 
     public Motor turela;
-    public HashMap<Goal, Integer> goal_values;
+    public Map<Goal, Integer> goal_values;
 
-    public static enum Goal {
+    public enum Goal {
         LEFT,
         RIGHT
     }
