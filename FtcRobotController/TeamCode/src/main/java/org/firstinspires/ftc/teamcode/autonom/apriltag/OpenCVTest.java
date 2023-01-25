@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonom.apriltag;
 
+import com.arcrobotics.ftclib.vision.DetectorState;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -33,12 +34,17 @@ public class OpenCVTest extends LinearOpMode {
         camera = aprilTagDetector.getCamera();
 
         telemetry.setAutoClear(true);
-        waitForStart();
 
-        while (opModeIsActive()) {
+        while (!opModeIsActive()) {
+
+            if (isStopRequested())
+                return;
+
             Map<String, Integer> detection = aprilTagDetector.getDetection();
+            DetectorState state = aprilTagDetector.getDetectorState();
             targets = aprilTagDetector.getTargets();
 
+            telemetry.addData("Detector State", state);
             telemetry.addLine("Camera FPS: " + df.format(camera.getFps()));
             telemetry.addLine("Max theoretical FPS: " + df.format(camera.getCurrentPipelineMaxFps()));
             telemetry.addLine("Current targets: " + (targets != null ? targets.toString() : "None"));
