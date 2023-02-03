@@ -11,7 +11,6 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.hardware.Colectare;
 import org.firstinspires.ftc.teamcode.hardware.Config;
@@ -43,9 +42,6 @@ public class IMUTest extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(frontLeft, frontRight, backLeft, backRight);
         GamepadEx gamepad = new GamepadEx(gamepad1);
 
-        Servo odometry_servo = hardwareMap.servo.get(Config.odometry_servo);
-        odometry_servo.setPosition(Config.odo_pos);
-
         RevIMU imu = new RevIMU(hardwareMap, "imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -53,14 +49,11 @@ public class IMUTest extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetry.setMsTransmissionInterval(50);
-        telemetry.addLine("Odometry servo raised to " + Config.odo_pos);
-        telemetry.addLine("Waiting for start...");
-        telemetry.update();
 
         waitForStart();
         telemetry.clearAll();
 
-        if(isStopRequested())
+        if (isStopRequested())
             return;
 
         while (opModeIsActive()) {

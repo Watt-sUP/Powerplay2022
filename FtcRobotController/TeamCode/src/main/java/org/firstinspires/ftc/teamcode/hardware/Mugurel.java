@@ -15,13 +15,13 @@ public class Mugurel {
         turela = new Turela(hm);
         deget = new Colectare(hm);
         driveMotors = new DriveMotors(hm);
-        foarfeca = new Foarfeca(hm);
+        foarfeca = new Foarfeca(hm, 0.3);
     }
 
     public void shutdown_system_motors()
     {
         glisiera.motor.setPower(0);
         glisiera.motor2.setPower(0);
-        turela.motortur.setPower(0);
+        turela.motortur.stopMotor();
     }
 }

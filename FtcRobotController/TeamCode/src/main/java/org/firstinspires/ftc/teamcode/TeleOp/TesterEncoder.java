@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.hardware.Config;
 
-@Disabled
+//@Disabled
 @TeleOp(name = "Encoder tester", group = "Testing")
 public class TesterEncoder extends LinearOpMode {
 
@@ -27,22 +26,21 @@ public class TesterEncoder extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
-            if(gamepad2.a)
+            if (gamepad2.a)
                 test_encoder(frontRightMotor);
 
-            if(gamepad2.b)
+            if (gamepad2.b)
                 test_encoder(frontLeftMotor);
 
-            if(gamepad2.y)
+            if (gamepad2.y)
                 test_encoder(backLeftMotor);
 
-            if(gamepad2.x)
+            if (gamepad2.x)
                 test_encoder(backRightMotor);
         }
     }
 
-    public void test_encoder(DcMotor motor)
-    {
+    public void test_encoder(DcMotor motor) {
         motor.setPower(0.5);
         motor.setTargetPosition(538);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);

@@ -1,78 +1,75 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import static java.lang.Thread.sleep;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.arcrobotics.ftclib.util.InterpLUT;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.hardware.Colectare;
 import org.firstinspires.ftc.teamcode.hardware.Foarfeca;
 import org.firstinspires.ftc.teamcode.hardware.Glisiere;
-import org.firstinspires.ftc.teamcode.hardware.TurelaBeta;
 
 @Config
-@Disabled
+//@Disabled
 @TeleOp
 public class TurelaTuner extends LinearOpMode {
-    // TODO: Tune the Position Coefficient and (optionally kD)
-    public static double kP = 0.2, kD = 0.25;
-    public boolean USE_kD = false;
+    public static boolean REVERSE = true;
+    public static double kP = 12, kD = 0, kI = 0;
+    public static int TOLERANCE, TARGET = 2000, GLIS_POS = 2;
+
+    InterpLUT kP_lut, tolerance_lut;
 
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetry.setMsTransmissionInterval(50);
 
-        TurelaBeta tur = new TurelaBeta(hardwareMap);
-        GamepadEx gamepad = new GamepadEx(gamepad1);
-        Motor turela = tur.turela;
-
-        Glisiere glisiere = new Glisiere(hardwareMap);
-        glisiere.setToPosition(3);
-
         Foarfeca foarfeca = new Foarfeca(hardwareMap);
         Colectare colectare = new Colectare(hardwareMap);
+        Glisiere glisiere = new Glisiere(hardwareMap);
+        PIDController pid = new PIDController(kP, kI, kD);
 
-        TurelaBeta.Goal goal = TurelaBeta.Goal.LEFT;
+        kP_lut = new InterpLUT();
+        tolerance_lut = new InterpLUT();
 
-        int goal_ticks = tur.goal_values.getOrDefault(goal, 0);
-        turela.set(0.0);
-        turela.setTargetPosition(goal_ticks);
-        turela.setPositionTolerance(10);
+        kP_lut.add(-2000, 18);
+        kP_lut.add(2150, 1.5);
+
+        tolerance_lut.add(-2000, 75);
+        tolerance_lut.add(2150, 150);
+
+        kP_lut.createLUT();
+        tolerance_lut.createLUT();
+
+        pid.setSetPoint(TARGET);
+        pid.setTolerance(TOLERANCE);
+        MotorEx turela = new MotorEx(hardwareMap, org.firstinspires.ftc.teamcode.hardware.Config.turela);
+        turela.setRunMode(Motor.RunMode.RawPower);
+        turela.setInverted(REVERSE);
+
+        glisiere.setToPosition(GLIS_POS);
+
+        telemetry.addData("Current Position", -turela.getCurrentPosition());
+        telemetry.addData("Current Velocity", turela.getVelocity());
+        telemetry.addData("Target Position", TARGET);
+        telemetry.update();
 
         waitForStart();
-        while (opModeIsActive() &&!gamepad.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
 
-            if (kP != turela.getPositionCoefficient())
-                turela.setPositionCoefficient(kP);
-
-            telemetry.addData("Current kP:", turela.getPositionCoefficient());
-            telemetry.addData("Current encoder position (Ticks):", turela.getCurrentPosition());
-            telemetry.addData("Current goal (Ticks):", goal_ticks);
+        while (!pid.atSetPoint() && !isStopRequested()) {
+            double output = pid.calculate(-turela.getCurrentPosition());
+            turela.setVelocity(output);
+            telemetry.addData("Current Position", -turela.getCurrentPosition());
+            telemetry.addData("Target Position", TARGET);
+            telemetry.addData("Current Velocity", output);
             telemetry.update();
-
-            if (!turela.atTargetPosition())
-                turela.set(1.0);
-            else {
-                turela.stopMotor();
-                goal = toggleGoal(goal);
-                sleep(1500);
-                goal_ticks = tur.goal_values.getOrDefault(goal, 0);
-                turela.setTargetPosition(goal_ticks);
-                turela.set(0.0);
-                turela.setPositionTolerance(15);
-            }
         }
-    }
-
-    private TurelaBeta.Goal toggleGoal(TurelaBeta.Goal goal) {
-        return (goal == TurelaBeta.Goal.LEFT) ? TurelaBeta.Goal.RIGHT : TurelaBeta.Goal.LEFT;
+        turela.stopMotor();
+        pid.reset();
     }
 }

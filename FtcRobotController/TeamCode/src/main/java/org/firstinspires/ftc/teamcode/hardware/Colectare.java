@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.hardware;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 public class Colectare {
     private final double desfacutPos = 0.5;
@@ -18,6 +17,7 @@ public class Colectare {
     public Colectare(HardwareMap hardwareMap) {
         stateDeget = StateDeget.Desfacut;
         deget = new SimpleServo(hardwareMap, Config.deget, -360, 360);
+        deget.setInverted(false);
         deget.setPosition(desfacutPos);
     }
 
@@ -28,7 +28,7 @@ public class Colectare {
     }
 
     public void desface() {
-        deget.setPosition(this.desfacutPos);
+        deget.setPosition(desfacutPos);
         stateDeget = StateDeget.Desfacut;
     }
 

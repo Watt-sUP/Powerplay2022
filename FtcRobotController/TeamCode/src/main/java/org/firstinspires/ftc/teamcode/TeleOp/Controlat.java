@@ -7,14 +7,12 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.util.Direction;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.hardware.Config;
 import org.firstinspires.ftc.teamcode.hardware.Mugurel;
-import org.firstinspires.ftc.teamcode.hardware.Turela;
 
 @TeleOp(name = "Salam adevaratu", group = "TeleOp")
 public class Controlat extends LinearOpMode {
@@ -27,18 +25,15 @@ public class Controlat extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         robot = new Mugurel(hardwareMap);
+        robot.turela.motortur.resetEncoder();
+
         GamepadEx driver1 = new GamepadEx(gamepad1);
         GamepadEx driver2 = new GamepadEx(gamepad2);
-        Servo odoServo = hardwareMap.get(Servo.class, Config.odometry_servo);
 
         robot.driveMotors.reverse_motors("Right");
-        odoServo.setPosition(Config.odo_pos);
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetry.setMsTransmissionInterval(50);
-        telemetry.addLine("Odometry servo lifted to position " + Config.odo_pos);
-        telemetry.addLine("Waiting for start...");
-        telemetry.update();
 
         waitForStart();
         telemetry.clearAll();
@@ -86,13 +81,18 @@ public class Controlat extends LinearOpMode {
     private void turela(GamepadEx gamepad) {
         robot.turela.glis_position = pos_glisiera;
         if (gamepad.wasJustPressed(GamepadKeys.Button.X))
-            robot.turela.setToPosition(Turela.Position.LEFT);
+            robot.turela.setToPosition(Direction.LEFT);
 
         if (gamepad.wasJustPressed(GamepadKeys.Button.B))
-            robot.turela.setToPosition(Turela.Position.RIGHT);
+            robot.turela.setToPosition(Direction.RIGHT);
 
         if (gamepad.wasJustPressed(GamepadKeys.Button.Y))
-            robot.turela.setToPosition(Turela.Position.FRONT);
+            robot.turela.setToPosition(Direction.FORWARD);
+
+        if (gamepad.wasJustPressed(GamepadKeys.Button.A))
+            robot.turela.setToPosition(Direction.BACKWARDS);
+
+        robot.turela.updatePower();
     }
 
     private void glisiera(GamepadEx gamepad) {
@@ -103,7 +103,7 @@ public class Controlat extends LinearOpMode {
             pos_glisiera--;
 
         if (gamepad.wasJustPressed(GamepadKeys.Button.B))
-            robot.glisiera.modifyPosition(-80);
+            robot.glisiera.modifyPosition(-160);
 
         if (gamepad.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER))
             pos_glisiera = 4;

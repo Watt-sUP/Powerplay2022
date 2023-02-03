@@ -1,68 +1,72 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.arcrobotics.ftclib.util.Direction;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import java.util.Hashtable;
 
 public class Turela {
 
-    public DcMotor motortur;
+    private final Hashtable<Direction, Integer> pos_dict;
     public int glis_position = 1;
-    private final Hashtable<Position, Integer> pos_dict;
+    public MotorEx motortur;
+    private PIDController pidController;
 
-    public enum Position {
-        FRONT,
-        BACK,
-        LEFT,
-        RIGHT
-    }
-
+    /**
+     * Initializes the motor.
+     *
+     * @param hardwareMap Hardware map to load the motor
+     */
     public Turela(HardwareMap hardwareMap) {
-        motortur = hardwareMap.dcMotor.get(Config.turela);
-        motortur.setDirection(DcMotorSimple.Direction.FORWARD);
-        motortur.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motortur = new MotorEx(hardwareMap, Config.turela);
+        motortur.setInverted(true);
+        motortur.setRunMode(Motor.RunMode.RawPower);
+
+        pidController = new PIDController(4, 3, 0);
+        pidController.setSetPoint(0);
+        pidController.setTolerance(0);
 
         pos_dict = new Hashtable<>();
-        pos_dict.put(Position.FRONT, 0);
-        pos_dict.put(Position.BACK, -2030);
-        pos_dict.put(Position.LEFT, 1000);
-        pos_dict.put(Position.RIGHT, -1000);
+        pos_dict.put(Direction.FORWARD, 0);
+        pos_dict.put(Direction.LEFT, 2100);
+        pos_dict.put(Direction.RIGHT, -2000);
+        pos_dict.put(Direction.BACKWARDS, -4100);
     }
 
-    public void setToPosition(Position position, double power) {
-        if (glis_position != 0) {
-            motortur.setTargetPosition(pos_dict.get(position));
-            motortur.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motortur.setPower(power);
-        }
+    /**
+     * Updates the kP value based on the supplied position.
+     *
+     * @param position The desired position
+     */
+    public void setToPosition(Direction position) {
+        pidController.setSetPoint(pos_dict.get(position));
     }
 
-    public void setToPosition(Position position) {
-        setToPosition(position, 1);
-    }
-
-    public void setToTicks(int ticks, double power) {
-        motortur.setTargetPosition(ticks);
-        motortur.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motortur.setPower(power);
-    }
-
+    /**
+     * <p>Updates the kP value based on ticks.</p>
+     *
+     * @param ticks The ticks to go to
+     */
     public void setToTicks(int ticks) {
-        setToTicks(ticks, 1);
+        pidController.setSetPoint(ticks);
     }
 
-    public void modifyPosition(int ticks) {
-        motortur.setTargetPosition(motortur.getCurrentPosition() + ticks);
-        motortur.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motortur.setPower(1);
+    /**
+     * Updates the power once to avoid blocking the thread.
+     */
+    public void updatePower() {
+        double output = pidController.calculate(-motortur.getCurrentPosition());
+        motortur.setVelocity(output);
     }
 
-    public double getPosition() {
-        return motortur.getCurrentPosition();
-    }
-
+    /**
+     * Helper method to log the tick count
+     *
+     * @return Motor tick count
+     */
     public int getTicks() {
         return motortur.getCurrentPosition();
     }

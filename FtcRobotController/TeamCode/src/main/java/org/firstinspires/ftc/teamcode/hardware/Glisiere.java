@@ -8,7 +8,7 @@ public class Glisiere {
 
     public DcMotor motor;
     public DcMotor motor2;
-    private final int[] positions = {0, 400, 944, 1541, 2250};
+    private final int[] positions = {0, 450, 975, 1650, 2360};
 
     public Glisiere(HardwareMap hardwareMap) {
 
@@ -57,9 +57,6 @@ public class Glisiere {
     }
 
     public double getPosition() {
-        return motor.getCurrentPosition();
-    }
-    public int getTicks() {
         return motor.getCurrentPosition();
     }
 
