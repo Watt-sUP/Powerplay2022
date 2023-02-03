@@ -37,7 +37,7 @@ public class Turela {
     }
 
     /**
-     * Updates the kP value based on the supplied position.
+     * Moves the turret to the given position.
      *
      * @param position The desired position
      */
@@ -46,7 +46,7 @@ public class Turela {
     }
 
     /**
-     * <p>Updates the kP value based on ticks.</p>
+     * <p>Moves the turret based on the supplied ticks.</p>
      *
      * @param ticks The ticks to go to
      */
@@ -63,7 +63,7 @@ public class Turela {
     }
 
     /**
-     * Helper method to log the tick count
+     * Helper method to log the tick count.
      *
      * @return Motor tick count
      */

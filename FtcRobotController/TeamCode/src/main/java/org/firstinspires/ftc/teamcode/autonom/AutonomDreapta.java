@@ -14,13 +14,13 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.Map;
 
 @com.acmerobotics.dashboard.config.Config
-@Autonomous
+@Autonomous(name = "Autonom Ploiesti (din nou)")
 public class AutonomDreapta extends LinearOpMode {
 
     public static double POWER = 0.5;
     public static int SLEEP = 2000, SLEEP_2 = 1000;
     DcMotor frontLeft, frontRight, backLeft, backRight;
-    private int last_tag = -1, strafe_multiplier = 0;
+    private int last_tag = -1;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -66,6 +66,7 @@ public class AutonomDreapta extends LinearOpMode {
         }
         detector.closeAsync();
 
+        int strafe_multiplier;
         switch (last_tag) {
             case 0:
                 strafe_multiplier = 1;

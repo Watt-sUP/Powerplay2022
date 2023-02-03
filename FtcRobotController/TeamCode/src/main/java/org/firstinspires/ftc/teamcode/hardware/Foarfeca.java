@@ -4,7 +4,6 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-@com.acmerobotics.dashboard.config.Config
 public class Foarfeca {
     private final double stransPos;
     private StateFoarfeca stateFoarfeca;
