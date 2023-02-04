@@ -80,7 +80,7 @@ public class AutonomDreapta extends LinearOpMode {
             case 0:
                 strafe_multiplier = 1;
                 SLEEP = 750;
-                SLEEP_2 = 1200;
+                SLEEP_2 = 1000;
                 break;
             default:
                 return;
