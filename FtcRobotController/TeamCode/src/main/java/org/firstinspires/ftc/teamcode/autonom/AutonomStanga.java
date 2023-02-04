@@ -14,8 +14,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.Map;
 
 @com.acmerobotics.dashboard.config.Config
-@Autonomous(name = "Autonom Ploiesti (Dreapta)")
-public class AutonomDreapta extends LinearOpMode {
+@Autonomous(name = "Autonom Ploiesti (Stanga)")
+public class AutonomStanga extends LinearOpMode {
 
     public static double POWER = 0.5;
     public static int SLEEP = 1800, SLEEP_2 = 1000;
@@ -68,8 +68,8 @@ public class AutonomDreapta extends LinearOpMode {
 
         int strafe_multiplier;
         switch (last_tag) {
-            case 2:
-                strafe_multiplier = -1;
+            case 0:
+                strafe_multiplier = 1;
                 SLEEP = 750;
                 SLEEP_2 = 1300;
                 break;
@@ -77,15 +77,14 @@ public class AutonomDreapta extends LinearOpMode {
                 strafe_multiplier = 0;
                 SLEEP = 700;
                 break;
-            case 0:
-                strafe_multiplier = 1;
+            case 2:
+                strafe_multiplier = -1;
                 SLEEP = 750;
                 SLEEP_2 = 1200;
                 break;
             default:
                 return;
         }
-
 
         frontLeft.setPower(-POWER * strafe_multiplier);
         frontRight.setPower(POWER * strafe_multiplier);

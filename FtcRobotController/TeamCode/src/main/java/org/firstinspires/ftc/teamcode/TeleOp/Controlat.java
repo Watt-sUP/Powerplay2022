@@ -25,7 +25,7 @@ public class Controlat extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         robot = new Mugurel(hardwareMap);
-        robot.turela.motortur.resetEncoder();
+//        robot.turela.motortur.resetEncoder();
 
         GamepadEx driver1 = new GamepadEx(gamepad1);
         GamepadEx driver2 = new GamepadEx(gamepad2);
@@ -34,7 +34,6 @@ public class Controlat extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetry.setMsTransmissionInterval(50);
-
         waitForStart();
         telemetry.clearAll();
 
