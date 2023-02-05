@@ -10,9 +10,12 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.util.Direction;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.hardware.Mugurel;
+
+import java.text.DecimalFormat;
 
 @TeleOp(name = "Salam adevaratu", group = "TeleOp")
 public class Controlat extends LinearOpMode {
@@ -25,6 +28,8 @@ public class Controlat extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         robot = new Mugurel(hardwareMap);
+        ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        DecimalFormat df = new DecimalFormat("0.00");
 //        robot.turela.motortur.resetEncoder();
 
         GamepadEx driver1 = new GamepadEx(gamepad1);
@@ -38,6 +43,8 @@ public class Controlat extends LinearOpMode {
         telemetry.clearAll();
 
         while (opModeIsActive()) {
+            timer.reset();
+
             driver1.readButtons();
             driver2.readButtons();
 
@@ -62,9 +69,9 @@ public class Controlat extends LinearOpMode {
                 robot.foarfeca.toggleFoarfeca();
 
             telemetry.addData("Current Sliders Offset", offset);
-            telemetry.addData("Max Sliders Offset", max_offset);
             telemetry.addData("Current Turela Ticks", robot.turela.getTicks());
             telemetry.addData("Power Limit", (powerLimit == null) ? 1.0 : powerLimit);
+            telemetry.addLine("OpMode is running at " + df.format(1000 / timer.milliseconds()) + " Hz");
             telemetry.update();
 
             idle();
