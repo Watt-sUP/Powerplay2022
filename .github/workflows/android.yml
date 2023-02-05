@@ -10,10 +10,12 @@ jobs:
         with:
           java-version: 1.8
 
-      - name: Load gradle wrapper and grant permissions
+      - name: Load gradle wrapper
         run: |
-          chmod +x ./gradlew
           ./gradlew wrapper --gradle-version 6.5 --distribution-type all
 
-      - name: Build TeamCode with Gradle
-        run: ./gradlew :TeamCode --stacktrace
+      - name: Build Project with Gradle
+        run: ./gradlew --stacktrace
+
+      - name: Build TeamCode
+        run: ./gradlew :TeamCode build
