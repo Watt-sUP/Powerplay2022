@@ -14,10 +14,10 @@ jobs:
         working-directory: ./FtcRobotController
         run: chmod +x gradlew
 
-      - name: Build Project with Gradle
+      - name: Test Project with Gradle
         working-directory: ./FtcRobotController
         run: ./gradlew --stacktrace
 
-      - name: Build TeamCode
+      - name: Build Project with Gradle
         working-directory: ./FtcRobotController
         run: ./gradlew :TeamCode build
