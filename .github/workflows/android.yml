@@ -20,4 +20,4 @@ jobs:
 
       - name: Build Project with Gradle
         working-directory: ./FtcRobotController
-        run: ./gradlew :TeamCode build
+        run: ./gradlew build
