@@ -11,11 +11,14 @@ jobs:
           java-version: 1.8
 
       - name: Load gradle wrapper
+        working-directory: ./FtcRobotController
         run: |
           ./gradlew wrapper --gradle-version 6.5 --distribution-type all
 
       - name: Build Project with Gradle
+        working-directory: ./FtcRobotController
         run: ./gradlew --stacktrace
 
       - name: Build TeamCode
+        working-directory: ./FtcRobotController
         run: ./gradlew :TeamCode build
