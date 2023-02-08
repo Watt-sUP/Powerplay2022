@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.hardware.Foarfeca;
  * This is a simple routine to test turning capabilities.
  */
 @Config
-@Disabled
+//@Disabled
 @Autonomous(group = "drive")
 public class TurnTest extends LinearOpMode {
     public static int ANGLE = 180; // deg
