@@ -55,10 +55,10 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  */
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0.95, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0.7, 0, 0);
 
-    public static double LATERAL_MULTIPLIER = 1;
+    public static double LATERAL_MULTIPLIER = 1.17216;
 
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
@@ -126,9 +126,6 @@ public class SampleMecanumDrive extends MecanumDrive {
         // TODO: reverse any motors using DcMotor.setDirection()
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        // TODO: if desired, use setLocalizer() to change the localization method
-        // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }
@@ -269,6 +266,14 @@ public class SampleMecanumDrive extends MecanumDrive {
         return wheelVelocities;
     }
 
+    public List<Double> getWheelSpeeds() {
+        List<Double> wheelSpeed = new ArrayList<>();
+        for (DcMotorEx motor : motors) {
+            wheelSpeed.add(motor.getPower());
+        }
+        return wheelSpeed;
+    }
+
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
         leftFront.setPower(v);
@@ -282,7 +287,6 @@ public class SampleMecanumDrive extends MecanumDrive {
         return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
     }
 
-    // TODO: Make sure this is correct
     @Override
     public Double getExternalHeadingVelocity() {
         return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;

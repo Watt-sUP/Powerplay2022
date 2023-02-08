@@ -4,6 +4,8 @@ import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.util.Direction;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import java.util.Hashtable;
@@ -12,8 +14,7 @@ public class Turela {
 
     private final Hashtable<Direction, Integer> pos_dict;
     public int glis_position = 1;
-    public MotorEx motortur;
-    private PIDController pidController;
+    public DcMotorEx motortur;
 
     /**
      * Initializes the motor.
@@ -21,13 +22,8 @@ public class Turela {
      * @param hardwareMap Hardware map to load the motor
      */
     public Turela(HardwareMap hardwareMap) {
-        motortur = new MotorEx(hardwareMap, Config.turela);
-        motortur.setInverted(true);
-        motortur.setRunMode(Motor.RunMode.RawPower);
-
-        pidController = new PIDController(4, 3, 0);
-        pidController.setSetPoint(0);
-        pidController.setTolerance(0);
+        motortur = hardwareMap.get(DcMotorEx.class, Config.turela);
+        motortur.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         pos_dict = new Hashtable<>();
         pos_dict.put(Direction.FORWARD, 0);
@@ -40,26 +36,39 @@ public class Turela {
      * Moves the turret to the given position.
      *
      * @param position The desired position
+     * @param power The desired power value
      */
-    public void setToPosition(Direction position) {
-        pidController.setSetPoint(pos_dict.get(position));
+    public void setToPosition(Direction position, double power) {
+        motortur.setTargetPosition(pos_dict.get(position));
+        motortur.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motortur.setPower(power);
     }
 
     /**
-     * <p>Moves the turret based on the supplied ticks.</p>
-     *
+     * Moves the turret to the given position.
+     * @param position The desired position
+     */
+    public void setToPosition(Direction position) {
+        setToPosition(position, 1);
+    }
+
+    /**
+     * Moves the turret based on the supplied ticks.
+     * @param ticks The ticks to go to
+     * @param power The desired power value
+     */
+    public void setToTicks(int ticks, double power) {
+        motortur.setTargetPosition(ticks);
+        motortur.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motortur.setPower(power);
+    }
+
+    /**
+     * Moves the turret based on the supplied ticks.
      * @param ticks The ticks to go to
      */
     public void setToTicks(int ticks) {
-        pidController.setSetPoint(ticks);
-    }
-
-    /**
-     * Updates the power once to avoid blocking the thread.
-     */
-    public void updatePower() {
-        double output = pidController.calculate(-motortur.getCurrentPosition());
-        motortur.setVelocity(output);
+        setToTicks(ticks, 1);
     }
 
     /**
