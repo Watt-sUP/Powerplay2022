@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 /**
- * Helper subsystem for operating drivetrain motors
+ * Helper subsystem for operating drivetrain motors.
  */
 public class DriveMotors {
     DcMotor frontLeft, frontRight, backLeft, backRight;
@@ -30,7 +30,7 @@ public class DriveMotors {
     /**
      * <p>Reverses 2 of the drivetrain's motors.</p>
      * <p>Passing in an invalid side will result in no operation occuring.</p>
-     * @param side Takes 2 values: left or right, depending on the desired part to be reversed.
+     * @param side Takes 2 values: left or right (case independent), depending on the desired part to be reversed.
      */
     public void reverse_motors(@NonNull String side) {
         if (side.equalsIgnoreCase("left")) {
@@ -42,6 +42,13 @@ public class DriveMotors {
         }
     }
 
+    /**
+     * <p>Updates the motor speeds based on the gamepad input.</p>
+     * <p>Control axes are the left stick for forward/backward and strafing, and the right stick for rotation.</p>
+     * <p>Passing in a null limit will result in no limit being applied.</p>
+     * @param gamepad The gamepad to get the input from
+     * @param limit Optional parameter to limit the motor speeds
+     */
     public void update_motor_speed(@NonNull Gamepad gamepad, @Nullable Double limit) {
         double accel = -gamepad.left_stick_y;
         double strafe = gamepad.left_stick_x * 1.1;

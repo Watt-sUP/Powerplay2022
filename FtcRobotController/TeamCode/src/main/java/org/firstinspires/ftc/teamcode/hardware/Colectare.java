@@ -5,35 +5,35 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Colectare {
-    private final double desfacutPos = 0.5;
-    private StateDeget stateDeget;
-    public ServoEx deget;
+    private final double openPos = 0.5;
+    private StateClaw stateClaw;
+    public ServoEx claw;
 
-    private enum StateDeget {
-        Desfacut,
-        Strans
+    private enum StateClaw {
+        Opened,
+        Closed
     }
 
     public Colectare(HardwareMap hardwareMap) {
-        stateDeget = StateDeget.Desfacut;
-        deget = new SimpleServo(hardwareMap, Config.deget, -360, 360);
-        deget.setInverted(false);
-        deget.setPosition(desfacutPos);
+        stateClaw = StateClaw.Opened;
+        claw = new SimpleServo(hardwareMap, Config.claw, -360, 360);
+        claw.setInverted(false);
+        claw.setPosition(openPos);
     }
 
-    public void strange() {
-        double stransPos = 0;
-        deget.setPosition(stransPos);
-        stateDeget = StateDeget.Strans;
+    public void close() {
+        double closePos = 0;
+        claw.setPosition(closePos);
+        stateClaw = StateClaw.Closed;
     }
 
-    public void desface() {
-        deget.setPosition(desfacutPos);
-        stateDeget = StateDeget.Desfacut;
+    public void open() {
+        claw.setPosition(openPos);
+        stateClaw = StateClaw.Opened;
     }
 
-    public void toggleDeget() {
-        if (stateDeget == StateDeget.Desfacut) strange();
-        else desface();
+    public void toggleClaw() {
+        if (stateClaw == StateClaw.Opened) close();
+        else open();
     }
 }

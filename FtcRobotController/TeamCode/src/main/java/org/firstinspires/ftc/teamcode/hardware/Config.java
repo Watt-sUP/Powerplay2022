@@ -8,7 +8,7 @@ public class Config {
 
     public static final String glisiera = "GLI";
     public static final String turela = "TUR";
-    public static final String deget = "DEG";
+    public static final String claw = "DEG";
     public static final String glisiera1 = "GLI1";
     public static final String foarfeca = "FOAR";
 }

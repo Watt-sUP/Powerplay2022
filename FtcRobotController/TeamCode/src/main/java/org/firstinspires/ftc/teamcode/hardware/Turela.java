@@ -1,19 +1,20 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
-import com.arcrobotics.ftclib.controller.PIDController;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import androidx.annotation.NonNull;
+
 import com.arcrobotics.ftclib.util.Direction;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import java.util.Hashtable;
+import java.util.function.Supplier;
 
 public class Turela {
 
     private final Hashtable<Direction, Integer> pos_dict;
-    public int glis_position = 1;
+    private boolean useSafety;
+    private Supplier<Boolean> safeSupplier;
     public DcMotorEx motortur;
 
     /**
@@ -21,9 +22,10 @@ public class Turela {
      *
      * @param hardwareMap Hardware map to load the motor
      */
-    public Turela(HardwareMap hardwareMap) {
+    public Turela(@NonNull HardwareMap hardwareMap) {
         motortur = hardwareMap.get(DcMotorEx.class, Config.turela);
         motortur.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        useSafety = false;
 
         pos_dict = new Hashtable<>();
         pos_dict.put(Direction.FORWARD, 0);
@@ -39,6 +41,10 @@ public class Turela {
      * @param power The desired power value
      */
     public void setToPosition(Direction position, double power) {
+        if (useSafety && !safeSupplier.get()) {
+            return;
+        }
+
         motortur.setTargetPosition(pos_dict.get(position));
         motortur.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motortur.setPower(power);
@@ -58,6 +64,10 @@ public class Turela {
      * @param power The desired power value
      */
     public void setToTicks(int ticks, double power) {
+        if (useSafety && !safeSupplier.get()) {
+            return;
+        }
+
         motortur.setTargetPosition(ticks);
         motortur.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motortur.setPower(power);
@@ -78,5 +88,22 @@ public class Turela {
      */
     public int getTicks() {
         return motortur.getCurrentPosition();
+    }
+
+    /**
+     * Enables a safety mechanism that avoids moving the turret whenever the slides are down.
+     * @param safeSupplier A supplier that returns true if the slides aren't down
+     */
+    public void enableSafety(Supplier<Boolean> safeSupplier) {
+        useSafety = true;
+        this.safeSupplier = safeSupplier;
+    }
+
+    /**
+     * Disables the safety mechanism.
+     */
+    public void disableSafety() {
+        useSafety = false;
+        safeSupplier = null;
     }
 }

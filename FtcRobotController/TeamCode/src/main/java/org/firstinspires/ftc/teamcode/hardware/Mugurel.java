@@ -10,7 +10,7 @@ public class Mugurel {
 
     public Glisiere glisiera;
     public Turela turela;
-    public Colectare deget;
+    public Colectare claw;
     public DriveMotors driveMotors;
     public Foarfeca foarfeca;
 
@@ -21,7 +21,7 @@ public class Mugurel {
     public Mugurel(HardwareMap hm) {
         glisiera = new Glisiere(hm);
         turela = new Turela(hm);
-        deget = new Colectare(hm);
+        claw = new Colectare(hm);
         driveMotors = new DriveMotors(hm);
         foarfeca = new Foarfeca(hm, 0.3);
     }

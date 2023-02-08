@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -16,21 +16,23 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.hardware.Mugurel;
 
 import java.text.DecimalFormat;
+import java.util.function.Supplier;
 
 @TeleOp(name = "Salam adevaratu", group = "TeleOp")
 public class Controlat extends LinearOpMode {
 
     private Mugurel robot;
-    private int max_offset;
-    private int pos_glisiera = 0, last_pos_glisiera = 0;
+    private int pos_sliders = 0, last_pos_sliders = 0;
+    private final Supplier<Boolean> turretSafe = () -> pos_sliders != 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         robot = new Mugurel(hardwareMap);
+        robot.turela.enableSafety(turretSafe);
+
         ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         DecimalFormat df = new DecimalFormat("0.00");
-//        robot.turela.motortur.resetEncoder();
 
         GamepadEx driver1 = new GamepadEx(gamepad1);
         GamepadEx driver2 = new GamepadEx(gamepad2);
@@ -38,9 +40,8 @@ public class Controlat extends LinearOpMode {
         robot.driveMotors.reverse_motors("Right");
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        telemetry.setMsTransmissionInterval(50);
+        telemetry.setMsTransmissionInterval(200);
         waitForStart();
-        telemetry.clearAll();
 
         while (opModeIsActive()) {
             timer.reset();
@@ -49,28 +50,26 @@ public class Controlat extends LinearOpMode {
             driver2.readButtons();
 
             int offset = robot.glisiera.getOffset();
-            if (offset > max_offset)
-                max_offset = offset;
 
-            @Nullable Double powerLimit;
+            double powerLimit;
             if (gamepad1.right_trigger >= 0.3)
                 powerLimit = 0.2;
             else if (driver1.isDown(GamepadKeys.Button.RIGHT_BUMPER))
                 powerLimit = 0.4;
             else
-                powerLimit = null;
+                powerLimit = 1.0;
 
-            deget(driver2);
             robot.driveMotors.update_motor_speed(gamepad1, powerLimit);
-            glisiera(driver2);
-            turela(driver1);
+            check_claw(driver2);
+            check_sliders(driver2);
+            check_turret(driver1);
 
             if (driver2.wasJustPressed(GamepadKeys.Button.LEFT_STICK_BUTTON))
                 robot.foarfeca.toggleFoarfeca();
 
             telemetry.addData("Current Sliders Offset", offset);
             telemetry.addData("Current Turela Ticks", robot.turela.getTicks());
-            telemetry.addData("Power Limit", (powerLimit == null) ? 1.0 : powerLimit);
+            telemetry.addData("Power Limit", powerLimit);
             telemetry.addLine("OpMode is running at " + df.format(1000 / timer.milliseconds()) + " Hz");
             telemetry.update();
 
@@ -79,13 +78,20 @@ public class Controlat extends LinearOpMode {
         robot.shutdown_system_motors();
     }
 
-    private void deget(GamepadEx gamepad) {
+    /**
+     * <p>Helper method to handle claw movement based on gamepad input.</p>
+     * @param gamepad GamepadEx object, used to read gamepad input and toggle the claw.
+     */
+    private void check_claw(@NonNull GamepadEx gamepad) {
         if (gamepad.wasJustPressed(GamepadKeys.Button.A))
-            robot.deget.toggleDeget();
+            robot.claw.toggleClaw();
     }
 
-    private void turela(GamepadEx gamepad) {
-        robot.turela.glis_position = pos_glisiera;
+    /**
+     * <p>Helper method to handle turret movement based on gamepad input.</p>
+     * @param gamepad GamepadEx object, used to read gamepad input and execute actions.
+     */
+    private void check_turret(@NonNull GamepadEx gamepad) {
         if (gamepad.wasJustPressed(GamepadKeys.Button.X))
             robot.turela.setToPosition(Direction.LEFT);
 
@@ -97,29 +103,32 @@ public class Controlat extends LinearOpMode {
 
         if (gamepad.wasJustPressed(GamepadKeys.Button.A))
             robot.turela.setToPosition(Direction.BACKWARDS);
-
     }
 
-    private void glisiera(GamepadEx gamepad) {
+    /**
+     * <p>Helper method to handle slider movement based on gamepad input.</p>
+     * @param gamepad GamepadEx object, used to read gamepad input and execute actions.
+     */
+    private void check_sliders(@NonNull GamepadEx gamepad) {
         if (gamepad.wasJustPressed(GamepadKeys.Button.Y))
-            pos_glisiera++;
+            pos_sliders++;
 
         if (gamepad.wasJustPressed(GamepadKeys.Button.X))
-            pos_glisiera--;
+            pos_sliders--;
 
         if (gamepad.wasJustPressed(GamepadKeys.Button.B))
             robot.glisiera.modifyPosition(-160);
 
         if (gamepad.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER))
-            pos_glisiera = 4;
+            pos_sliders = 4;
 
         if (gamepad.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER))
-            pos_glisiera = 0;
+            pos_sliders = 0;
 
-        pos_glisiera = Range.clip(pos_glisiera, 0, 4);
-        if (pos_glisiera != last_pos_glisiera) {
-            robot.glisiera.setToPosition(pos_glisiera);
-            last_pos_glisiera = pos_glisiera;
+        pos_sliders = Range.clip(pos_sliders, 0, 4);
+        if (pos_sliders != last_pos_sliders) {
+            robot.glisiera.setToPosition(pos_sliders);
+            last_pos_sliders = pos_sliders;
         }
     }
 }
