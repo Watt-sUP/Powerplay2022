@@ -5,8 +5,6 @@ import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.util.MathUtils;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 public class DriveSubsystem extends SubsystemBase {
     private double powerLimit = 1.0;
     private final MecanumDrive drive;
@@ -26,9 +24,5 @@ public class DriveSubsystem extends SubsystemBase {
     public void setPowerLimit(double limit) {
         powerLimit = limit;
         drive.setMaxSpeed(MathUtils.clamp(limit, -1.0, 1.0));
-    }
-
-    public void getPowerLimit(Telemetry telemetry) {
-        telemetry.addData("Power Limit:", powerLimit);
     }
 }

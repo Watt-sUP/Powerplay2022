@@ -1,60 +1,79 @@
 package org.firstinspires.ftc.teamcode.commands.subsystems;
 
+import androidx.annotation.NonNull;
+
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 
+/**
+ * Command-based subsystem for the claw and scissors.
+ */
 public class ColectareSubsystem extends SubsystemBase {
-    private ServoEx gheara, foarfeca;
-    private StateGheara stateGheara;
-    private StateFoarfeca stateFoarfeca;
+    private final ServoEx claw, scissors;
+    private StateClaw stateClaw;
+    private StateScissors stateScissors;
 
-    private enum StateGheara {
-        Desfacut,
-        Strans
+    private enum StateClaw {
+        Opened,
+        Closed
     }
-    private enum StateFoarfeca {
-        Intins,
-        Strans
-    }
-
-    public ColectareSubsystem(ServoEx gheara, ServoEx foarfeca) {
-        this.gheara = gheara;
-        this.foarfeca = foarfeca;
-        gheara.setPosition(0.5);
-        foarfeca.setPosition(0.5);
-        stateGheara = StateGheara.Desfacut;
-        stateFoarfeca = StateFoarfeca.Strans;
+    private enum StateScissors {
+        Extended,
+        Retracted
     }
 
-    public void strangeGheara() {
-        double stransPos = 1;
-        gheara.setPosition(stransPos);
-        stateGheara = StateGheara.Strans;
+    /**
+     * Creates a new instance of the subsystem.
+     * @param claw ServoEx object controlling the claw
+     * @param scissors ServoEx object controlling the scissors
+     */
+    public ColectareSubsystem(@NonNull ServoEx claw, @NonNull ServoEx scissors) {
+        this.claw = claw;
+        this.scissors = scissors;
+
+        this.claw.setInverted(true);
+        this.scissors.setInverted(true);
+
+        this.claw.setPosition(0);
+        this.scissors.setPosition(0.25);
+
+        stateClaw = StateClaw.Opened;
+        stateScissors = StateScissors.Retracted;
     }
 
-    public void desfaceGheara() {
-        gheara.setPosition(0.5);
-        stateGheara = StateGheara.Desfacut;
+    public void closeClaw() {
+        claw.setPosition(1);
+        stateClaw = StateClaw.Closed;
     }
 
-    public void toggleGheara() {
-        if (stateGheara == StateGheara.Desfacut) strangeGheara();
-        else desfaceGheara();
+    public void openClaw() {
+        claw.setPosition(0);
+        stateClaw = StateClaw.Opened;
     }
 
-    public void intindeFoarfeca() {
-        double intinsPos = 1;
-        foarfeca.setPosition(intinsPos);
-        stateFoarfeca = StateFoarfeca.Intins;
+    /**
+     * Toggles the claw between the open and closed positions.
+     */
+    public void toggleClaw() {
+        if (stateClaw == StateClaw.Opened) closeClaw();
+        else openClaw();
     }
 
-    public void strangeFoarfeca() {
-        foarfeca.setPosition(0.5);
-        stateFoarfeca = StateFoarfeca.Strans;
+    public void extendScissors() {
+        scissors.setPosition(0.75);
+        stateScissors = StateScissors.Extended;
     }
 
-    public void toggleFoarfeca() {
-        if (stateFoarfeca == StateFoarfeca.Intins) strangeFoarfeca();
-        else intindeFoarfeca();
+    public void retractScissors() {
+        scissors.setPosition(0.25);
+        stateScissors = StateScissors.Retracted;
+    }
+
+    /**
+     * Toggles the scissors between the extended and retracted positions.
+     */
+    public void toggleScissors() {
+        if (stateScissors == StateScissors.Extended) retractScissors();
+        else extendScissors();
     }
 }

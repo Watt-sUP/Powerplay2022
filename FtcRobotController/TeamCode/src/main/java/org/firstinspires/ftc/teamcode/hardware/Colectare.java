@@ -5,7 +5,7 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Colectare {
-    private final double openPos = 0.5;
+    private final double openPos = 0;
     private StateClaw stateClaw;
     public ServoEx claw;
 
@@ -17,12 +17,12 @@ public class Colectare {
     public Colectare(HardwareMap hardwareMap) {
         stateClaw = StateClaw.Opened;
         claw = new SimpleServo(hardwareMap, Config.claw, -360, 360);
-        claw.setInverted(false);
+        claw.setInverted(true);
         claw.setPosition(openPos);
     }
 
     public void close() {
-        double closePos = 0;
+        double closePos = 1;
         claw.setPosition(closePos);
         stateClaw = StateClaw.Closed;
     }
