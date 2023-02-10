@@ -97,4 +97,7 @@ public class TurelaSubsystem extends SubsystemBase {
     public void modifyByTicks(int ticks) {
         modifyByTicks(ticks, 0.5);
     }
+    public int getTicks() {
+        return motor.getCurrentPosition();
+    }
 }

@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  */
 public class GlisiereSubsystem extends SubsystemBase {
     public int position;
-    private final int[] positions = {0, 450, 1000, 1675, 2360};
+    private final int[] positions = {0, 300, 725, 1250, 1935};
     private final DcMotor motor, motor2;
 
     /**
@@ -34,8 +34,6 @@ public class GlisiereSubsystem extends SubsystemBase {
      * @param position The desired position (ranges 0-4)
      */
     public void setToPosition(int position) {
-        if (position == this.position)
-            return;
 
         this.position = position;
         this.position = MathUtils.clamp(this.position, 0, 4);
@@ -83,5 +81,9 @@ public class GlisiereSubsystem extends SubsystemBase {
      */
     public int getPosition() {
         return position;
+    }
+
+    public int getTicks() {
+        return motor.getCurrentPosition();
     }
 }

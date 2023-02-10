@@ -4,7 +4,6 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
-import com.noahbres.meepmeep.roadrunner.SampleMecanumDrive;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class MeepMeepTesting {
@@ -12,12 +11,12 @@ public class MeepMeepTesting {
         MeepMeep mm = new MeepMeep(640);
 
         RoadRunnerBotEntity bot = new DefaultBotBuilder(mm)
-                .setConstraints(56.25590416793869, 56.25590416793869, 2.9375, 2.9375, 14.72)
+                .setConstraints(56.25590416793869, 56.25590416793869, 2.997602939605713, 2.997602939605713, 14.76)
                 .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-34, -61, Math.toRadians(90)))
-                        .setConstraints(
-                                SampleMecanumDrive.getVelocityConstraint(45, 2.9375, 14.72),
-                                SampleMecanumDrive.getAccelerationConstraint(45)
-                        )
+//                        .setConstraints(
+//                                SampleMecanumDrive.getVelocityConstraint(45, 2.9375, 14.72),
+//                                SampleMecanumDrive.getAccelerationConstraint(45)
+//                        )
                         .splineTo(new Vector2d(-50, -12), Math.toRadians(180))
                         .resetConstraints()
                         .resetTurnConstraint()

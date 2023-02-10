@@ -19,7 +19,8 @@ public class ColectareSubsystem extends SubsystemBase {
     }
     private enum StateScissors {
         Extended,
-        Retracted
+        Retracted,
+        Custom
     }
 
     /**
@@ -70,10 +71,19 @@ public class ColectareSubsystem extends SubsystemBase {
     }
 
     /**
+     * Sets the scissors to a custom position.
+     * @param position The position to set the scissors to
+     */
+    public void setScissorsPosition(double position) {
+        scissors.setPosition(position);
+        stateScissors = StateScissors.Custom;
+    }
+
+    /**
      * Toggles the scissors between the extended and retracted positions.
      */
     public void toggleScissors() {
-        if (stateScissors == StateScissors.Extended) retractScissors();
+        if (stateScissors == StateScissors.Extended || stateScissors == StateScissors.Custom) retractScissors();
         else extendScissors();
     }
 }
