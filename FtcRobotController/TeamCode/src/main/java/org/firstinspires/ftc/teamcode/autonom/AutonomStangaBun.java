@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commands.ConeCommand;
 import org.firstinspires.ftc.teamcode.commands.subsystems.ColectareSubsystem;
+import org.firstinspires.ftc.teamcode.commands.subsystems.DetectorSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.GlisiereSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.TurelaSubsystem;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
@@ -22,17 +23,16 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.hardware.Cone;
 import org.firstinspires.ftc.teamcode.hardware.Config;
 
-@com.acmerobotics.dashboard.config.Config
-@Autonomous(name = "Autonom Test")
-public class AutonomTest extends CommandOpMode {
+import java.util.Map;
 
-    public static Cone cone1 = new Cone(300, -875, 475, 0.52, 0.55);
-    public static Cone cone2 = new Cone(225, -875, 465, 0.52, 0.55);
-    public static Cone cone3 = new Cone(150, -875, 465, 0.52, 0.55);
-    public static Cone cone4 = new Cone(75, -875, 465, 0.52, 0.55);
-    public static Cone cone5 = new Cone(0, -875, 465, 0.52, 0.55);
+@Autonomous(name = "Autonom 5+1 Stanga")
+public class AutonomStangaBun extends CommandOpMode {
 
-    public static int DROP_TICKS = 400;
+    private final Cone cone1 = new Cone(300, -875, 475, 0.52, 0.55);
+    private final Cone cone2 = new Cone(225, -875, 465, 0.52, 0.55);
+    private final Cone cone3 = new Cone(150, -875, 465, 0.52, 0.55);
+    private final Cone cone4 = new Cone(75, -875, 465, 0.52, 0.55);
+    private final Cone cone5 = new Cone(0, -875, 465, 0.52, 0.55);
 
     @Override
     public void initialize() {
@@ -55,13 +55,13 @@ public class AutonomTest extends CommandOpMode {
                 hardwareMap.dcMotor.get(Config.glisiera),
                 hardwareMap.dcMotor.get(Config.glisiera1)
         );
-        TurelaSubsystem turelaSystem = new TurelaSubsystem(
-                new Motor(hardwareMap, Config.turela)
-        );
+        TurelaSubsystem turelaSystem = new TurelaSubsystem(new Motor(hardwareMap, Config.turela));
+        DetectorSubsystem detectorSystem = new DetectorSubsystem(hardwareMap, 0, 1, 2);
 
         register(glisiereSystem);
         register(turelaSystem);
         register(colectareSystem);
+        register(detectorSystem);
 
         SequentialCommandGroup autonom = new SequentialCommandGroup(
                 new InstantCommand(() -> drive.setPoseEstimate(startPose)),
@@ -73,7 +73,7 @@ public class AutonomTest extends CommandOpMode {
                         new InstantCommand(() -> colectareSystem.setScissorsPosition(0.55)),
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> turelaSystem.modifyByTicks(475, 0.8)),
-                                new WaitUntilCommand(() -> turelaSystem.getTicks() > DROP_TICKS),
+                                new WaitUntilCommand(() -> turelaSystem.getTicks() > 400),
                                 new InstantCommand(() -> glisiereSystem.setToPosition(2))
                         )
                 ),
@@ -87,6 +87,16 @@ public class AutonomTest extends CommandOpMode {
                 new ConeCommand(cone5, colectareSystem, turelaSystem, glisiereSystem)
         );
 
-        schedule(autonom);
+        while (!isStarted()) {
+            Map<String, Integer> detection = detectorSystem.getDetection();
+            telemetry.addData("Last Detection ID", detectorSystem.lastDetection);
+            if (detection != null) {
+                telemetry.addData("Detection X", detection.get("x"));
+                telemetry.addData("Detection Y", detection.get("y"));
+            }
+            telemetry.update();
+        }
+
+        schedule(new InstantCommand(detectorSystem::close).andThen(autonom));
     }
 }

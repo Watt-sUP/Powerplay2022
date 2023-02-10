@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.autonom;
+package org.firstinspires.ftc.teamcode.autonom.parcari;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -13,9 +14,9 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.Map;
 
-@com.acmerobotics.dashboard.config.Config
-@Autonomous(name = "Autonom Ploiesti (Stanga)")
-public class AutonomStanga extends LinearOpMode {
+@Disabled
+@Autonomous(name = "Autonom Ploiesti (Dreapta)")
+public class AutonomDreapta extends LinearOpMode {
 
     public static double POWER = 0.5;
     public static int SLEEP = 1800, SLEEP_2 = 1000;
@@ -68,8 +69,8 @@ public class AutonomStanga extends LinearOpMode {
 
         int strafe_multiplier;
         switch (last_tag) {
-            case 0:
-                strafe_multiplier = 1;
+            case 2:
+                strafe_multiplier = -1;
                 SLEEP = 750;
                 SLEEP_2 = 1300;
                 break;
@@ -77,14 +78,15 @@ public class AutonomStanga extends LinearOpMode {
                 strafe_multiplier = 0;
                 SLEEP = 700;
                 break;
-            case 2:
-                strafe_multiplier = -1;
+            case 0:
+                strafe_multiplier = 1;
                 SLEEP = 750;
                 SLEEP_2 = 1000;
                 break;
             default:
                 return;
         }
+
 
         frontLeft.setPower(-POWER * strafe_multiplier);
         frontRight.setPower(POWER * strafe_multiplier);
