@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  */
 public class GlisiereSubsystem extends SubsystemBase {
     public int position;
-    private final int[] positions = {0, 300, 725, 1250, 1935};
+    private final int[] positions = {0, 300, 725, 1250, 1835};
     private final DcMotor motor, motor2;
 
     /**

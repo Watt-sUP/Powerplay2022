@@ -40,7 +40,7 @@ public class AutonomStangaSus extends CommandOpMode {
     public static Cone cone5 = new Cone(0, -875, 950, 0.5, 0.6);
 
     public static int DROP_TICKS = 725;
-    public static Cone preload = new Cone(-1, -1, 950, -1, 0.6);
+    public static Cone preload = new Cone(-1, -1, 975, -1, 0.6);
 
     @Override
     public void initialize() {
@@ -103,7 +103,7 @@ public class AutonomStangaSus extends CommandOpMode {
                 new WaitCommand(400),
                 new InstantCommand(() -> glisiereSystem.setToPosition(3)),
                 new InstantCommand(() -> drive.followTrajectory(stack_traj)),
-                new InstantCommand(() -> glisiereSystem.setToPosition(4), glisiereSystem),
+                new InstantCommand(() -> glisiereSystem.setToTicks(1935), glisiereSystem),
                 new WaitUntilCommand(() -> glisiereSystem.getTicks() > 800),
                 new InstantCommand(colectareSystem::retractScissors),
                 new ParallelCommandGroup(

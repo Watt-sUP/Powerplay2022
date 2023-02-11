@@ -41,7 +41,7 @@ public class ConeCommandHigh extends SequentialCommandGroup {
                 new WaitCommand(300),
                 new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(300),
-                new InstantCommand(() -> glisiereSystem.setToPosition(4), glisiereSystem),
+                new InstantCommand(() -> glisiereSystem.setToTicks(1935), glisiereSystem),
                 new WaitUntilCommand(() -> glisiereSystem.getTicks() > 800),
                 new InstantCommand(colectareSystem::retractScissors),
                 new ParallelCommandGroup(

@@ -14,7 +14,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void drive(double fwd, double st, double rot) {
-        drive.driveRobotCentric(st, fwd, rot);
+        drive.driveRobotCentric(st, fwd, rot, true);
     }
 
     public double getPowerLimit() {
