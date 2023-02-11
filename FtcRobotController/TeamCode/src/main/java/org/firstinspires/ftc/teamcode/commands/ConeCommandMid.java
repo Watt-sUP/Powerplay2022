@@ -16,7 +16,8 @@ import org.firstinspires.ftc.teamcode.hardware.Cone;
 /**
  * Helper command for scoring a cone.
  */
-public class ConeCommand extends SequentialCommandGroup {
+public class ConeCommandMid extends SequentialCommandGroup {
+
     /**
      * Runs a new command for scoring a cone.
      * @param cone The data about the cone
@@ -24,7 +25,7 @@ public class ConeCommand extends SequentialCommandGroup {
      * @param turelaSystem The subsystem for the turret
      * @param glisiereSystem The subsystem for the slides
      */
-    public ConeCommand(@NonNull Cone cone, ColectareSubsystem colectareSystem, TurelaSubsystem turelaSystem, GlisiereSubsystem glisiereSystem) {
+    public ConeCommandMid(@NonNull Cone cone, ColectareSubsystem colectareSystem, TurelaSubsystem turelaSystem, GlisiereSubsystem glisiereSystem) {
         addCommands(
             new InstantCommand(() -> colectareSystem.setScissorsPosition(0.35)),
             new ParallelCommandGroup(
@@ -34,7 +35,7 @@ public class ConeCommand extends SequentialCommandGroup {
                         new InstantCommand(() -> glisiereSystem.setToTicks(cone.glisPos))
                     )
             ),
-            new WaitCommand(900),
+            new WaitCommand(800),
             new InstantCommand(() -> colectareSystem.setScissorsPosition(cone.coneScissors)),
             new WaitCommand(300),
             new InstantCommand(colectareSystem::toggleClaw),
