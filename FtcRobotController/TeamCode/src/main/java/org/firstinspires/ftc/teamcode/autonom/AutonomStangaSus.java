@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @com.acmerobotics.dashboard.config.Config
-@Autonomous
+@Autonomous(name = "Autonom 5+1 Stanga (Sus)", group = "Autonom")
 public class AutonomStangaSus extends CommandOpMode {
 
     public static Cone cone1 = new Cone(300, -875, 950, 0.5, 0.6);
