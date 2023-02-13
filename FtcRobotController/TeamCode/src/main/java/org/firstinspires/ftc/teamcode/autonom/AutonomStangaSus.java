@@ -33,11 +33,11 @@ import java.util.Map;
 @Autonomous(name = "Autonom 5+1 Stanga (Sus)", group = "Autonom")
 public class AutonomStangaSus extends CommandOpMode {
 
-    public static Cone cone1 = new Cone(300, -875, 950, 0.5, 0.6);
-    public static Cone cone2 = new Cone(225, -875, 950, 0.5, 0.6);
-    public static Cone cone3 = new Cone(150, -875, 950, 0.5, 0.6);
-    public static Cone cone4 = new Cone(75, -875, 950, 0.5, 0.6);
-    public static Cone cone5 = new Cone(0, -875, 950, 0.5, 0.6);
+    public static Cone cone1 = new Cone(300, -875, 950, 0.52, 0.6);
+    public static Cone cone2 = new Cone(225, -875, 950, 0.52, 0.6);
+    public static Cone cone3 = new Cone(150, -875, 950, 0.52, 0.6);
+    public static Cone cone4 = new Cone(75, -875, 950, 0.52, 0.6);
+    public static Cone cone5 = new Cone(0, -875, 950, 0.52, 0.6);
 
     public static int DROP_TICKS = 725;
     public static Cone preload = new Cone(-1, -1, 975, -1, 0.6);
@@ -110,7 +110,7 @@ public class AutonomStangaSus extends CommandOpMode {
                         new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.8)),
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() > DROP_TICKS),
-                                new WaitCommand(150),
+                                new WaitUntilCommand(() -> glisiereSystem.getTicks() > 1800),
                                 new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
                                 new WaitCommand(150),
                                 new InstantCommand(() -> glisiereSystem.setToPosition(2))

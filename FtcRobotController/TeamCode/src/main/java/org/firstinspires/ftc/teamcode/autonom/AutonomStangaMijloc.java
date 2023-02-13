@@ -15,7 +15,7 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.commands.ConeCommandMidRight;
+import org.firstinspires.ftc.teamcode.commands.ConeCommandMidLeft;
 import org.firstinspires.ftc.teamcode.commands.subsystems.ColectareSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.DetectorSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.GlisiereSubsystem;
@@ -38,7 +38,7 @@ public class AutonomStangaMijloc extends CommandOpMode {
     public static Cone cone3 = new Cone(150, -875, 450, 0.52, 0.57);
     public static Cone cone4 = new Cone(75, -875, 450, 0.52, 0.57);
     public static Cone cone5 = new Cone(0, -875, 450, 0.52, 0.57);
-    public static int DROP_TICKS = 360;
+    public static int DROP_TICKS = 375, PRELOAD_OFFSET = 40;
 
     @Override
     public void initialize() {
@@ -105,19 +105,19 @@ public class AutonomStangaMijloc extends CommandOpMode {
                 new ParallelCommandGroup(
                         new InstantCommand(() -> colectareSystem.setScissorsPosition(0.55)),
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> turelaSystem.modifyByTicks(450, 0.8)),
-                                new WaitUntilCommand(() -> turelaSystem.getTicks() > DROP_TICKS),
+                                new InstantCommand(() -> turelaSystem.modifyByTicks(475, 0.8)),
+                                new WaitUntilCommand(() -> turelaSystem.getTicks() > DROP_TICKS + PRELOAD_OFFSET),
                                 new InstantCommand(() -> glisiereSystem.setToPosition(2))
                         )
                 ),
                 new WaitCommand(100),
                 new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(100),
-                new ConeCommandMidRight(cone1, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandMidRight(cone2, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandMidRight(cone3, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandMidRight(cone4, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandMidRight(cone5, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandMidLeft(cone1, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandMidLeft(cone2, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandMidLeft(cone3, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandMidLeft(cone4, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandMidLeft(cone5, colectareSystem, turelaSystem, glisiereSystem),
                 new ParallelCommandGroup(
                         new InstantCommand(colectareSystem::retractScissors),
                         new InstantCommand(() -> turelaSystem.setToTicks(-825)),
