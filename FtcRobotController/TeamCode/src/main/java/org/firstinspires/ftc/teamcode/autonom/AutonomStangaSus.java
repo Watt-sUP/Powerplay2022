@@ -15,7 +15,7 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.commands.ConeCommandHigh;
+import org.firstinspires.ftc.teamcode.commands.ConeCommandHighLeft;
 import org.firstinspires.ftc.teamcode.commands.subsystems.ColectareSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.DetectorSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.GlisiereSubsystem;
@@ -110,6 +110,7 @@ public class AutonomStangaSus extends CommandOpMode {
                         new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.8)),
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() > DROP_TICKS),
+                                new WaitCommand(150),
                                 new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
                                 new WaitCommand(150),
                                 new InstantCommand(() -> glisiereSystem.setToPosition(2))
@@ -118,11 +119,11 @@ public class AutonomStangaSus extends CommandOpMode {
                 new WaitCommand(250),
                 new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(100),
-                new ConeCommandHigh(cone1, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandHigh(cone2, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandHigh(cone3, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandHigh(cone4, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandHigh(cone5, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandHighLeft(cone1, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandHighLeft(cone2, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandHighLeft(cone3, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandHighLeft(cone4, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandHighLeft(cone5, colectareSystem, turelaSystem, glisiereSystem),
                 new ParallelCommandGroup(
                         new InstantCommand(colectareSystem::retractScissors),
                         new InstantCommand(() -> glisiereSystem.setToPosition(2)),
@@ -148,7 +149,7 @@ public class AutonomStangaSus extends CommandOpMode {
                 return;
 
             Map<String, Integer> detection = detectorSystem.getDetection();
-            telemetry.addData("Last Detection ID", detectorSystem.lastDetection);
+            telemetry.addData("Last Detection ID", detectorSystem.lastDetection + 1);
             if (detection != null) {
                 telemetry.addData("Detection X", detection.get("x"));
                 telemetry.addData("Detection Y", detection.get("y"));

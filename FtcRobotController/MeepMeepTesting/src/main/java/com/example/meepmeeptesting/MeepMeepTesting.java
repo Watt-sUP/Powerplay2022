@@ -13,16 +13,16 @@ public class MeepMeepTesting {
 
         RoadRunnerBotEntity bot = new DefaultBotBuilder(mm)
                 .setConstraints(56.25590416793869, 56.25590416793869, 2.997602939605713, 2.997602939605713, 14.76)
-                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-34, -61, Math.toRadians(90)))
+                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(34, -61, Math.toRadians(90)))
                         .setConstraints(
                                 SampleMecanumDrive.getVelocityConstraint(40, 2.997602939605713, 14.76),
                                 SampleMecanumDrive.getAccelerationConstraint(40)
                         )
-                        .splineTo(new Vector2d(-50, -12), Math.toRadians(180))
-//                        .setTangent(Math.toRadians(180))
+                        .splineTo(new Vector2d(50, -12), Math.toRadians(0))
+                        .setTangent(Math.toRadians(180))
                         .setReversed(true)
-                        .lineTo(new Vector2d(-26, -12))
-                        .splineTo(new Vector2d(-11, -32), Math.toRadians(270))
+                        .lineTo(new Vector2d(26, -12))
+                        .splineTo(new Vector2d(11, -32), Math.toRadians(270))
                         .resetConstraints()
                         .resetTurnConstraint()
                         .build());
