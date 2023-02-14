@@ -15,7 +15,8 @@ import org.firstinspires.ftc.teamcode.commands.subsystems.TurelaSubsystem;
 import org.firstinspires.ftc.teamcode.hardware.Cone;
 
 /**
- * Helper command for scoring a cone.
+ * <p>Helper command for scoring a cone.</p>
+ * <p>This command will deposit the cone on the high junction when the robot is on the left side.</p>
  */
 public class ConeCommandHighLeft extends SequentialCommandGroup {
 
@@ -36,15 +37,15 @@ public class ConeCommandHighLeft extends SequentialCommandGroup {
                                 new InstantCommand(() -> glisiereSystem.setToTicks(cone.glisPos))
                         )
                 ),
-                new WaitCommand(800),
+                new WaitUntilCommand(() -> turelaSystem.getTicks() - 50 < cone.conePos && glisiereSystem.getTicks() < cone.glisPos + 50),
                 new InstantCommand(() -> colectareSystem.setScissorsPosition(cone.coneScissors)),
-                new WaitCommand(300),
+                new WaitCommand(250),
                 new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(300),
-                new InstantCommand(() -> glisiereSystem.setToTicks(1935), glisiereSystem),
-                new WaitUntilCommand(() -> glisiereSystem.getTicks() > 800),
-                new InstantCommand(colectareSystem::retractScissors),
+                new InstantCommand(() -> glisiereSystem.setToTicks(1950), glisiereSystem),
+                new WaitUntilCommand(() -> glisiereSystem.getTicks() > cone.glisPos + 400),
                 new ParallelCommandGroup(
+                        new InstantCommand(colectareSystem::retractScissors),
                         new InstantCommand(() -> turelaSystem.setToTicks(cone.stickPos, 0.8)),
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() > AutonomStangaSus.DROP_TICKS),

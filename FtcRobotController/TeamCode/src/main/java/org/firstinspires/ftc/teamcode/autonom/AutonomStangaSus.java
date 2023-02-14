@@ -33,11 +33,11 @@ import java.util.Map;
 @Autonomous(name = "Autonom 5+1 Stanga (Sus)", group = "Autonom")
 public class AutonomStangaSus extends CommandOpMode {
 
-    public static Cone cone1 = new Cone(300, -875, 950, 0.52, 0.6);
-    public static Cone cone2 = new Cone(225, -875, 950, 0.52, 0.6);
-    public static Cone cone3 = new Cone(150, -875, 950, 0.52, 0.6);
-    public static Cone cone4 = new Cone(75, -875, 950, 0.52, 0.6);
-    public static Cone cone5 = new Cone(0, -875, 950, 0.52, 0.6);
+    public static Cone cone1 = new Cone(300, -875, 950, 0.49, 0.6);
+    public static Cone cone2 = new Cone(225, -875, 950, 0.49, 0.6);
+    public static Cone cone3 = new Cone(150, -875, 950, 0.49, 0.6);
+    public static Cone cone4 = new Cone(75, -875, 950, 0.49, 0.6);
+    public static Cone cone5 = new Cone(0, -875, 950, 0.49, 0.6);
 
     public static int DROP_TICKS = 725;
     public static Cone preload = new Cone(-1, -1, 975, -1, 0.6);
@@ -98,19 +98,20 @@ public class AutonomStangaSus extends CommandOpMode {
         register(detectorSystem);
 
         SequentialCommandGroup autonom = new SequentialCommandGroup(
-                new InstantCommand(() -> drive.setPoseEstimate(startPose)),
-                new InstantCommand(colectareSystem::toggleClaw),
-                new WaitCommand(400),
+                new ParallelCommandGroup(
+                    new InstantCommand(() -> drive.setPoseEstimate(startPose)),
+                    new InstantCommand(colectareSystem::toggleClaw)
+                ),
+                new WaitCommand(300),
                 new InstantCommand(() -> glisiereSystem.setToPosition(3)),
                 new InstantCommand(() -> drive.followTrajectory(stack_traj)),
-                new InstantCommand(() -> glisiereSystem.setToTicks(1935), glisiereSystem),
-                new WaitUntilCommand(() -> glisiereSystem.getTicks() > 800),
-                new InstantCommand(colectareSystem::retractScissors),
                 new ParallelCommandGroup(
+                        new InstantCommand(colectareSystem::retractScissors),
+                        new InstantCommand(() -> glisiereSystem.setToTicks(1950)),
                         new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.8)),
+
                         new SequentialCommandGroup(
-                                new WaitUntilCommand(() -> turelaSystem.getTicks() > DROP_TICKS),
-                                new WaitUntilCommand(() -> glisiereSystem.getTicks() > 1800),
+                                new WaitUntilCommand(() -> turelaSystem.getTicks() > DROP_TICKS && glisiereSystem.getTicks() > 1850),
                                 new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
                                 new WaitCommand(150),
                                 new InstantCommand(() -> glisiereSystem.setToPosition(2))
@@ -119,11 +120,13 @@ public class AutonomStangaSus extends CommandOpMode {
                 new WaitCommand(250),
                 new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(100),
+
                 new ConeCommandHighLeft(cone1, colectareSystem, turelaSystem, glisiereSystem),
                 new ConeCommandHighLeft(cone2, colectareSystem, turelaSystem, glisiereSystem),
                 new ConeCommandHighLeft(cone3, colectareSystem, turelaSystem, glisiereSystem),
                 new ConeCommandHighLeft(cone4, colectareSystem, turelaSystem, glisiereSystem),
                 new ConeCommandHighLeft(cone5, colectareSystem, turelaSystem, glisiereSystem),
+
                 new ParallelCommandGroup(
                         new InstantCommand(colectareSystem::retractScissors),
                         new InstantCommand(() -> glisiereSystem.setToPosition(2)),
