@@ -36,22 +36,24 @@ public class ConeCommandMidRight extends SequentialCommandGroup {
                                 new InstantCommand(() -> glisiereSystem.setToTicks(cone.glisPos))
                         )
                 ),
-                new WaitCommand(800),
+                new WaitUntilCommand(() -> turelaSystem.getTicks() + 50 > cone.conePos && glisiereSystem.getTicks() < cone.glisPos + 50),
                 new InstantCommand(() -> colectareSystem.setScissorsPosition(cone.coneScissors)),
-                new WaitCommand(300),
+                new WaitCommand(250),
                 new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(300),
-                new InstantCommand(() -> glisiereSystem.setToTicks(1250), glisiereSystem),
-                new WaitUntilCommand(() -> glisiereSystem.getTicks() > 800),
+                new InstantCommand(() -> glisiereSystem.setToTicks(1450), glisiereSystem),
+                new WaitUntilCommand(() -> glisiereSystem.getTicks() > cone.glisPos + 400),
                 new ParallelCommandGroup(
+                        new InstantCommand(colectareSystem::retractScissors),
                         new InstantCommand(() -> turelaSystem.setToTicks(cone.stickPos, 0.8)),
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> colectareSystem.setScissorsPosition(cone.stickScissors)),
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() < AutonomDreaptaMijloc.DROP_TICKS),
+                                new InstantCommand(() -> colectareSystem.setScissorsPosition(cone.stickScissors)),
+                                new WaitCommand(150),
                                 new InstantCommand(() -> glisiereSystem.setToPosition(2))
                         )
                 ),
-                new WaitCommand(200),
+                new WaitCommand(250),
                 new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(100)
         );

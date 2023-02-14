@@ -104,11 +104,11 @@ public class AutonomStangaMijloc extends CommandOpMode {
                 new WaitCommand(300),
                 new InstantCommand(() -> glisiereSystem.setToTicks(1450)),
                 new InstantCommand(() -> drive.followTrajectory(stack_traj)),
-                new InstantCommand(colectareSystem::retractScissors),
                 new ParallelCommandGroup(
+                        new InstantCommand(colectareSystem::retractScissors),
                         new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.8)),
-                        new SequentialCommandGroup(
 
+                        new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() > DROP_TICKS + PRELOAD_OFFSET && glisiereSystem.getTicks() > 1000),
                                 new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
                                 new WaitCommand(150),

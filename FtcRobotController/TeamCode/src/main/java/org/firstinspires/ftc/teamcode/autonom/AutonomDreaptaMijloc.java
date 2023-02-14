@@ -39,7 +39,7 @@ public class AutonomDreaptaMijloc extends CommandOpMode {
     public static Cone cone4 = new Cone(75, 825, -400, 0.52, 0.58);
     public static Cone cone5 = new Cone(0, 825, -400, 0.52, 0.58);
     public static Cone preload = new Cone(-1, -1, -425, -1, 0.58);
-    public static int DROP_TICKS = -330, PRELOAD_OFFSET = -95;
+    public static int DROP_TICKS = -350, PRELOAD_OFFSET = -75;
 
     @Override
     public void initialize() {
@@ -99,41 +99,48 @@ public class AutonomDreaptaMijloc extends CommandOpMode {
         register(detectorSystem);
 
         SequentialCommandGroup autonom = new SequentialCommandGroup(
-                new InstantCommand(() -> drive.setPoseEstimate(startPose)),
-                new InstantCommand(colectareSystem::toggleClaw),
-                new WaitCommand(400),
-                new InstantCommand(() -> glisiereSystem.setToTicks(1250)),
-                new InstantCommand(() -> drive.followTrajectory(stack_traj)),
-                new WaitUntilCommand(() -> glisiereSystem.getTicks() > 800),
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
+                        new InstantCommand(() -> drive.setPoseEstimate(startPose)),
+                        new InstantCommand(colectareSystem::toggleClaw)
+                ),
+                new WaitCommand(300),
+                new InstantCommand(() -> glisiereSystem.setToTicks(1450)),
+                new InstantCommand(() -> drive.followTrajectory(stack_traj)),
+                new ParallelCommandGroup(
+                        new InstantCommand(colectareSystem::retractScissors),
+                        new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.8)),
+
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> turelaSystem.modifyByTicks(preload.stickPos, 0.8)),
-                                new WaitUntilCommand(() -> turelaSystem.getTicks() < DROP_TICKS + PRELOAD_OFFSET),
+                                new WaitUntilCommand(() -> turelaSystem.getTicks() < DROP_TICKS + PRELOAD_OFFSET && glisiereSystem.getTicks() > 1000),
+                                new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
+                                new WaitCommand(150),
                                 new InstantCommand(() -> glisiereSystem.setToPosition(2))
                         )
                 ),
-                new WaitCommand(100),
+                new WaitCommand(250),
                 new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(100),
+
                 new ConeCommandMidRight(cone1, colectareSystem, turelaSystem, glisiereSystem),
                 new ConeCommandMidRight(cone2, colectareSystem, turelaSystem, glisiereSystem),
                 new ConeCommandMidRight(cone3, colectareSystem, turelaSystem, glisiereSystem),
                 new ConeCommandMidRight(cone4, colectareSystem, turelaSystem, glisiereSystem),
                 new ConeCommandMidRight(cone5, colectareSystem, turelaSystem, glisiereSystem),
+
                 new ParallelCommandGroup(
                         new InstantCommand(colectareSystem::retractScissors),
                         new InstantCommand(() -> turelaSystem.setToTicks(825)),
                         new InstantCommand(() -> glisiereSystem.setToPosition(2))
                 ),
-                new WaitUntilCommand(() -> turelaSystem.getTicks() > 600),
                 new SelectCommand(
-                        new HashMap<Object, Command>() {{
-                            put(-1, new InstantCommand(() -> drive.followTrajectorySequence(right_traj)));
-                            put(0, new InstantCommand(() -> drive.followTrajectorySequence(left_traj)));
-                            put(1, new InstantCommand(() -> drive.followTrajectorySequence(middle_traj)));
-                            put(2, new InstantCommand(() -> drive.followTrajectorySequence(right_traj)));
-                        }},
+                        new HashMap<Object, Command>() {
+                            {
+                                put(-1, new InstantCommand(() -> drive.followTrajectorySequence(right_traj)));
+                                put(0, new InstantCommand(() -> drive.followTrajectorySequence(left_traj)));
+                                put(1, new InstantCommand(() -> drive.followTrajectorySequence(middle_traj)));
+                                put(2, new InstantCommand(() -> drive.followTrajectorySequence(right_traj)));
+                            }
+                        },
                         () -> detectorSystem.lastDetection
                 ),
                 new InstantCommand(() -> glisiereSystem.setToPosition(0))
