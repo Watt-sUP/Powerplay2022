@@ -37,10 +37,10 @@ public class AutonomStangaSus extends CommandOpMode {
     public static Cone cone2 = new Cone(225, -875, 950, 0.49, 0.6);
     public static Cone cone3 = new Cone(150, -875, 950, 0.49, 0.6);
     public static Cone cone4 = new Cone(75, -875, 950, 0.49, 0.6);
-    public static Cone cone5 = new Cone(0, -875, 950, 0.49, 0.6);
+    public static Cone cone5 = new Cone(0, -875, 950, 0.49, 0.61);
 
-    public static int DROP_TICKS = 725;
-    public static Cone preload = new Cone(-1, -1, 975, -1, 0.6);
+    public static int DROP_TICKS = 725, PRELOAD_OFFSET = 75;
+    public static Cone preload = new Cone(-1, -1, 960, -1, 0.62);
 
     @Override
     public void initialize() {
@@ -111,9 +111,9 @@ public class AutonomStangaSus extends CommandOpMode {
                         new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.8)),
 
                         new SequentialCommandGroup(
-                                new WaitUntilCommand(() -> turelaSystem.getTicks() > DROP_TICKS && glisiereSystem.getTicks() > 1850),
+                                new WaitUntilCommand(() -> turelaSystem.getTicks() > DROP_TICKS + PRELOAD_OFFSET && glisiereSystem.getTicks() > 1850),
                                 new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
-                                new WaitCommand(150),
+                                new WaitCommand(250),
                                 new InstantCommand(() -> glisiereSystem.setToPosition(2))
                         )
                 ),
