@@ -51,7 +51,7 @@ public class ConeCommandHighLeft extends SequentialCommandGroup {
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() > AutonomStangaSus.DROP_TICKS),
                                 new InstantCommand(() -> colectareSystem.setScissorsPosition(cone.stickScissors)),
-                                new WaitCommand(150),
+                                new WaitCommand(250),
                                 new InstantCommand(() -> glisiereSystem.setToPosition(2))
                         )
                 ),

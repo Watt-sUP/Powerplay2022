@@ -15,8 +15,20 @@ import org.firstinspires.ftc.teamcode.commands.subsystems.TurelaSubsystem;
 import org.firstinspires.ftc.teamcode.hardware.Cone;
 
 // TODO: Add javadocs and finish the command
+
+/**
+ * <p>Helper command for scoring a cone.</p>
+ * <p>This command will deposit the cone on the high junction when the robot is on the right side.</p>
+ */
 public class ConeCommandHighRight extends SequentialCommandGroup {
 
+    /**
+     * Runs a new command for scoring a cone.
+     * @param cone The data about the cone
+     * @param colectareSystem The subsystem for the claw and scissors
+     * @param turelaSystem The subsystem for the turret
+     * @param glisiereSystem The subsystem for the slides
+     */
     public ConeCommandHighRight(@NonNull Cone cone, ColectareSubsystem colectareSystem, TurelaSubsystem turelaSystem, GlisiereSubsystem glisiereSystem) {
         addCommands(
                 new ParallelCommandGroup(
@@ -41,7 +53,7 @@ public class ConeCommandHighRight extends SequentialCommandGroup {
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() < AutonomDreaptaSus.DROP_TICKS),
                                 new InstantCommand(() -> colectareSystem.setScissorsPosition(cone.stickScissors)),
-                                new WaitCommand(150),
+                                new WaitCommand(250),
                                 new InstantCommand(() -> glisiereSystem.setToPosition(2))
                         )
                 ),
