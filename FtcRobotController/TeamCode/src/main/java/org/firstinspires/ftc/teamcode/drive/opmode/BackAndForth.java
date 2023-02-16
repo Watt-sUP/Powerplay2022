@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.hardware.Foarfeca;
  * is recommended that you use the FollowerPIDTuner opmode for further fine tuning.
  */
 @Config
-//@Disabled
+@Disabled
 @Autonomous(group = "drive")
 public class BackAndForth extends LinearOpMode {
 

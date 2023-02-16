@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.hardware.Foarfeca;
 
 // This is an example of a more complex path to really test the tuning.
 
-//@Disabled
+@Disabled
 @Config
 @Autonomous(group = "drive")
 public class SplineTest extends LinearOpMode {
