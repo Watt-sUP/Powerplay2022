@@ -33,14 +33,14 @@ import java.util.Map;
 @Autonomous(name = "Autonom 5+1 Stanga (Sus)", group = "Autonom")
 public class AutonomStangaSus extends CommandOpMode {
 
-    public static Cone cone1 = new Cone(300, -875, 950, 0.49, 0.6);
-    public static Cone cone2 = new Cone(225, -875, 950, 0.49, 0.6);
-    public static Cone cone3 = new Cone(150, -875, 950, 0.49, 0.6);
-    public static Cone cone4 = new Cone(75, -875, 950, 0.49, 0.6);
-    public static Cone cone5 = new Cone(0, -875, 950, 0.49, 0.61);
+    public static Cone cone1 = new Cone(300, -875, 950, 0.49, 0.58);
+    public static Cone cone2 = new Cone(225, -875, 950, 0.49, 0.58);
+    public static Cone cone3 = new Cone(150, -875, 950, 0.49, 0.58);
+    public static Cone cone4 = new Cone(75, -875, 950, 0.49, 0.58);
+    public static Cone cone5 = new Cone(0, -875, 950, 0.49, 0.58);
 
     public static int DROP_TICKS = 725, PRELOAD_OFFSET = 75;
-    public static Cone preload = new Cone(-1, -1, 960, -1, 0.62);
+    public static Cone preload = new Cone(-1, -1, 975, -1, 0.62);
 
     @Override
     public void initialize() {

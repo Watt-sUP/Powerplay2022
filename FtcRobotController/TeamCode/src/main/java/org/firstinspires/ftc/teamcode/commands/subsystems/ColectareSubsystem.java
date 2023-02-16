@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
  */
 public class ColectareSubsystem extends SubsystemBase {
     private final ServoEx claw, scissors;
+    private double scissorsRetractedPos = 0.2;
     private StateClaw stateClaw;
     private StateScissors stateScissors;
 
@@ -36,12 +37,17 @@ public class ColectareSubsystem extends SubsystemBase {
         this.scissors.setInverted(true);
 
         this.claw.setPosition(0);
-        this.scissors.setPosition(0.2);
+        this.scissors.setPosition(scissorsRetractedPos);
 
         stateClaw = StateClaw.Opened;
         stateScissors = StateScissors.Retracted;
     }
 
+    public ColectareSubsystem(@NonNull ServoEx claw, @NonNull ServoEx scissors, double scissorsInitPos) {
+        this(claw, scissors);
+        scissorsRetractedPos = scissorsInitPos;
+        this.scissors.setPosition(scissorsRetractedPos);
+    }
     public void closeClaw() {
         claw.setPosition(1);
         stateClaw = StateClaw.Closed;
@@ -66,7 +72,7 @@ public class ColectareSubsystem extends SubsystemBase {
     }
 
     public void retractScissors() {
-        scissors.setPosition(0.2);
+        scissors.setPosition(scissorsRetractedPos);
         stateScissors = StateScissors.Retracted;
     }
 

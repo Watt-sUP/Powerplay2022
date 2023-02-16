@@ -36,11 +36,11 @@ public class AutonomDreaptaSus extends CommandOpMode {
 
     public static int DROP_TICKS = -800, PRELOAD_OFFSET = -50;
     public static Cone preload = new Cone(-1, -1, -975, -1, 0.6);
-    public static Cone cone1 = new Cone(300, 875, -950, 0.5, 0.6);
-    public static Cone cone2 = new Cone(225, 875, -950, 0.5, 0.6);
-    public static Cone cone3 = new Cone(150, 875, -950, 0.5, 0.6);
-    public static Cone cone4 = new Cone(75, 875, -950, 0.5, 0.6);
-    public static Cone cone5 = new Cone(0, 875, -950, 0.5, 0.6);
+    public static Cone cone1 = new Cone(300, 850, -975, 0.5, 0.6);
+    public static Cone cone2 = new Cone(225, 850, -975, 0.5, 0.6);
+    public static Cone cone3 = new Cone(150, 850, -975, 0.5, 0.6);
+    public static Cone cone4 = new Cone(75, 850, -975, 0.5, 0.6);
+    public static Cone cone5 = new Cone(0, 850, -975, 0.5, 0.6);
 
     @Override
     public void initialize() {
