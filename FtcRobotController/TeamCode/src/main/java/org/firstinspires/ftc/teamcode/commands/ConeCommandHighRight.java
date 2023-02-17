@@ -33,7 +33,7 @@ public class ConeCommandHighRight extends SequentialCommandGroup {
         addCommands(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> colectareSystem.setScissorsPosition(0.35)),
-                        new InstantCommand(() -> turelaSystem.setToTicks(cone.conePos)),
+                        new InstantCommand(() -> turelaSystem.setToTicks(cone.conePos, 0.8)),
 
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() > 0),

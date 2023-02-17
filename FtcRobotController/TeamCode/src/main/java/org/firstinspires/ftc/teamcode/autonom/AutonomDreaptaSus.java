@@ -34,13 +34,13 @@ import java.util.Map;
 @Autonomous(name = "Autonom 5+1 Dreapta (Sus)", group = "Autonom")
 public class AutonomDreaptaSus extends CommandOpMode {
 
-    public static int DROP_TICKS = -800, PRELOAD_OFFSET = -50;
-    public static Cone preload = new Cone(-1, -1, -950, -1, 0.6);
-    public static Cone cone1 = new Cone(300, 825, -950, 0.48, 0.6);
-    public static Cone cone2 = new Cone(225, 825, -950, 0.48, 0.6);
-    public static Cone cone3 = new Cone(150, 825, -950, 0.48, 0.6);
-    public static Cone cone4 = new Cone(75, 825, -950, 0.48, 0.6);
-    public static Cone cone5 = new Cone(0, 825, -950, 0.48, 0.6);
+    public static int DROP_TICKS = -800, PRELOAD_OFFSET = -75;
+    public static Cone preload = new Cone(-1, -1, -950, -1, 0.58);
+    public static Cone cone1 = new Cone(300, 800, -950, 0.48, 0.58);
+    public static Cone cone2 = new Cone(225, 800, -950, 0.48, 0.58);
+    public static Cone cone3 = new Cone(150, 800, -950, 0.48, 0.58);
+    public static Cone cone4 = new Cone(75, 800, -950, 0.48, 0.58);
+    public static Cone cone5 = new Cone(0, 800, -950, 0.48, 0.58);
 
     @Override
     public void initialize() {

@@ -30,7 +30,7 @@ public class ConeCommandMidRight extends SequentialCommandGroup {
         addCommands(
                 new InstantCommand(() -> colectareSystem.setScissorsPosition(0.35)),
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> turelaSystem.setToTicks(cone.conePos)),
+                        new InstantCommand(() -> turelaSystem.setToTicks(cone.conePos, 0.8)),
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() > 0),
                                 new InstantCommand(() -> glisiereSystem.setToTicks(cone.glisPos))
