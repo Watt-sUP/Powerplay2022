@@ -29,18 +29,17 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO: Finish the OpMode
 @com.acmerobotics.dashboard.config.Config
 @Autonomous(name = "Autonom 5+1 Dreapta (Sus)", group = "Autonom")
 public class AutonomDreaptaSus extends CommandOpMode {
 
-    public static int DROP_TICKS = -800, PRELOAD_OFFSET = -75;
-    public static Cone preload = new Cone(-1, -1, -950, -1, 0.58);
-    public static Cone cone1 = new Cone(300, 800, -950, 0.48, 0.58);
-    public static Cone cone2 = new Cone(225, 800, -950, 0.48, 0.58);
-    public static Cone cone3 = new Cone(150, 800, -950, 0.48, 0.58);
-    public static Cone cone4 = new Cone(75, 800, -950, 0.48, 0.58);
-    public static Cone cone5 = new Cone(0, 800, -950, 0.48, 0.58);
+    public static int DROP_TICKS = -800, PRELOAD_OFFSET = -100;
+    public static Cone preload = new Cone(-1, -1, -975, -1, 0.57);
+    public static Cone cone1 = new Cone(300, 825, -950, 0.52, 0.57);
+    public static Cone cone2 = new Cone(225, 825, -950, 0.52, 0.57);
+    public static Cone cone3 = new Cone(150, 825, -950, 0.52, 0.57);
+    public static Cone cone4 = new Cone(75, 825, -950, 0.52, 0.57);
+    public static Cone cone5 = new Cone(0, 825, -950, 0.52, 0.57    );
 
     @Override
     public void initialize() {
@@ -137,7 +136,7 @@ public class AutonomDreaptaSus extends CommandOpMode {
                 new SelectCommand(
                         new HashMap<Object, Command>() {
                             {
-                                put(-1, new InstantCommand(() -> drive.followTrajectorySequence(right_traj)));
+                                put(-1, new InstantCommand(() -> drive.followTrajectorySequence(left_traj)));
                                 put(0, new InstantCommand(() -> drive.followTrajectorySequence(left_traj)));
                                 put(1, new InstantCommand(() -> drive.followTrajectorySequence(middle_traj)));
                                 put(2, new InstantCommand(() -> drive.followTrajectorySequence(right_traj)));
@@ -149,19 +148,20 @@ public class AutonomDreaptaSus extends CommandOpMode {
         );
 
         while (!isStarted()) {
-
             if (isStopRequested())
                 return;
 
             Map<String, Integer> detection = detectorSystem.getDetection();
-            telemetry.addData("Last Detection ID", detectorSystem.lastDetection + 1);
+            telemetry.addData("Last Detection ID", (detectorSystem.lastDetection == -1) ? "None" : (detectorSystem.lastDetection + 1));
             if (detection != null) {
                 telemetry.addData("Detection X", detection.get("x"));
                 telemetry.addData("Detection Y", detection.get("y"));
             }
             telemetry.update();
         }
-
-        schedule(new InstantCommand(detectorSystem::close).andThen(autonom));
+        schedule(
+                new InstantCommand(detectorSystem::close)
+                        .andThen(autonom)
+        );
     }
 }

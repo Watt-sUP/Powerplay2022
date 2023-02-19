@@ -33,13 +33,13 @@ import java.util.Map;
 @Autonomous(name = "Autonom 5+1 Stanga (Mijloc)", group = "Autonom")
 public class AutonomStangaMijloc extends CommandOpMode {
 
-    public static Cone preload = new Cone(-1, -1, 525, -1, 0.55);
-    public static Cone cone1 = new Cone(300, -825, 525, 0.48, 0.55);
-    public static Cone cone2 = new Cone(225, -825, 525, 0.48, 0.55);
-    public static Cone cone3 = new Cone(150, -825, 525, 0.48, 0.55);
-    public static Cone cone4 = new Cone(75, -825, 525, 0.48, 0.55);
-    public static Cone cone5 = new Cone(0, -825, 525, 0.48, 0.55);
-    public static int DROP_TICKS = 375, PRELOAD_OFFSET = 40;
+    public static Cone preload = new Cone(-1, -1, 525, -1, 0.56);
+    public static Cone cone1 = new Cone(300, -850, 500, 0.51, 0.56);
+    public static Cone cone2 = new Cone(225, -850, 500, 0.51, 0.56);
+    public static Cone cone3 = new Cone(150, -850, 500, 0.51, 0.56);
+    public static Cone cone4 = new Cone(75, -850, 500, 0.51, 0.56);
+    public static Cone cone5 = new Cone(0, -850, 500, 0.51, 0.56);
+    public static int DROP_TICKS = 375, PRELOAD_OFFSET = 50;
 
     @Override
     public void initialize() {
@@ -111,7 +111,7 @@ public class AutonomStangaMijloc extends CommandOpMode {
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() > DROP_TICKS + PRELOAD_OFFSET && glisiereSystem.getTicks() > 1000),
                                 new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
-                                new WaitCommand(150),
+                                new WaitCommand(250),
                                 new InstantCommand(() -> glisiereSystem.setToPosition(2))
                         )
                 ),
@@ -146,7 +146,7 @@ public class AutonomStangaMijloc extends CommandOpMode {
 
         while (!isStarted()) {
             Map<String, Integer> detection = detectorSystem.getDetection();
-            telemetry.addData("Last Detection ID", detectorSystem.lastDetection + 1);
+            telemetry.addData("Last Detection ID", (detectorSystem.lastDetection == -1) ? "None" : (detectorSystem.lastDetection + 1));
             if (detection != null) {
                 telemetry.addData("Detection X", detection.get("x"));
                 telemetry.addData("Detection Y", detection.get("y"));

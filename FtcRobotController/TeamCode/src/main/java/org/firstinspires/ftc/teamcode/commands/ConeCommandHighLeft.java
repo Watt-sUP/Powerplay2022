@@ -30,8 +30,8 @@ public class ConeCommandHighLeft extends SequentialCommandGroup {
     public ConeCommandHighLeft(@NonNull Cone cone, ColectareSubsystem colectareSystem, TurelaSubsystem turelaSystem, GlisiereSubsystem glisiereSystem) {
         addCommands(
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> turelaSystem.setToTicks(cone.conePos)),
-                        new InstantCommand(() -> colectareSystem.setScissorsPosition(0.35)),
+                        new InstantCommand(() -> turelaSystem.setToTicks(cone.conePos, 0.8)),
+                        new InstantCommand(() -> colectareSystem.setScissorsPosition(0.4)),
 
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() < 0),

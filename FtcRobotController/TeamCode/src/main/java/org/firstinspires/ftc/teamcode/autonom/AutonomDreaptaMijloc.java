@@ -33,12 +33,12 @@ import java.util.Map;
 @Autonomous(name = "Autonom 5+1 Dreapta (Mijloc)", group = "Autonom")
 public class AutonomDreaptaMijloc extends CommandOpMode {
 
-    public static Cone cone1 = new Cone(300, 800, -525, 0.48, 0.55);
-    public static Cone cone2 = new Cone(225, 800, -500, 0.48, 0.55);
-    public static Cone cone3 = new Cone(150, 800, -500, 0.48, 0.55);
-    public static Cone cone4 = new Cone(75, 800, -500, 0.48, 0.55);
-    public static Cone cone5 = new Cone(0, 800, -500, 0.48, 0.55);
-    public static Cone preload = new Cone(-1, -1, -550, -1, 0.55);
+    public static Cone cone1 = new Cone(300, 800, -525, 0.5, 0.59);
+    public static Cone cone2 = new Cone(225, 800, -525, 0.5, 0.59);
+    public static Cone cone3 = new Cone(150, 800, -525, 0.5, 0.59);
+    public static Cone cone4 = new Cone(75, 800, -525, 0.5, 0.59);
+    public static Cone cone5 = new Cone(0, 800, -525, 0.5, 0.59);
+    public static Cone preload = new Cone(-1, -1, -550, -1, 0.59);
     public static int DROP_TICKS = -425, PRELOAD_OFFSET = -100;
 
     @Override
@@ -113,7 +113,7 @@ public class AutonomDreaptaMijloc extends CommandOpMode {
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() < DROP_TICKS + PRELOAD_OFFSET && glisiereSystem.getTicks() > 1000),
                                 new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
-                                new WaitCommand(150),
+                                new WaitCommand(250),
                                 new InstantCommand(() -> glisiereSystem.setToPosition(2))
                         )
                 ),
@@ -135,7 +135,7 @@ public class AutonomDreaptaMijloc extends CommandOpMode {
                 new SelectCommand(
                         new HashMap<Object, Command>() {
                             {
-                                put(-1, new InstantCommand(() -> drive.followTrajectorySequence(right_traj)));
+                                put(-1, new InstantCommand(() -> drive.followTrajectorySequence(left_traj)));
                                 put(0, new InstantCommand(() -> drive.followTrajectorySequence(left_traj)));
                                 put(1, new InstantCommand(() -> drive.followTrajectorySequence(middle_traj)));
                                 put(2, new InstantCommand(() -> drive.followTrajectorySequence(right_traj)));
@@ -148,7 +148,7 @@ public class AutonomDreaptaMijloc extends CommandOpMode {
 
         while (!isStarted()) {
             Map<String, Integer> detection = detectorSystem.getDetection();
-            telemetry.addData("Last Detection ID", detectorSystem.lastDetection + 1);
+            telemetry.addData("Last Detection ID", (detectorSystem.lastDetection == -1) ? "None" : (detectorSystem.lastDetection + 1));
             if (detection != null) {
                 telemetry.addData("Detection X", detection.get("x"));
                 telemetry.addData("Detection Y", detection.get("y"));
