@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.RunCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
@@ -19,8 +23,7 @@ import org.firstinspires.ftc.teamcode.hardware.Config;
 
 @TeleOp(name = "Drive Optimizat (Odo + Leica)", group = "TeleOp")
 public class ControlatOdo extends CommandOpMode {
-
-    ElapsedTime time = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
+    private final ElapsedTime time = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
 
     @Override
     public void initialize() {
@@ -51,6 +54,7 @@ public class ControlatOdo extends CommandOpMode {
         register(colectareSystem);
         schedule(new RunCommand(() -> {
             telemetry.addLine((int) time.seconds() + " seconds elapsed OpMode start");
+            telemetry.addData("Current Power Limit", driveSystem.getPowerLimit());
             telemetry.update();
         }));
 
@@ -62,10 +66,18 @@ public class ControlatOdo extends CommandOpMode {
         // Drivetrain controls below
         driver1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whileHeld(() -> driveSystem.setPowerLimit(0.2))
-                .whenReleased(() -> driveSystem.setPowerLimit(1.0));
+                .whenReleased(() -> driveSystem.setPowerLimit(driveSystem.defaultPowerLimit));
         driver1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whileHeld(() -> driveSystem.setPowerLimit(0.4))
-                .whenReleased(() -> driveSystem.setPowerLimit(1.0));
+                .whenReleased(() -> driveSystem.setPowerLimit(driveSystem.defaultPowerLimit));
+        driver1.getGamepadButton(GamepadKeys.Button.A)
+                .toggleWhenPressed(() -> {
+                    driveSystem.defaultPowerLimit = 0.8;
+                    driveSystem.setPowerLimit(driveSystem.defaultPowerLimit);
+                }, () -> {
+                    driveSystem.defaultPowerLimit = 1.0;
+                    driveSystem.setPowerLimit(driveSystem.defaultPowerLimit);
+                });
 
         // Turret controls below
         driver1.getGamepadButton(GamepadKeys.Button.X)
@@ -74,18 +86,36 @@ public class ControlatOdo extends CommandOpMode {
                 .whenPressed(() -> turelaSystem.setToPosition(Direction.RIGHT));
         driver1.getGamepadButton(GamepadKeys.Button.Y)
                 .whenPressed(() -> turelaSystem.setToPosition(Direction.FORWARD));
-        driver1.getGamepadButton(GamepadKeys.Button.A)
-                .whenPressed(() -> turelaSystem.setToPosition(Direction.BACKWARDS));
 
         // Slider controls below
         driver2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(() -> glisiereSystem.setToPosition(4));
+                .whenPressed(new ParallelCommandGroup(
+                        // Raises the sliders and rotates the turret to the front
+                        new InstantCommand(() -> glisiereSystem.setToPosition(4)),
+                        new WaitUntilCommand(() -> glisiereSystem.position != 0)
+                                .andThen(new InstantCommand(() -> turelaSystem.setToPosition(Direction.FORWARD)))
+                ));
         driver2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .whenPressed(new SequentialCommandGroup(
+                        // Lowers the sliders and rotates the turret to the last known position
+                        // or the front if it is unknown
+                        new InstantCommand(() -> turelaSystem.setToPosition(turelaSystem.lastDirection)),
+                        new InstantCommand(() -> glisiereSystem.setToPosition(0))
+                ));
+
+        // Move the slides to the highest and lowest positions
+        driver2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(() -> glisiereSystem.setToPosition(4));
+        driver2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(() -> glisiereSystem.setToPosition(0));
+
+        // Raise and lower the sliders by 1 position
         driver2.getGamepadButton(GamepadKeys.Button.Y)
                 .whenPressed(() -> glisiereSystem.setToPosition(glisiereSystem.position + 1));
         driver2.getGamepadButton(GamepadKeys.Button.X)
                 .whenPressed(() -> glisiereSystem.setToPosition(glisiereSystem.position - 1));
+
+        // Lowers the slides a bit
         driver2.getGamepadButton(GamepadKeys.Button.B)
                 .whenPressed(() -> glisiereSystem.modifyTicks(-160));
 

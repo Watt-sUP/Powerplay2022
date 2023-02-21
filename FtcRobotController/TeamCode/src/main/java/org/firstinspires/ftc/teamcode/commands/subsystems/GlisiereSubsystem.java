@@ -10,7 +10,16 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  */
 public class GlisiereSubsystem extends SubsystemBase {
     public int position;
-    private final int[] positions = {0, 300, 725, 1300, 1835};
+    /*
+        * The positions of the sliders, in encoder ticks.
+        * Positions Legend:
+        * 0: Starting position
+        * 1: Stack position
+        * 2: Low junction
+        * 3: Middle junction
+        * 4: High junction
+     */
+    private final int[] positions = {0, 300, 775, 1300, 1835};
     private final DcMotor motor, motor2;
 
     /**
@@ -34,13 +43,11 @@ public class GlisiereSubsystem extends SubsystemBase {
      * @param position The desired position (ranges 0-4)
      */
     public void setToPosition(int position) {
-
-        this.position = position;
-        this.position = MathUtils.clamp(this.position, 0, 4);
+        this.position = MathUtils.clamp(position, 0, 4);
 
         motor.setTargetPosition(positions[this.position]);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor.setPower(0.98);
+        motor.setPower(1);
 
         motor2.setTargetPosition(positions[this.position]);
         motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -54,7 +61,7 @@ public class GlisiereSubsystem extends SubsystemBase {
     public void setToTicks(int ticks) {
         motor.setTargetPosition(ticks);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor.setPower(0.98);
+        motor.setPower(1);
 
         motor2.setTargetPosition(ticks);
         motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -68,7 +75,7 @@ public class GlisiereSubsystem extends SubsystemBase {
     public void modifyTicks(int ticks) {
         motor.setTargetPosition(motor.getCurrentPosition() + ticks);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor.setPower(0.98 * 0.2);
+        motor.setPower(0.2);
 
         motor2.setTargetPosition(motor2.getCurrentPosition() + ticks);
         motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -76,13 +83,9 @@ public class GlisiereSubsystem extends SubsystemBase {
     }
 
     /**
-     * Helper method for turret safety.
-     * @return The current position of the sliders
+     * Gets the current position of the sliders.
+     * @return Sliders position, measured in encoder ticks
      */
-    public int getPosition() {
-        return position;
-    }
-
     public int getTicks() {
         return motor.getCurrentPosition();
     }

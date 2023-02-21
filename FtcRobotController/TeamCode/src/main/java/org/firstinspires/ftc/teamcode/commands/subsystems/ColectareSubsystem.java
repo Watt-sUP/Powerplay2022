@@ -36,7 +36,7 @@ public class ColectareSubsystem extends SubsystemBase {
         this.claw.setInverted(true);
         this.scissors.setInverted(true);
 
-        this.claw.setPosition(0);
+        this.claw.setPosition(0.25);
         this.scissors.setPosition(scissorsRetractedPos);
 
         stateClaw = StateClaw.Opened;
@@ -54,7 +54,7 @@ public class ColectareSubsystem extends SubsystemBase {
     }
 
     public void openClaw() {
-        claw.setPosition(0);
+        claw.setPosition(0.25);
         stateClaw = StateClaw.Opened;
     }
 
