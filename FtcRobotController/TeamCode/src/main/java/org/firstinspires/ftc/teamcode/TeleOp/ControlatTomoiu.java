@@ -39,11 +39,12 @@ public class ControlatTomoiu extends CommandOpMode {
         );
         ColectareSubsystem colectareSystem = new ColectareSubsystem(
                 new SimpleServo(hardwareMap, Config.claw, -360, 360),
-                new SimpleServo(hardwareMap, Config.foarfeca, -360, 360), 0.25
+                new SimpleServo(hardwareMap, Config.foarfeca, -360, 300), 0.25
         );
         GlisiereSubsystem glisiereSystem = new GlisiereSubsystem(
                 hardwareMap.dcMotor.get(Config.glisiera),
-                hardwareMap.dcMotor.get(Config.glisiera1)
+                hardwareMap.dcMotor.get(Config.glisiera1),
+                new SimpleServo(hardwareMap, Config.ghidaj, 0, 360)
         );
         TurelaSubsystem turelaSystem = new TurelaSubsystem(
                 new Motor(hardwareMap, Config.turela),
@@ -82,9 +83,11 @@ public class ControlatTomoiu extends CommandOpMode {
                 .whenInactive(() -> driveSystem.setPowerLimit(driveSystem.defaultPowerLimit));
 
         // Turret controls below
-        driver2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+        driver1.getGamepadButton(GamepadKeys.Button.Y)
+                .whenPressed(() -> turelaSystem.setToPosition(Direction.FORWARD));
+        driver1.getGamepadButton(GamepadKeys.Button.X)
                 .whenPressed(() -> turelaSystem.setToPosition(Direction.LEFT));
-        driver2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+        driver1.getGamepadButton(GamepadKeys.Button.B)
                 .whenPressed(() -> turelaSystem.setToPosition(Direction.RIGHT));
 
         // Slider controls below

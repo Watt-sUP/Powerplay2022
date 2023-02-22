@@ -11,4 +11,6 @@ public class Config {
     public static final String claw = "DEG";
     public static final String glisiera1 = "GLI1";
     public static final String foarfeca = "FOAR";
+
+    public static final String ghidaj = "GHID";
 }

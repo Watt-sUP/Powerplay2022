@@ -39,7 +39,7 @@ public class AutonomDreaptaSus extends CommandOpMode {
     public static Cone cone2 = new Cone(225, 825, -950, 0.52, 0.57);
     public static Cone cone3 = new Cone(150, 825, -950, 0.52, 0.57);
     public static Cone cone4 = new Cone(75, 825, -950, 0.52, 0.57);
-    public static Cone cone5 = new Cone(0, 825, -950, 0.52, 0.57    );
+    public static Cone cone5 = new Cone(0, 825, -950, 0.52, 0.57);
 
     @Override
     public void initialize() {
@@ -88,7 +88,8 @@ public class AutonomDreaptaSus extends CommandOpMode {
         );
         GlisiereSubsystem glisiereSystem = new GlisiereSubsystem(
                 hardwareMap.dcMotor.get(Config.glisiera),
-                hardwareMap.dcMotor.get(Config.glisiera1)
+                hardwareMap.dcMotor.get(Config.glisiera1),
+                new SimpleServo(hardwareMap, Config.ghidaj, 0, 300)
         );
         TurelaSubsystem turelaSystem = new TurelaSubsystem(new Motor(hardwareMap, Config.turela));
         DetectorSubsystem detectorSystem = new DetectorSubsystem(hardwareMap, 0, 1, 2);

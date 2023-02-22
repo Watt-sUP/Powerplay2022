@@ -40,7 +40,8 @@ public class ControlatOdo extends CommandOpMode {
         );
         GlisiereSubsystem glisiereSystem = new GlisiereSubsystem(
                 hardwareMap.dcMotor.get(Config.glisiera),
-                hardwareMap.dcMotor.get(Config.glisiera1)
+                hardwareMap.dcMotor.get(Config.glisiera1),
+                new SimpleServo(hardwareMap, Config.ghidaj, 0, 300)
         );
         TurelaSubsystem turelaSystem = new TurelaSubsystem(
                 new Motor(hardwareMap, Config.turela),
