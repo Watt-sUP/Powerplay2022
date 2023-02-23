@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.autonom.parcari;
 
+import com.arcrobotics.ftclib.vision.AprilTagDetector;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.autonom.apriltag.AprilTagDetector;
 import org.firstinspires.ftc.teamcode.hardware.Colectare;
 import org.firstinspires.ftc.teamcode.hardware.Config;
 import org.firstinspires.ftc.teamcode.hardware.Foarfeca;
