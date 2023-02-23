@@ -48,7 +48,7 @@ public class GlisiereSubsystem extends SubsystemBase {
 
         this.ghidajDelay = new WaitUntilCommand(() -> motor.getCurrentPosition() >= positions[2])
                 .andThen(new InstantCommand(() -> {
-                            ghidaj.turnToAngle(180);
+                            ghidaj.turnToAngle(160);
                             stateGhidaj = StateGhidaj.Active;
                         })
                 );
