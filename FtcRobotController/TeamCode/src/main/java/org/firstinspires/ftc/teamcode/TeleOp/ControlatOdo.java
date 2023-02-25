@@ -13,12 +13,13 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.util.Direction;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 import org.firstinspires.ftc.teamcode.commands.subsystems.ColectareSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.DriveSubsystem;
-import org.firstinspires.ftc.teamcode.commands.subsystems.GlisiereSubsystem;
+import org.firstinspires.ftc.teamcode.commands.subsystems.GlisierePIDSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.TurelaSubsystem;
 import org.firstinspires.ftc.teamcode.hardware.Config;
 
@@ -39,11 +40,11 @@ public class ControlatOdo extends CommandOpMode {
         );
         ColectareSubsystem colectareSystem = new ColectareSubsystem(
                 new SimpleServo(hardwareMap, Config.claw, -360, 360),
-                new SimpleServo(hardwareMap, Config.foarfeca, -360, 360), 0.25
+                new SimpleServo(hardwareMap, Config.foarfeca, -360, 360), 0.225
         );
-        GlisiereSubsystem glisiereSystem = new GlisiereSubsystem(
-                hardwareMap.dcMotor.get(Config.glisiera),
-                hardwareMap.dcMotor.get(Config.glisiera1),
+        GlisierePIDSubsystem glisiereSystem = new GlisierePIDSubsystem(
+                hardwareMap.get(DcMotorEx.class, Config.glisiera),
+                hardwareMap.get(DcMotorEx.class, Config.glisiera1),
                 new SimpleServo(hardwareMap, Config.ghidaj, 0, 300)
         );
         TurelaSubsystem turelaSystem = new TurelaSubsystem(
@@ -121,7 +122,7 @@ public class ControlatOdo extends CommandOpMode {
 
         // Lowers the slides a bit
         driver2.getGamepadButton(GamepadKeys.Button.B)
-                .whenPressed(() -> glisiereSystem.modifyTicks(-160));
+                .whenPressed(() -> glisiereSystem.modifyByTicks(-160));
 
         // Collector controls below
         driver2.getGamepadButton(GamepadKeys.Button.A)

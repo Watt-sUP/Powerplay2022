@@ -10,7 +10,7 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
  */
 public class ColectareSubsystem extends SubsystemBase {
     private final ServoEx claw, scissors;
-    private double scissorsRetractedPos = 0.22;
+    private double scissorsRetractedPos = 0.2;
     private StateClaw stateClaw;
     private StateScissors stateScissors;
 

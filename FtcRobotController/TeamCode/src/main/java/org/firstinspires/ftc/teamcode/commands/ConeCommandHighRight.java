@@ -14,8 +14,6 @@ import org.firstinspires.ftc.teamcode.commands.subsystems.GlisiereSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.TurelaSubsystem;
 import org.firstinspires.ftc.teamcode.hardware.Cone;
 
-// TODO: Add javadocs and finish the command
-
 /**
  * <p>Helper command for scoring a cone.</p>
  * <p>This command will deposit the cone on the high junction when the robot is on the right side.</p>
