@@ -48,7 +48,7 @@ public class GlisiereSubsystem extends SubsystemBase {
 
         this.ghidajDelay = new WaitUntilCommand(() -> motor.getCurrentPosition() >= positions[2])
                 .andThen(new InstantCommand(() -> {
-                            ghidaj.turnToAngle(160);
+                            ghidaj.turnToAngle(190);
                             stateGhidaj = StateGhidaj.Active;
                         })
                 );
@@ -71,7 +71,7 @@ public class GlisiereSubsystem extends SubsystemBase {
     public void setToPosition(int position) {
         this.position = MathUtils.clamp(position, 0, 4);
 
-        if (this.position >= 3) openGhidaj();
+        if (this.position == 4) openGhidaj();
         else closeGhidaj();
 
         motor.setTargetPosition(positions[this.position]);
@@ -89,7 +89,7 @@ public class GlisiereSubsystem extends SubsystemBase {
      * @param ticks The ticks amount to move to
      */
     public void setToTicks(int ticks) {
-        if (ticks >= positions[3]) openGhidaj();
+        if (ticks >= positions[4]) openGhidaj();
         else closeGhidaj();
 
         motor.setTargetPosition(ticks);

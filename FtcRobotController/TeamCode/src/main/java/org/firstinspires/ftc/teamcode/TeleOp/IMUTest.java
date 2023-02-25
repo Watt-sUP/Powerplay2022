@@ -7,10 +7,12 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.hardware.Colectare;
 import org.firstinspires.ftc.teamcode.hardware.Config;
@@ -19,12 +21,20 @@ import org.firstinspires.ftc.teamcode.hardware.Foarfeca;
 import java.text.DecimalFormat;
 
 @Disabled
+//@com.acmerobotics.dashboard.config.Config
 @TeleOp(name = "IMU Angle Test", group = "Testing")
 public class IMUTest extends LinearOpMode {
     DecimalFormat df = new DecimalFormat("0.00");
+    ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+    public static boolean USE_PHOTON = true, USE_MULTI_THREADING = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+        if (USE_PHOTON) {
+            PhotonCore.enable();
+            PhotonCore.experimental.setSinglethreadedOptimized(USE_MULTI_THREADING);
+        }
 
         Foarfeca foarfeca = new Foarfeca(hardwareMap);
         Colectare deget = new Colectare(hardwareMap);
@@ -57,6 +67,7 @@ public class IMUTest extends LinearOpMode {
             return;
 
         while (opModeIsActive()) {
+            timer.reset();
 
             drive.driveRobotCentric(
                     gamepad.getLeftX(),
@@ -80,7 +91,11 @@ public class IMUTest extends LinearOpMode {
             telemetry.addData("Acceleration Value", df.format(gamepad.getLeftY()));
             telemetry.addData("Strafe Value", df.format(gamepad.getLeftX()));
             telemetry.addData("Rotation Value", df.format(gamepad.getRightX()));
+            telemetry.addData("Measured Hz", df.format(1000 / timer.milliseconds()));
             telemetry.update();
         }
+
+        if (USE_PHOTON)
+            PhotonCore.disable();
     }
 }

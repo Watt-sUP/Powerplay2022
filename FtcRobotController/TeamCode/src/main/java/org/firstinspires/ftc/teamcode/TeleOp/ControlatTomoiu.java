@@ -11,6 +11,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.util.Direction;
+import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -28,6 +29,8 @@ public class ControlatTomoiu extends CommandOpMode {
 
     @Override
     public void initialize() {
+
+        PhotonCore.enable();
 
         Trigger limiter = new Trigger(() -> gamepad1.right_trigger > 0.3);
         DriveSubsystem driveSystem = new DriveSubsystem(

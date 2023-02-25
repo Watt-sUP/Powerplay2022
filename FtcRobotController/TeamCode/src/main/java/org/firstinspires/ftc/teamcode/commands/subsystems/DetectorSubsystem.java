@@ -18,15 +18,16 @@ public class DetectorSubsystem extends SubsystemBase {
 
     /**
      * Creates a new instance of the subsystem.
+     *
      * @param hardwareMap HardwareMap object, used to initialize the detector
-     * @param targets List of target IDs to detect
+     * @param targets     List of target IDs to detect
      */
     public DetectorSubsystem(HardwareMap hardwareMap, Integer... targets) {
-        detector = new AprilTagDetector(hardwareMap);
+        detector = new AprilTagDetector(hardwareMap, "Webcam 1");
         detector.WIDTH = 1280;
         detector.HEIGHT = 720;
-        detector.ORIENTATION = OpenCvCameraRotation.SIDEWAYS_LEFT;
-        detector.GPU_ENABLED = true;
+        detector.ORIENTATION = OpenCvCameraRotation.UPRIGHT;
+        detector.GPU_ENABLED = false;
 
         detector.init();
         detector.setTargets(targets);
@@ -34,6 +35,7 @@ public class DetectorSubsystem extends SubsystemBase {
 
     /**
      * Overrides the current target IDs.
+     *
      * @param targets List of target IDs to detect
      */
     public void setTargets(Integer... targets) {
@@ -42,6 +44,7 @@ public class DetectorSubsystem extends SubsystemBase {
 
     /**
      * Gets the current detection. If a tag is detected, the ID of the tag is stored in lastDetection.
+     *
      * @return A map containing the ID of the detected tag and its coordinates in the image.
      */
     public Map<String, Integer> getDetection() {
