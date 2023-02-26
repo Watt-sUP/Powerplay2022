@@ -22,16 +22,17 @@ public class ConeCommandHighLeft extends SequentialCommandGroup {
 
     /**
      * Runs a new command for scoring a cone.
-     * @param cone The data about the cone
+     *
+     * @param cone            The data about the cone
      * @param colectareSystem The subsystem for the claw and scissors
-     * @param turelaSystem The subsystem for the turret
-     * @param glisiereSystem The subsystem for the slides
+     * @param turelaSystem    The subsystem for the turret
+     * @param glisiereSystem  The subsystem for the slides
      */
     public ConeCommandHighLeft(@NonNull Cone cone, ColectareSubsystem colectareSystem, TurelaSubsystem turelaSystem, GlisiereSubsystem glisiereSystem) {
         addCommands(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> turelaSystem.setToTicks(cone.conePos, 0.8)),
-                        new InstantCommand(() -> colectareSystem.setScissorsPosition(0.4)),
+                        new InstantCommand(() -> colectareSystem.setScissorsPosition(0.35)),
 
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() < 0),
@@ -43,20 +44,30 @@ public class ConeCommandHighLeft extends SequentialCommandGroup {
                 new WaitCommand(250),
                 new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(300),
-                new InstantCommand(() -> glisiereSystem.setToTicks(1950), glisiereSystem),
-                new WaitUntilCommand(() -> glisiereSystem.getTicks() > cone.glisPos + 400),
+                new InstantCommand(() -> glisiereSystem.setToTicks(1900), glisiereSystem),
+                new WaitUntilCommand(() -> glisiereSystem.getTicks() > cone.glisPos + 500),
                 new ParallelCommandGroup(
                         new InstantCommand(colectareSystem::retractScissors),
                         new InstantCommand(() -> turelaSystem.setToTicks(cone.stickPos, 0.8)),
-                        new SequentialCommandGroup(
-                                new WaitUntilCommand(() -> turelaSystem.getTicks() > AutonomStangaSus.DROP_TICKS),
-                                new InstantCommand(() -> colectareSystem.setScissorsPosition(cone.stickScissors)),
-                                new WaitCommand(250),
-                                new InstantCommand(() -> glisiereSystem.setToPosition(2))
+
+                        new ParallelCommandGroup(
+                                new SequentialCommandGroup(
+                                        new WaitUntilCommand(() -> turelaSystem.getTicks() > AutonomStangaSus.DROP_TICKS),
+                                        new InstantCommand(() -> colectareSystem.setScissorsPosition(cone.stickScissors)),
+                                        new WaitCommand(350),
+                                        new InstantCommand(() -> glisiereSystem.setToPosition(2))
+                                ),
+                                new SequentialCommandGroup(
+                                        new WaitUntilCommand(() -> glisiereSystem.getTicks() > 1500),
+                                        new InstantCommand(glisiereSystem::openGhidaj)
+                                )
                         )
                 ),
-                new WaitCommand(250),
-                new InstantCommand(colectareSystem::toggleClaw),
+                new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1000),
+                new ParallelCommandGroup(
+                        new InstantCommand(colectareSystem::toggleClaw),
+                        new InstantCommand(glisiereSystem::closeGhidaj)
+                ),
                 new WaitCommand(100)
         );
         addRequirements(colectareSystem, turelaSystem, glisiereSystem);

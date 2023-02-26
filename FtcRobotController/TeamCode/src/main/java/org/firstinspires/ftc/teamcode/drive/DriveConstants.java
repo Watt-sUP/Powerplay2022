@@ -34,8 +34,8 @@ public class DriveConstants {
      * from DriveVelocityPIDTuner.
      */
     public static final boolean RUN_USING_ENCODER = true;
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(4, 0, 2,
-            14.348480410709804);
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(20, 0, 12,
+            14);
 
     /*
      * These are physical constants that can be determined from your robot (including the track
@@ -46,8 +46,8 @@ public class DriveConstants {
      * convenience. Make sure to exclude any gear ratio included in MOTOR_CONFIG from GEAR_RATIO.
      */
     public static double WHEEL_RADIUS = 1.8898; // in
-    public static double GEAR_RATIO = 1.0138084; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 14.76; // in
+    public static double GEAR_RATIO = 1.0127; // output (wheel) speed / input (motor) speed
+    public static double TRACK_WIDTH = 14.14; // in
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -69,7 +69,7 @@ public class DriveConstants {
     /*
      * Note from LearnRoadRunner.com:
      * The velocity and acceleration constraints were calculated based on the following equation:
-     * ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.85
+     * ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI)
      * Resulting in 52.48291908330528 in/s.
      * This is only 85% of the theoretical maximum velocity of the bot, following the recommendation above.
      * This is capped at 85% because there are a number of variables that will prevent your bot from actually
@@ -87,10 +87,10 @@ public class DriveConstants {
      * You are free to raise this on your own if you would like. It is best determined through experimentation.
 
      */
-    public static double MAX_VEL = 56.25590416793869;
-    public static double MAX_ACCEL = 56.25590416793869;
-    public static double MAX_ANG_VEL = 2.997602939605713;
-    public static double MAX_ANG_ACCEL = 2.997602939605713;
+    public static double MAX_VEL = 59.13865631126549;
+    public static double MAX_ACCEL = 59.13865631126549;
+    public static double MAX_ANG_VEL = Math.PI;
+    public static double MAX_ANG_ACCEL = Math.PI;
 
 
     public static double encoderTicksToInches(double ticks) {

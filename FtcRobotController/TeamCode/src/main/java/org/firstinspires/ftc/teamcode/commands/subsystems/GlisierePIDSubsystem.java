@@ -17,14 +17,16 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class GlisierePIDSubsystem extends SubsystemBase {
 
     private final DcMotorEx motor, motor2;
-//    public static double kP = 4.5, kI = 0.1, kD = 0;
+    private boolean use_automations;
+    //    public static double kP = 4.5, kI = 0.1, kD = 0;
     public final int[] positions = {0, 300, 775, 1300, 1835};
-    private final PIDController pidController = new PIDController(4.5, 0.1, 0);
+    private final PIDController pidController = new PIDController(5, 0.1, 0);
     public int position;
 
     private final ServoEx ghidaj;
     private final Command ghidajDelay;
     private StateGhidaj stateGhidaj;
+
     private enum StateGhidaj {
         Active,
         Inactive
@@ -34,6 +36,7 @@ public class GlisierePIDSubsystem extends SubsystemBase {
         this.motor = motor;
         this.motor2 = motor2;
         this.ghidaj = ghidaj;
+        this.use_automations = true;
 
         this.ghidajDelay = new WaitUntilCommand(() -> motor.getCurrentPosition() >= positions[2])
                 .andThen(new InstantCommand(() -> {
@@ -41,6 +44,7 @@ public class GlisierePIDSubsystem extends SubsystemBase {
                             stateGhidaj = StateGhidaj.Active;
                         })
                 );
+        closeGhidaj();
 
         this.motor.setDirection(DcMotorSimple.Direction.FORWARD);
         this.motor2.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -54,16 +58,19 @@ public class GlisierePIDSubsystem extends SubsystemBase {
         pidController.reset();
         pidController.setTolerance(0);
         pidController.setIntegrationBounds(-20000, 20000);
+    }
 
-//        pidController.setPID(kP, kI, kD);
+    public GlisierePIDSubsystem(DcMotorEx motor, DcMotorEx motor2, ServoEx ghidaj, Boolean use_automations) {
+        this(motor, motor2, ghidaj);
+        this.use_automations = use_automations;
     }
 
     public void setToPosition(int position) {
         this.position = MathUtils.clamp(position, 0, positions.length - 1);
         pidController.setSetPoint(positions[this.position]);
 
-        if (this.position == 4) openGhidaj();
-        else closeGhidaj();
+        if (this.position == 4 && use_automations) openGhidaj();
+        else if (use_automations) closeGhidaj();
 
         new RunCommand(
                 () -> {
@@ -76,8 +83,8 @@ public class GlisierePIDSubsystem extends SubsystemBase {
 
     public void setToTicks(int ticks) {
         pidController.setSetPoint(ticks);
-        if (ticks >= positions[4]) openGhidaj();
-        else closeGhidaj();
+        if (ticks >= positions[4] && use_automations) openGhidaj();
+        else if (use_automations) closeGhidaj();
 
         new RunCommand(
                 () -> {

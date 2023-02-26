@@ -24,6 +24,7 @@ public class GlisiereSubsystem extends SubsystemBase {
      * 4: High junction
      */
     private final int[] positions = {0, 300, 775, 1300, 1835};
+    private boolean use_automations;
     private final DcMotor motor, motor2;
     private final ServoEx ghidaj;
     private final Command ghidajDelay;
@@ -45,10 +46,11 @@ public class GlisiereSubsystem extends SubsystemBase {
         this.motor = motor;
         this.ghidaj = ghidaj;
         this.motor2 = motor2;
+        use_automations = true;
 
         this.ghidajDelay = new WaitUntilCommand(() -> motor.getCurrentPosition() >= positions[2])
                 .andThen(new InstantCommand(() -> {
-                            ghidaj.turnToAngle(190);
+                            ghidaj.turnToAngle(191);
                             stateGhidaj = StateGhidaj.Active;
                         })
                 );
@@ -63,6 +65,11 @@ public class GlisiereSubsystem extends SubsystemBase {
         closeGhidaj();
     }
 
+    public GlisiereSubsystem(DcMotor motor, DcMotor motor2, ServoEx ghidaj, Boolean use_automations) {
+        this(motor, motor2, ghidaj);
+        this.use_automations = use_automations;
+    }
+
     /**
      * Moves the sliders to the given position.
      *
@@ -71,8 +78,8 @@ public class GlisiereSubsystem extends SubsystemBase {
     public void setToPosition(int position) {
         this.position = MathUtils.clamp(position, 0, 4);
 
-        if (this.position == 4) openGhidaj();
-        else closeGhidaj();
+        if (this.position == 4 && use_automations) openGhidaj();
+        else if (use_automations) closeGhidaj();
 
         motor.setTargetPosition(positions[this.position]);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -89,8 +96,8 @@ public class GlisiereSubsystem extends SubsystemBase {
      * @param ticks The ticks amount to move to
      */
     public void setToTicks(int ticks) {
-        if (ticks >= positions[4]) openGhidaj();
-        else closeGhidaj();
+        if (ticks >= positions[4] && use_automations) openGhidaj();
+        else if (use_automations) closeGhidaj();
 
         motor.setTargetPosition(ticks);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);

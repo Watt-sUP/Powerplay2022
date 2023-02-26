@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.autonom;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -44,40 +43,42 @@ public class AutonomStangaMijloc extends CommandOpMode {
     @Override
     public void initialize() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        Pose2d startPose = new Pose2d(-34, -61, Math.toRadians(90));
 
-        Trajectory stack_traj = drive.trajectoryBuilder(startPose)
+        TrajectorySequence stack_traj = drive.trajectorySequenceBuilder(new Pose2d(-35.68, -64.07, Math.toRadians(90.00)))
                 .splineTo(
-                        new Vector2d(-46, -12), Math.toRadians(180),
+                        new Vector2d(-49.69, -12.45), Math.toRadians(180.00),
                         SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
+                        SampleMecanumDrive.getAccelerationConstraint(40)
                 )
                 .build();
+
         TrajectorySequence left_traj = drive.trajectorySequenceBuilder(stack_traj.end())
                 .setConstraints(
-                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
                 )
-                .splineTo(new Vector2d(-60, -35), Math.toRadians(270))
-                .setReversed(true)
-                .lineToLinearHeading(new Pose2d(-60, -27, Math.toRadians(270)))
+                .splineTo(new Vector2d(-60.75, -33.3), Math.toRadians(270.00))
                 .build();
+
         TrajectorySequence middle_traj = drive.trajectorySequenceBuilder(stack_traj.end())
-                .setConstraints(
-                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
-                )
+                .resetConstraints()
+                .resetTurnConstraint()
                 .setReversed(true)
-                .splineTo(new Vector2d(-34, -32), Math.toRadians(270))
+                .splineTo(new Vector2d(-36.05, -34.94), Math.toRadians(270.00))
+                .setReversed(false)
                 .build();
+
         TrajectorySequence right_traj = drive.trajectorySequenceBuilder(stack_traj.end())
                 .setConstraints(
-                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
+                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(50)
                 )
                 .setReversed(true)
-                .lineTo(new Vector2d(-26, -12))
-                .splineTo(new Vector2d(-11, -32), Math.toRadians(270))
+                .lineToConstantHeading(new Vector2d(-21.85, -12.45))
+                .splineTo(new Vector2d(-12.45, -37), Math.toRadians(270.00))
+                .setReversed(false)
+                .resetConstraints()
+                .resetTurnConstraint()
                 .build();
 
         ColectareSubsystem colectareSystem = new ColectareSubsystem(
@@ -99,12 +100,12 @@ public class AutonomStangaMijloc extends CommandOpMode {
 
         SequentialCommandGroup autonom = new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> drive.setPoseEstimate(startPose)),
+                        new InstantCommand(() -> drive.setPoseEstimate(stack_traj.start())),
                         new InstantCommand(colectareSystem::toggleClaw)
                 ),
                 new WaitCommand(300),
                 new InstantCommand(() -> glisiereSystem.setToTicks(1450)),
-                new InstantCommand(() -> drive.followTrajectory(stack_traj)),
+                new InstantCommand(() -> drive.followTrajectorySequence(stack_traj)),
                 new ParallelCommandGroup(
                         new InstantCommand(colectareSystem::retractScissors),
                         new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.8)),
