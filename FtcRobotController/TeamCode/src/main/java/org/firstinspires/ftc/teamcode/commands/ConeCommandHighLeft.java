@@ -58,12 +58,12 @@ public class ConeCommandHighLeft extends SequentialCommandGroup {
                                         new InstantCommand(() -> glisiereSystem.setToPosition(2))
                                 ),
                                 new SequentialCommandGroup(
-                                        new WaitUntilCommand(() -> glisiereSystem.getTicks() > 1500),
+                                        new WaitUntilCommand(() -> glisiereSystem.getTicks() > 1400),
                                         new InstantCommand(glisiereSystem::openGhidaj)
                                 )
                         )
                 ),
-                new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1000),
+                new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1650),
                 new ParallelCommandGroup(
                         new InstantCommand(colectareSystem::toggleClaw),
                         new InstantCommand(glisiereSystem::closeGhidaj)

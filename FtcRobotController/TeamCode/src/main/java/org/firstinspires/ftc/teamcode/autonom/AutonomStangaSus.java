@@ -77,7 +77,7 @@ public class AutonomStangaSus extends CommandOpMode {
                 )
                 .setReversed(true)
                 .lineToConstantHeading(new Vector2d(-21.85, -12.45))
-                .splineTo(new Vector2d(-12.45, -37), Math.toRadians(270.00))
+                .splineTo(new Vector2d(-12.45, -36), Math.toRadians(270.00))
                 .setReversed(false)
                 .resetConstraints()
                 .resetTurnConstraint()
@@ -121,12 +121,12 @@ public class AutonomStangaSus extends CommandOpMode {
                                         new InstantCommand(() -> glisiereSystem.setToPosition(2))
                                 ),
                                 new SequentialCommandGroup(
-                                        new WaitUntilCommand(() -> glisiereSystem.getTicks() > 1500),
+                                        new WaitUntilCommand(() -> glisiereSystem.getTicks() > 1400),
                                         new InstantCommand(glisiereSystem::openGhidaj)
                                 )
                         )
                 ),
-                new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1000),
+                new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1650),
                 new ParallelCommandGroup(
                         new InstantCommand(colectareSystem::toggleClaw),
                         new InstantCommand(glisiereSystem::closeGhidaj)
