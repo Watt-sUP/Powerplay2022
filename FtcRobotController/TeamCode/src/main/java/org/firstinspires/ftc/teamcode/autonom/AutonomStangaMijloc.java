@@ -32,12 +32,12 @@ import java.util.Map;
 @Autonomous(name = "Autonom 5+1 Stanga (Mijloc)", group = "Autonom")
 public class AutonomStangaMijloc extends CommandOpMode {
 
-    public static Cone preload = new Cone(-1, -1, 550, -1, 0.56);
-    public static Cone cone1 = new Cone(300, -850, 525, 0.53, 0.56);
-    public static Cone cone2 = new Cone(225, -850, 500, 0.53, 0.56);
-    public static Cone cone3 = new Cone(150, -850, 500, 0.53, 0.56);
-    public static Cone cone4 = new Cone(75, -850, 500, 0.53, 0.56);
-    public static Cone cone5 = new Cone(0, -850, 500, 0.53, 0.56);
+    public static Cone preload = new Cone(-1, -1, 550, -1, 0.6);
+    public static Cone cone1 = new Cone(300, -850, 550, 0.53, 0.6);
+    public static Cone cone2 = new Cone(225, -850, 550, 0.53, 0.6);
+    public static Cone cone3 = new Cone(150, -850, 550, 0.53, 0.6);
+    public static Cone cone4 = new Cone(75, -850, 550, 0.53, 0.6);
+    public static Cone cone5 = new Cone(0, -850, 550, 0.53, 0.6);
     public static int DROP_TICKS = 375, PRELOAD_OFFSET = 50;
 
     @Override

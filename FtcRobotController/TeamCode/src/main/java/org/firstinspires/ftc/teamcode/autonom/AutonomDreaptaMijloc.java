@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.autonom;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -33,53 +32,43 @@ import java.util.Map;
 @Autonomous(name = "Autonom 5+1 Dreapta (Mijloc)", group = "Autonom")
 public class AutonomDreaptaMijloc extends CommandOpMode {
 
-    public static Cone cone1 = new Cone(300, 800, -525, 0.5, 0.59);
-    public static Cone cone2 = new Cone(225, 800, -525, 0.5, 0.59);
-    public static Cone cone3 = new Cone(150, 800, -525, 0.5, 0.59);
-    public static Cone cone4 = new Cone(75, 800, -525, 0.5, 0.59);
-    public static Cone cone5 = new Cone(0, 800, -525, 0.5, 0.59);
-    public static Cone preload = new Cone(-1, -1, -550, -1, 0.59);
+    public static Cone cone1 = new Cone(300, 800, -525, 0.5, 0.58);
+    public static Cone cone2 = new Cone(225, 800, -525, 0.5, 0.58);
+    public static Cone cone3 = new Cone(150, 800, -525, 0.5, 0.58);
+    public static Cone cone4 = new Cone(75, 800, -525, 0.5, 0.58);
+    public static Cone cone5 = new Cone(0, 800, -525, 0.5, 0.58);
+    public static Cone preload = new Cone(-1, -1, -525, -1, 0.58);
     public static int DROP_TICKS = -425, PRELOAD_OFFSET = -100;
 
     @Override
     public void initialize() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        Pose2d startPose = new Pose2d(34, -61, Math.toRadians(90));
 
-        Trajectory stack_traj = drive.trajectoryBuilder(startPose)
-                .splineTo(
-                        new Vector2d(46, -12), Math.toRadians(0),
+        TrajectorySequence stack_traj = drive.trajectorySequenceBuilder(new Pose2d(-34.76, 63.89, Math.toRadians(-90.00)))
+                .setConstraints(
                         SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
+                        SampleMecanumDrive.getAccelerationConstraint(40)
                 )
+                .splineTo(new Vector2d(-35.31, 26.46), Math.toRadians(-90.00))
+                .splineTo(new Vector2d(-47.00, 12.45), Math.toRadians(180.00))
+                .resetConstraints()
                 .build();
+
         TrajectorySequence right_traj = drive.trajectorySequenceBuilder(stack_traj.end())
-                .setConstraints(
-                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
-                )
-                .splineTo(new Vector2d(60, -35), Math.toRadians(270))
-                .setReversed(true)
-                .lineToLinearHeading(new Pose2d(60, -27, Math.toRadians(270)))
+                .splineTo(new Vector2d(-60.75, 34.76), Math.toRadians(90.00))
                 .build();
+
         TrajectorySequence middle_traj = drive.trajectorySequenceBuilder(stack_traj.end())
-                .setConstraints(
-                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
-                )
-                .setTangent(Math.toRadians(180))
                 .setReversed(true)
-                .splineTo(new Vector2d(34, -32), Math.toRadians(270))
+                .splineTo(new Vector2d(-35.12, 36.23), Math.toRadians(90.00))
+                .setReversed(false)
                 .build();
-        TrajectorySequence left_traj = drive.trajectorySequenceBuilder(stack_traj.end())
-                .setConstraints(
-                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
-                )
-                .setTangent(Math.toRadians(180))
+
+        TrajectorySequence left_traj = drive.trajectorySequenceBuilder(new Pose2d(-47.00, 12.45, Math.toRadians(180.00)))
                 .setReversed(true)
-                .lineTo(new Vector2d(26, -12))
-                .splineTo(new Vector2d(11, -32), Math.toRadians(270))
+                .splineTo(new Vector2d(-11.89, 20.74), Math.toRadians(90.00))
+                .setReversed(false)
+                .lineToConstantHeading(new Vector2d(-11.89, 35.86))
                 .build();
 
         ColectareSubsystem colectareSystem = new ColectareSubsystem(
@@ -101,12 +90,12 @@ public class AutonomDreaptaMijloc extends CommandOpMode {
 
         SequentialCommandGroup autonom = new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> drive.setPoseEstimate(startPose)),
+                        new InstantCommand(() -> drive.setPoseEstimate(stack_traj.start())),
                         new InstantCommand(colectareSystem::toggleClaw)
                 ),
                 new WaitCommand(300),
                 new InstantCommand(() -> glisiereSystem.setToTicks(1450)),
-                new InstantCommand(() -> drive.followTrajectory(stack_traj)),
+                new InstantCommand(() -> drive.followTrajectorySequence(stack_traj)),
                 new ParallelCommandGroup(
                         new InstantCommand(colectareSystem::retractScissors),
                         new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.8)),

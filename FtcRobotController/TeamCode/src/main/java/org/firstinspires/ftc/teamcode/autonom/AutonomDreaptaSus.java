@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.autonom;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -34,52 +33,42 @@ import java.util.Map;
 public class AutonomDreaptaSus extends CommandOpMode {
 
     public static int DROP_TICKS = -800, PRELOAD_OFFSET = -100;
-    public static Cone preload = new Cone(-1, -1, -975, -1, 0.57);
-    public static Cone cone1 = new Cone(300, 825, -950, 0.52, 0.57);
-    public static Cone cone2 = new Cone(225, 825, -950, 0.52, 0.57);
-    public static Cone cone3 = new Cone(150, 825, -950, 0.52, 0.57);
-    public static Cone cone4 = new Cone(75, 825, -950, 0.52, 0.57);
-    public static Cone cone5 = new Cone(0, 825, -950, 0.52, 0.57);
+    public static Cone preload = new Cone(-1, -1, -1025, -1, 0.64);
+    public static Cone cone1 = new Cone(300, 800, -1000, 0.52, 0.62);
+    public static Cone cone2 = new Cone(225, 800, -1000, 0.52, 0.62);
+    public static Cone cone3 = new Cone(150, 800, -1000, 0.52, 0.62);
+    public static Cone cone4 = new Cone(75, 800, -1000, 0.52, 0.62);
+    public static Cone cone5 = new Cone(0, 800, -1000, 0.52, 0.62);
 
     @Override
     public void initialize() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        Pose2d startPose = new Pose2d(34, -61, Math.toRadians(90));
 
-        Trajectory stack_traj = drive.trajectoryBuilder(startPose)
-                .splineTo(
-                        new Vector2d(46, -12), Math.toRadians(0),
+        TrajectorySequence stack_traj = drive.trajectorySequenceBuilder(new Pose2d(-34.76, 63.89, Math.toRadians(-90.00)))
+                .setConstraints(
                         SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
+                        SampleMecanumDrive.getAccelerationConstraint(40)
                 )
+                .splineTo(new Vector2d(-35.31, 26.46), Math.toRadians(-90.00))
+                .splineTo(new Vector2d(-47.00, 12.45), Math.toRadians(180.00))
+                .resetConstraints()
                 .build();
+
         TrajectorySequence right_traj = drive.trajectorySequenceBuilder(stack_traj.end())
-                .setConstraints(
-                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
-                )
-                .splineTo(new Vector2d(60, -35), Math.toRadians(270))
-                .setReversed(true)
-                .lineToLinearHeading(new Pose2d(60, -27, Math.toRadians(270)))
+                .splineTo(new Vector2d(-60.75, 34.76), Math.toRadians(90.00))
                 .build();
+
         TrajectorySequence middle_traj = drive.trajectorySequenceBuilder(stack_traj.end())
-                .setConstraints(
-                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
-                )
-                .setTangent(Math.toRadians(180))
                 .setReversed(true)
-                .splineTo(new Vector2d(34, -32), Math.toRadians(270))
+                .splineTo(new Vector2d(-35.12, 36.23), Math.toRadians(90.00))
+                .setReversed(false)
                 .build();
+
         TrajectorySequence left_traj = drive.trajectorySequenceBuilder(stack_traj.end())
-                .setConstraints(
-                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
-                )
-                .setTangent(Math.toRadians(180))
                 .setReversed(true)
-                .lineTo(new Vector2d(26, -12))
-                .splineTo(new Vector2d(11, -32), Math.toRadians(270))
+                .splineTo(new Vector2d(-11.89, 20.74), Math.toRadians(90.00))
+                .setReversed(false)
+                .lineToConstantHeading(new Vector2d(-11.89, 35.86))
                 .build();
 
         ColectareSubsystem colectareSystem = new ColectareSubsystem(
@@ -101,26 +90,28 @@ public class AutonomDreaptaSus extends CommandOpMode {
 
         SequentialCommandGroup autonom = new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> drive.setPoseEstimate(startPose)),
+                        new InstantCommand(() -> drive.setPoseEstimate(stack_traj.start())),
                         new InstantCommand(colectareSystem::toggleClaw)
                 ),
                 new WaitCommand(300),
                 new InstantCommand(() -> glisiereSystem.setToPosition(3)),
-                new InstantCommand(() -> drive.followTrajectory(stack_traj)),
+                new InstantCommand(() -> drive.followTrajectorySequence(stack_traj)),
                 new ParallelCommandGroup(
                         new InstantCommand(colectareSystem::retractScissors),
-                        new InstantCommand(() -> glisiereSystem.setToTicks(1950)),
+                        new InstantCommand(() -> glisiereSystem.setToTicks(1900)),
                         new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.8)),
 
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> glisiereSystem.getTicks() > 1850 && turelaSystem.getTicks() < DROP_TICKS + PRELOAD_OFFSET),
                                 new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
-                                new WaitCommand(250),
+                                new WaitCommand(400),
                                 new InstantCommand(() -> glisiereSystem.setToPosition(2))
                         )
                 ),
-                new WaitCommand(250),
-                new InstantCommand(colectareSystem::toggleClaw),
+                new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1650),
+                new ParallelCommandGroup(
+                        new InstantCommand(colectareSystem::toggleClaw)
+                ),
                 new WaitCommand(100),
 
                 new ConeCommandHighRight(cone1, colectareSystem, turelaSystem, glisiereSystem),
@@ -160,9 +151,6 @@ public class AutonomDreaptaSus extends CommandOpMode {
             }
             telemetry.update();
         }
-        schedule(
-                new InstantCommand(detectorSystem::close)
-                        .andThen(autonom)
-        );
+        schedule(new InstantCommand(detectorSystem::close).andThen(autonom));
     }
 }

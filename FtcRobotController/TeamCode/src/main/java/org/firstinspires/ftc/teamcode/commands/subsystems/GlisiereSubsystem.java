@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.subsystems;
 
-import com.arcrobotics.ftclib.command.Command;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.util.MathUtils;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -23,18 +20,14 @@ public class GlisiereSubsystem extends SubsystemBase {
      * 3: Middle junction
      * 4: High junction
      */
-    private final int[] positions = {0, 300, 775, 1300, 1835};
-    private boolean use_automations;
+    private final int[] positions = {0, 300, 575, 1150, 1675};
     private final DcMotor motor, motor2;
-    private final ServoEx ghidaj;
-    private final Command ghidajDelay;
-
-    private enum StateGhidaj {
-        Active,
-        Inactive
+    private final ServoEx unghi;
+    private StateUnghi stateUnghi = StateUnghi.Lowered;
+    private enum StateUnghi {
+        Raised,
+        Lowered
     }
-
-    private StateGhidaj stateGhidaj;
 
     /**
      * Creates a new instance of the subsystem.
@@ -42,18 +35,10 @@ public class GlisiereSubsystem extends SubsystemBase {
      * @param motor  DcMotor object controlling the first motor
      * @param motor2 DcMotor object controlling the second motor
      */
-    public GlisiereSubsystem(DcMotor motor, DcMotor motor2, ServoEx ghidaj) {
+    public GlisiereSubsystem(DcMotor motor, DcMotor motor2, ServoEx unghi) {
         this.motor = motor;
-        this.ghidaj = ghidaj;
         this.motor2 = motor2;
-        use_automations = true;
-
-        this.ghidajDelay = new WaitUntilCommand(() -> motor.getCurrentPosition() >= positions[2])
-                .andThen(new InstantCommand(() -> {
-                            ghidaj.turnToAngle(185);
-                            stateGhidaj = StateGhidaj.Active;
-                        })
-                );
+        this.unghi = unghi;
 
         this.motor.setDirection(DcMotorSimple.Direction.FORWARD);
         this.motor2.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -61,13 +46,8 @@ public class GlisiereSubsystem extends SubsystemBase {
         this.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        this.ghidaj.setInverted(false);
-        closeGhidaj();
-    }
-
-    public GlisiereSubsystem(DcMotor motor, DcMotor motor2, ServoEx ghidaj, Boolean use_automations) {
-        this(motor, motor2, ghidaj);
-        this.use_automations = use_automations;
+        this.unghi.setInverted(true);
+        this.unghi.turnToAngle(150);
     }
 
     /**
@@ -77,9 +57,8 @@ public class GlisiereSubsystem extends SubsystemBase {
      */
     public void setToPosition(int position) {
         this.position = MathUtils.clamp(position, 0, 4);
-
-        if (this.position == 4 && use_automations) openGhidaj();
-        else if (use_automations) closeGhidaj();
+        if (this.position >= 2) raiseUnghi();
+        else lowerUnghi();
 
         motor.setTargetPosition(positions[this.position]);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -96,8 +75,8 @@ public class GlisiereSubsystem extends SubsystemBase {
      * @param ticks The ticks amount to move to
      */
     public void setToTicks(int ticks) {
-        if (ticks >= positions[4] && use_automations) openGhidaj();
-        else if (use_automations) closeGhidaj();
+        if (ticks >= positions[2]) raiseUnghi();
+        else lowerUnghi();
 
         motor.setTargetPosition(ticks);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -114,6 +93,9 @@ public class GlisiereSubsystem extends SubsystemBase {
      * @param ticks The ticks count to change the current position by
      */
     public void modifyTicks(int ticks) {
+        if (motor.getCurrentPosition() + ticks >= positions[2]) raiseUnghi();
+        else lowerUnghi();
+
         motor.setTargetPosition(motor.getCurrentPosition() + ticks);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor.setPower(0.2);
@@ -123,24 +105,18 @@ public class GlisiereSubsystem extends SubsystemBase {
         motor2.setPower(0.2);
     }
 
-    public void openGhidaj() {
-        ghidajDelay.schedule(true);
+    public void raiseUnghi() {
+        unghi.turnToAngle(0);
+        stateUnghi = StateUnghi.Raised;
     }
 
-    public void closeGhidaj() {
-        if (ghidajDelay.isScheduled())
-            ghidajDelay.cancel();
-
-        if (stateGhidaj == StateGhidaj.Inactive)
-            return;
-
-        this.ghidaj.turnToAngle(0);
-        stateGhidaj = StateGhidaj.Inactive;
+    public void lowerUnghi() {
+        unghi.turnToAngle(150);
+        stateUnghi = StateUnghi.Lowered;
     }
-
-    public void toggleGhidaj() {
-        if (stateGhidaj == StateGhidaj.Inactive) openGhidaj();
-        else closeGhidaj();
+    public void toggleUnghi() {
+        if (stateUnghi == StateUnghi.Lowered) raiseUnghi();
+        else lowerUnghi();
     }
 
     /**

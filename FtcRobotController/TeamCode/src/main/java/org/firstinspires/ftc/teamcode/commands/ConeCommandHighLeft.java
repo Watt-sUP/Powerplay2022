@@ -49,25 +49,15 @@ public class ConeCommandHighLeft extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new InstantCommand(colectareSystem::retractScissors),
                         new InstantCommand(() -> turelaSystem.setToTicks(cone.stickPos, 0.8)),
-
-                        new ParallelCommandGroup(
-                                new SequentialCommandGroup(
-                                        new WaitUntilCommand(() -> turelaSystem.getTicks() > AutonomStangaSus.DROP_TICKS),
-                                        new InstantCommand(() -> colectareSystem.setScissorsPosition(cone.stickScissors)),
-                                        new WaitCommand(350),
-                                        new InstantCommand(() -> glisiereSystem.setToPosition(2))
-                                ),
-                                new SequentialCommandGroup(
-                                        new WaitUntilCommand(() -> glisiereSystem.getTicks() > 1400),
-                                        new InstantCommand(glisiereSystem::openGhidaj)
-                                )
+                        new SequentialCommandGroup(
+                                new WaitUntilCommand(() -> turelaSystem.getTicks() > AutonomStangaSus.DROP_TICKS),
+                                new InstantCommand(() -> colectareSystem.setScissorsPosition(cone.stickScissors)),
+                                new WaitCommand(350),
+                                new InstantCommand(() -> glisiereSystem.setToPosition(2))
                         )
                 ),
                 new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1650),
-                new ParallelCommandGroup(
-                        new InstantCommand(colectareSystem::toggleClaw),
-                        new InstantCommand(glisiereSystem::closeGhidaj)
-                ),
+                new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(100)
         );
         addRequirements(colectareSystem, turelaSystem, glisiereSystem);

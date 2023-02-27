@@ -39,7 +39,7 @@ public class AutonomStangaSus extends CommandOpMode {
     public static Cone cone5 = new Cone(25, -825, 975, 0.53, 0.72);
 
     public static int DROP_TICKS = 775, PRELOAD_OFFSET = 75;
-    public static Cone preload = new Cone(-1, -1, 975, -1, 0.72);
+    public static Cone preload = new Cone(-1, -1, 975, -1, 0.75);
 
     @Override
     public void initialize() {
@@ -90,7 +90,7 @@ public class AutonomStangaSus extends CommandOpMode {
         GlisiereSubsystem glisiereSystem = new GlisiereSubsystem(
                 hardwareMap.dcMotor.get(Config.glisiera),
                 hardwareMap.dcMotor.get(Config.glisiera1),
-                new SimpleServo(hardwareMap, Config.ghidaj, 0, 300), false
+                new SimpleServo(hardwareMap, Config.ghidaj, 0, 300)
         );
         TurelaSubsystem turelaSystem = new TurelaSubsystem(new Motor(hardwareMap, Config.turela));
         DetectorSubsystem detectorSystem = new DetectorSubsystem(hardwareMap, 0, 1, 2);
@@ -113,24 +113,15 @@ public class AutonomStangaSus extends CommandOpMode {
                         new InstantCommand(() -> glisiereSystem.setToTicks(1900)),
                         new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.8)),
 
-                        new ParallelCommandGroup(
-                                new SequentialCommandGroup(
-                                        new WaitUntilCommand(() -> turelaSystem.getTicks() > DROP_TICKS + PRELOAD_OFFSET && glisiereSystem.getTicks() > 1850),
-                                        new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
-                                        new WaitCommand(350),
-                                        new InstantCommand(() -> glisiereSystem.setToPosition(2))
-                                ),
-                                new SequentialCommandGroup(
-                                        new WaitUntilCommand(() -> glisiereSystem.getTicks() > 1400),
-                                        new InstantCommand(glisiereSystem::openGhidaj)
-                                )
+                        new SequentialCommandGroup(
+                                new WaitUntilCommand(() -> turelaSystem.getTicks() > DROP_TICKS + PRELOAD_OFFSET && glisiereSystem.getTicks() > 1850),
+                                new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
+                                new WaitCommand(350),
+                                new InstantCommand(() -> glisiereSystem.setToPosition(2))
                         )
                 ),
                 new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1650),
-                new ParallelCommandGroup(
-                        new InstantCommand(colectareSystem::toggleClaw),
-                        new InstantCommand(glisiereSystem::closeGhidaj)
-                ),
+                new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(100),
 
                 new ConeCommandHighLeft(cone1, colectareSystem, turelaSystem, glisiereSystem),

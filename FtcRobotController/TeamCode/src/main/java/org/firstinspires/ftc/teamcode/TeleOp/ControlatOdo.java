@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.util.Direction;
@@ -19,7 +20,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 import org.firstinspires.ftc.teamcode.commands.subsystems.ColectareSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.DriveSubsystem;
-import org.firstinspires.ftc.teamcode.commands.subsystems.GlisierePIDSubsystem;
+import org.firstinspires.ftc.teamcode.commands.subsystems.GlisiereSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.TurelaSubsystem;
 import org.firstinspires.ftc.teamcode.hardware.Config;
 
@@ -31,6 +32,8 @@ public class ControlatOdo extends CommandOpMode {
     public void initialize() {
 
         PhotonCore.enable();
+        ServoEx ghidaj = new SimpleServo(hardwareMap, Config.ghidaj, 0, 300);
+        ghidaj.turnToAngle(150);
 
         DriveSubsystem driveSystem = new DriveSubsystem(
                 new Motor(hardwareMap, Config.left_front),
@@ -42,7 +45,7 @@ public class ControlatOdo extends CommandOpMode {
                 new SimpleServo(hardwareMap, Config.claw, -360, 360),
                 new SimpleServo(hardwareMap, Config.foarfeca, -360, 360), 0.225
         );
-        GlisierePIDSubsystem glisiereSystem = new GlisierePIDSubsystem(
+        GlisiereSubsystem glisiereSystem = new GlisiereSubsystem(
                 hardwareMap.get(DcMotorEx.class, Config.glisiera),
                 hardwareMap.get(DcMotorEx.class, Config.glisiera1),
                 new SimpleServo(hardwareMap, Config.ghidaj, 0, 300)
@@ -122,12 +125,18 @@ public class ControlatOdo extends CommandOpMode {
 
         // Lowers the slides a bit
         driver2.getGamepadButton(GamepadKeys.Button.B)
-                .whenPressed(() -> glisiereSystem.modifyByTicks(-160));
+                .whenPressed(() -> glisiereSystem.modifyTicks(-160));
 
         // Collector controls below
         driver2.getGamepadButton(GamepadKeys.Button.A)
                 .whenPressed(colectareSystem::toggleClaw);
         driver2.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
                 .whenPressed(colectareSystem::toggleScissors);
+
+        driver2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+                .whenPressed(() -> {
+                    glisiereSystem.toggleUnghi();
+                    colectareSystem.toggleClaw();
+                });
     }
 }

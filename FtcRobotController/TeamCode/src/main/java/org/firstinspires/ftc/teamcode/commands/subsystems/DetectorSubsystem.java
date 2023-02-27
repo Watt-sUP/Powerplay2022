@@ -26,7 +26,7 @@ public class DetectorSubsystem extends SubsystemBase {
         detector = new AprilTagDetector(hardwareMap, "Webcam 1");
         detector.WIDTH = 1280;
         detector.HEIGHT = 720;
-        detector.ORIENTATION = OpenCvCameraRotation.UPRIGHT;
+        detector.ORIENTATION = OpenCvCameraRotation.UPSIDE_DOWN;
         detector.GPU_ENABLED = false;
 
         detector.init();
