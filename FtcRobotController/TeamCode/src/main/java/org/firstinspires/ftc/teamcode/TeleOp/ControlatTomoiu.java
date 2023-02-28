@@ -130,14 +130,11 @@ public class ControlatTomoiu extends CommandOpMode {
                 .whenPressed(() -> glisiereSystem.modifyTicks(-160));
 
         // Collector controls below
-        driver2.getGamepadButton(GamepadKeys.Button.A)
-                .whenPressed(colectareSystem::toggleClaw);
         driver2.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
                 .whenPressed(colectareSystem::toggleScissors);
-
-        driver2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+        driver2.getGamepadButton(GamepadKeys.Button.A)
                 .whenPressed(() -> {
-                    glisiereSystem.toggleUnghi();
+                    glisiereSystem.lowerUnghi();
                     colectareSystem.toggleClaw();
                 });
     }

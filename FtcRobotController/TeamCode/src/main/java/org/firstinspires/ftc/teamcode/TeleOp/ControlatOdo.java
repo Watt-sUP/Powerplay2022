@@ -129,14 +129,11 @@ public class ControlatOdo extends CommandOpMode {
 
         // Collector controls below
         driver2.getGamepadButton(GamepadKeys.Button.A)
-                .whenPressed(colectareSystem::toggleClaw);
-        driver2.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
-                .whenPressed(colectareSystem::toggleScissors);
-
-        driver2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
                 .whenPressed(() -> {
-                    glisiereSystem.toggleUnghi();
+                    glisiereSystem.lowerUnghi();
                     colectareSystem.toggleClaw();
                 });
+        driver2.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
+                .whenPressed(colectareSystem::toggleScissors);
     }
 }

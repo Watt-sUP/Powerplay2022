@@ -21,6 +21,7 @@ public class GlisiereSubsystem extends SubsystemBase {
      * 4: High junction
      */
     private final int[] positions = {0, 300, 575, 1150, 1675};
+    private boolean use_automations = true;
     private final DcMotor motor, motor2;
     private final ServoEx unghi;
     private StateUnghi stateUnghi = StateUnghi.Lowered;
@@ -46,8 +47,13 @@ public class GlisiereSubsystem extends SubsystemBase {
         this.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        this.unghi.setInverted(true);
-        this.unghi.turnToAngle(150);
+        this.unghi.setInverted(false);
+        this.unghi.turnToAngle(160);
+    }
+
+    public GlisiereSubsystem(DcMotor motor, DcMotor motor2, ServoEx unghi, boolean use_automations) {
+        this(motor, motor2, unghi);
+        this.use_automations = use_automations;
     }
 
     /**
@@ -57,8 +63,11 @@ public class GlisiereSubsystem extends SubsystemBase {
      */
     public void setToPosition(int position) {
         this.position = MathUtils.clamp(position, 0, 4);
-        if (this.position >= 2) raiseUnghi();
-        else lowerUnghi();
+
+        if (use_automations) {
+            if (this.position >= 2) raiseUnghi();
+            else lowerUnghi();
+        }
 
         motor.setTargetPosition(positions[this.position]);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -75,8 +84,11 @@ public class GlisiereSubsystem extends SubsystemBase {
      * @param ticks The ticks amount to move to
      */
     public void setToTicks(int ticks) {
-        if (ticks >= positions[2]) raiseUnghi();
-        else lowerUnghi();
+
+        if (use_automations) {
+            if (ticks >= positions[2]) raiseUnghi();
+            else lowerUnghi();
+        }
 
         motor.setTargetPosition(ticks);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -87,14 +99,21 @@ public class GlisiereSubsystem extends SubsystemBase {
         motor2.setPower(1);
     }
 
+    public void turnUnghiToAngle(double degrees) {
+        unghi.turnToAngle(degrees);
+    }
+
     /**
      * Moves the sliders in a relative manner based on a custom ticks value.
      *
      * @param ticks The ticks count to change the current position by
      */
     public void modifyTicks(int ticks) {
-        if (motor.getCurrentPosition() + ticks >= positions[2]) raiseUnghi();
-        else lowerUnghi();
+
+        if (use_automations) {
+            if (motor.getCurrentPosition() + ticks >= positions[2]) raiseUnghi();
+            else lowerUnghi();
+        }
 
         motor.setTargetPosition(motor.getCurrentPosition() + ticks);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -106,17 +125,13 @@ public class GlisiereSubsystem extends SubsystemBase {
     }
 
     public void raiseUnghi() {
-        unghi.turnToAngle(0);
+        unghi.turnToAngle(75);
         stateUnghi = StateUnghi.Raised;
     }
 
     public void lowerUnghi() {
-        unghi.turnToAngle(150);
+        unghi.turnToAngle(160);
         stateUnghi = StateUnghi.Lowered;
-    }
-    public void toggleUnghi() {
-        if (stateUnghi == StateUnghi.Lowered) raiseUnghi();
-        else lowerUnghi();
     }
 
     /**

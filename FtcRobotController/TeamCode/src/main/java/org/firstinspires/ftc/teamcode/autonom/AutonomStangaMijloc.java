@@ -33,11 +33,11 @@ import java.util.Map;
 public class AutonomStangaMijloc extends CommandOpMode {
 
     public static Cone preload = new Cone(-1, -1, 550, -1, 0.6);
-    public static Cone cone1 = new Cone(300, -850, 550, 0.53, 0.6);
-    public static Cone cone2 = new Cone(225, -850, 550, 0.53, 0.6);
-    public static Cone cone3 = new Cone(150, -850, 550, 0.53, 0.6);
-    public static Cone cone4 = new Cone(75, -850, 550, 0.53, 0.6);
-    public static Cone cone5 = new Cone(0, -850, 550, 0.53, 0.6);
+    public static Cone cone1 = new Cone(300, -800, 525, 0.51, 0.58);
+    public static Cone cone2 = new Cone(225, -800, 525, 0.51, 0.58);
+    public static Cone cone3 = new Cone(150, -800, 525, 0.51, 0.58);
+    public static Cone cone4 = new Cone(75, -800, 525, 0.51, 0.58);
+    public static Cone cone5 = new Cone(0, -800, 525, 0.51, 0.58);
     public static int DROP_TICKS = 375, PRELOAD_OFFSET = 50;
 
     @Override
@@ -53,32 +53,23 @@ public class AutonomStangaMijloc extends CommandOpMode {
                 .build();
 
         TrajectorySequence left_traj = drive.trajectorySequenceBuilder(stack_traj.end())
-                .setConstraints(
-                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
-                )
+                .resetConstraints()
                 .splineTo(new Vector2d(-60.75, -33.3), Math.toRadians(270.00))
                 .build();
 
         TrajectorySequence middle_traj = drive.trajectorySequenceBuilder(stack_traj.end())
                 .resetConstraints()
-                .resetTurnConstraint()
                 .setReversed(true)
                 .splineTo(new Vector2d(-36.05, -34.94), Math.toRadians(270.00))
                 .setReversed(false)
                 .build();
 
         TrajectorySequence right_traj = drive.trajectorySequenceBuilder(stack_traj.end())
-                .setConstraints(
-                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(50)
-                )
+                .resetConstraints()
                 .setReversed(true)
                 .lineToConstantHeading(new Vector2d(-21.85, -12.45))
                 .splineTo(new Vector2d(-12.45, -36), Math.toRadians(270.00))
                 .setReversed(false)
-                .resetConstraints()
-                .resetTurnConstraint()
                 .build();
 
         ColectareSubsystem colectareSystem = new ColectareSubsystem(
@@ -88,7 +79,7 @@ public class AutonomStangaMijloc extends CommandOpMode {
         GlisiereSubsystem glisiereSystem = new GlisiereSubsystem(
                 hardwareMap.dcMotor.get(Config.glisiera),
                 hardwareMap.dcMotor.get(Config.glisiera1),
-                new SimpleServo(hardwareMap, Config.ghidaj, 0, 300)
+                new SimpleServo(hardwareMap, Config.ghidaj, 0, 300), false
         );
         TurelaSubsystem turelaSystem = new TurelaSubsystem(new Motor(hardwareMap, Config.turela));
         DetectorSubsystem detectorSystem = new DetectorSubsystem(hardwareMap, 0, 1, 2);
@@ -104,7 +95,10 @@ public class AutonomStangaMijloc extends CommandOpMode {
                         new InstantCommand(colectareSystem::toggleClaw)
                 ),
                 new WaitCommand(300),
-                new InstantCommand(() -> glisiereSystem.setToTicks(1450)),
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> glisiereSystem.setToTicks(1450)),
+                        new InstantCommand(() -> glisiereSystem.turnUnghiToAngle(180))
+                ),
                 new InstantCommand(() -> drive.followTrajectorySequence(stack_traj)),
                 new ParallelCommandGroup(
                         new InstantCommand(colectareSystem::retractScissors),
@@ -114,10 +108,11 @@ public class AutonomStangaMijloc extends CommandOpMode {
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() > DROP_TICKS + PRELOAD_OFFSET && glisiereSystem.getTicks() > 1000),
                                 new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
                                 new WaitCommand(250),
-                                new InstantCommand(() -> glisiereSystem.setToPosition(2))
+                                new InstantCommand(() -> glisiereSystem.setToPosition(2)),
+                                new InstantCommand(glisiereSystem::lowerUnghi)
                         )
                 ),
-                new WaitCommand(250),
+                new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1100),
                 new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(100),
 
