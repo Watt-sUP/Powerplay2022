@@ -45,19 +45,22 @@ public class ConeCommandHighLeft extends SequentialCommandGroup {
                 new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(300),
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> glisiereSystem.setToTicks(1950)),
+                        new InstantCommand(() -> glisiereSystem.setToTicks(2000)),
                         new InstantCommand(() -> glisiereSystem.turnUnghiToAngle(180))
                 ),
-                new WaitUntilCommand(() -> glisiereSystem.getTicks() > cone.glisPos + 400),
+                new WaitUntilCommand(() -> glisiereSystem.getTicks() > cone.glisPos + 500),
                 new ParallelCommandGroup(
                         new InstantCommand(colectareSystem::retractScissors),
                         new InstantCommand(() -> turelaSystem.setToTicks(cone.stickPos, 0.8)),
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() > AutonomStangaSus.DROP_TICKS),
                                 new InstantCommand(() -> colectareSystem.setScissorsPosition(cone.stickScissors)),
-                                new WaitCommand(350),
-                                new InstantCommand(() -> glisiereSystem.setToPosition(2)),
-                                new InstantCommand(glisiereSystem::lowerUnghi)
+                                new WaitCommand(300),
+                                new ParallelCommandGroup(
+                                        new InstantCommand(() -> turelaSystem.setToTicks(cone.stickPos, 0.33)),
+                                        new InstantCommand(() -> glisiereSystem.setToPosition(2)),
+                                        new InstantCommand(glisiereSystem::lowerUnghi)
+                                )
                         )
                 ),
                 new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1600),

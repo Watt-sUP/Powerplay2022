@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonom;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Command;
@@ -32,17 +34,18 @@ import java.util.Map;
 @Autonomous(name = "Autonom 5+1 Dreapta (Mijloc)", group = "Autonom")
 public class AutonomDreaptaMijloc extends CommandOpMode {
 
-    public static Cone cone1 = new Cone(300, 800, -525, 0.5, 0.58);
-    public static Cone cone2 = new Cone(225, 800, -525, 0.5, 0.58);
-    public static Cone cone3 = new Cone(150, 800, -525, 0.5, 0.58);
-    public static Cone cone4 = new Cone(75, 800, -525, 0.5, 0.58);
-    public static Cone cone5 = new Cone(0, 800, -525, 0.5, 0.58);
-    public static Cone preload = new Cone(-1, -1, -525, -1, 0.58);
+    public static Cone cone1 = new Cone(300, 790, -537, 0.54, 0.54);
+    public static Cone cone2 = new Cone(225, 790, -537, 0.54, 0.54);
+    public static Cone cone3 = new Cone(150, 790, -537, 0.54, 0.54);
+    public static Cone cone4 = new Cone(75, 790, -537, 0.54, 0.54);
+    public static Cone cone5 = new Cone(0, 790, -537, 0.54, 0.54);
+    public static Cone preload = new Cone(-1, -1, -537, -1, 0.54);
     public static int DROP_TICKS = -425, PRELOAD_OFFSET = -100;
 
     @Override
     public void initialize() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         TrajectorySequence stack_traj = drive.trajectorySequenceBuilder(new Pose2d(-34.76, 63.89, Math.toRadians(-90.00)))
                 .setConstraints(
@@ -56,6 +59,7 @@ public class AutonomDreaptaMijloc extends CommandOpMode {
 
         TrajectorySequence right_traj = drive.trajectorySequenceBuilder(stack_traj.end())
                 .splineTo(new Vector2d(-60.75, 34.76), Math.toRadians(90.00))
+                .back(5)
                 .build();
 
         TrajectorySequence middle_traj = drive.trajectorySequenceBuilder(stack_traj.end())
@@ -75,13 +79,15 @@ public class AutonomDreaptaMijloc extends CommandOpMode {
                 new SimpleServo(hardwareMap, Config.claw, -360, 360),
                 new SimpleServo(hardwareMap, Config.foarfeca, -360, 360)
         );
+        colectareSystem.setClawPosition(0.25);
         GlisiereSubsystem glisiereSystem = new GlisiereSubsystem(
                 hardwareMap.dcMotor.get(Config.glisiera),
                 hardwareMap.dcMotor.get(Config.glisiera1),
-                new SimpleServo(hardwareMap, Config.ghidaj, 0, 300)
+                new SimpleServo(hardwareMap, Config.ghidaj, 0, 300), false
         );
         TurelaSubsystem turelaSystem = new TurelaSubsystem(new Motor(hardwareMap, Config.turela));
         DetectorSubsystem detectorSystem = new DetectorSubsystem(hardwareMap, 0, 1, 2);
+        FtcDashboard.getInstance().startCameraStream(detectorSystem.getCamera(), 0);
 
         register(glisiereSystem);
         register(turelaSystem);
@@ -94,7 +100,10 @@ public class AutonomDreaptaMijloc extends CommandOpMode {
                         new InstantCommand(colectareSystem::toggleClaw)
                 ),
                 new WaitCommand(300),
-                new InstantCommand(() -> glisiereSystem.setToTicks(1450)),
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> glisiereSystem.setToTicks(1450)),
+                        new InstantCommand(() -> glisiereSystem.turnUnghiToAngle(180))
+                ),
                 new InstantCommand(() -> drive.followTrajectorySequence(stack_traj)),
                 new ParallelCommandGroup(
                         new InstantCommand(colectareSystem::retractScissors),
@@ -104,10 +113,14 @@ public class AutonomDreaptaMijloc extends CommandOpMode {
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() < DROP_TICKS + PRELOAD_OFFSET && glisiereSystem.getTicks() > 1000),
                                 new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
                                 new WaitCommand(250),
-                                new InstantCommand(() -> glisiereSystem.setToPosition(2))
+                                new ParallelCommandGroup(
+                                        new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.33)),
+                                        new InstantCommand(() -> glisiereSystem.setToPosition(2)),
+                                        new InstantCommand(glisiereSystem::lowerUnghi)
+                                )
                         )
                 ),
-                new WaitCommand(250),
+                new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1100),
                 new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(100),
 
@@ -146,6 +159,9 @@ public class AutonomDreaptaMijloc extends CommandOpMode {
             telemetry.update();
         }
 
-        schedule(new InstantCommand(detectorSystem::close).andThen(autonom));
+        schedule(new InstantCommand(() -> {
+            FtcDashboard.getInstance().stopCameraStream();
+            detectorSystem.close();
+        }).andThen(autonom));
     }
 }

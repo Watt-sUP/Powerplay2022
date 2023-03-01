@@ -55,8 +55,11 @@ public class ConeCommandMidLeft extends SequentialCommandGroup {
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() > AutonomStangaMijloc.DROP_TICKS),
                                 new InstantCommand(() -> colectareSystem.setScissorsPosition(cone.stickScissors)),
                                 new WaitCommand(250),
-                                new InstantCommand(() -> glisiereSystem.setToPosition(2)),
-                                new InstantCommand(glisiereSystem::lowerUnghi)
+                                new ParallelCommandGroup(
+                                        new InstantCommand(() -> turelaSystem.setToTicks(cone.stickPos, 0.33)),
+                                        new InstantCommand(() -> glisiereSystem.setToPosition(2)),
+                                        new InstantCommand(glisiereSystem::lowerUnghi)
+                                )
                         )
                 ),
                 new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1100),

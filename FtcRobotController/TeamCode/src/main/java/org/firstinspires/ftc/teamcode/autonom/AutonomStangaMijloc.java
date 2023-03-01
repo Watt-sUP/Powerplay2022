@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonom;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Command;
@@ -32,12 +33,12 @@ import java.util.Map;
 @Autonomous(name = "Autonom 5+1 Stanga (Mijloc)", group = "Autonom")
 public class AutonomStangaMijloc extends CommandOpMode {
 
-    public static Cone preload = new Cone(-1, -1, 550, -1, 0.6);
-    public static Cone cone1 = new Cone(300, -800, 525, 0.51, 0.58);
-    public static Cone cone2 = new Cone(225, -800, 525, 0.51, 0.58);
-    public static Cone cone3 = new Cone(150, -800, 525, 0.51, 0.58);
-    public static Cone cone4 = new Cone(75, -800, 525, 0.51, 0.58);
-    public static Cone cone5 = new Cone(0, -800, 525, 0.51, 0.58);
+    public static Cone preload = new Cone(-1, -1, 550, -1, 0.62);
+    public static Cone cone1 = new Cone(300, -825, 525, 0.51, 0.58);
+    public static Cone cone2 = new Cone(225, -825, 525, 0.51, 0.58);
+    public static Cone cone3 = new Cone(150, -825, 525, 0.51, 0.58);
+    public static Cone cone4 = new Cone(75, -825, 525, 0.51, 0.58);
+    public static Cone cone5 = new Cone(0, -825, 525, 0.51, 0.58);
     public static int DROP_TICKS = 375, PRELOAD_OFFSET = 50;
 
     @Override
@@ -55,6 +56,7 @@ public class AutonomStangaMijloc extends CommandOpMode {
         TrajectorySequence left_traj = drive.trajectorySequenceBuilder(stack_traj.end())
                 .resetConstraints()
                 .splineTo(new Vector2d(-60.75, -33.3), Math.toRadians(270.00))
+                .back(5)
                 .build();
 
         TrajectorySequence middle_traj = drive.trajectorySequenceBuilder(stack_traj.end())
@@ -76,6 +78,7 @@ public class AutonomStangaMijloc extends CommandOpMode {
                 new SimpleServo(hardwareMap, Config.claw, -360, 360),
                 new SimpleServo(hardwareMap, Config.foarfeca, -360, 360)
         );
+        colectareSystem.setClawPosition(0.25);
         GlisiereSubsystem glisiereSystem = new GlisiereSubsystem(
                 hardwareMap.dcMotor.get(Config.glisiera),
                 hardwareMap.dcMotor.get(Config.glisiera1),
@@ -83,6 +86,7 @@ public class AutonomStangaMijloc extends CommandOpMode {
         );
         TurelaSubsystem turelaSystem = new TurelaSubsystem(new Motor(hardwareMap, Config.turela));
         DetectorSubsystem detectorSystem = new DetectorSubsystem(hardwareMap, 0, 1, 2);
+        FtcDashboard.getInstance().startCameraStream(detectorSystem.getCamera(), 0);
 
         register(glisiereSystem);
         register(turelaSystem);
@@ -108,8 +112,11 @@ public class AutonomStangaMijloc extends CommandOpMode {
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() > DROP_TICKS + PRELOAD_OFFSET && glisiereSystem.getTicks() > 1000),
                                 new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
                                 new WaitCommand(250),
-                                new InstantCommand(() -> glisiereSystem.setToPosition(2)),
-                                new InstantCommand(glisiereSystem::lowerUnghi)
+                                new ParallelCommandGroup(
+                                        new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.33)),
+                                        new InstantCommand(() -> glisiereSystem.setToPosition(2)),
+                                        new InstantCommand(glisiereSystem::lowerUnghi)
+                                )
                         )
                 ),
                 new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1100),
@@ -151,6 +158,9 @@ public class AutonomStangaMijloc extends CommandOpMode {
             telemetry.update();
         }
 
-        schedule(new InstantCommand(detectorSystem::close).andThen(autonom));
+        schedule(new InstantCommand(() -> {
+            FtcDashboard.getInstance().stopCameraStream();
+            detectorSystem.close();
+        }).andThen(autonom));
     }
 }
