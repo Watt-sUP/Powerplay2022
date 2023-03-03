@@ -34,12 +34,12 @@ import java.util.Map;
 @Autonomous(name = "Autonom 5+1 Dreapta (Mijloc)", group = "Autonom")
 public class AutonomDreaptaMijloc extends CommandOpMode {
 
-    public static Cone cone1 = new Cone(300, 790, -537, 0.54, 0.54);
-    public static Cone cone2 = new Cone(225, 790, -537, 0.54, 0.54);
-    public static Cone cone3 = new Cone(150, 790, -537, 0.54, 0.54);
-    public static Cone cone4 = new Cone(75, 790, -537, 0.54, 0.54);
-    public static Cone cone5 = new Cone(0, 790, -537, 0.54, 0.54);
-    public static Cone preload = new Cone(-1, -1, -537, -1, 0.54);
+    public static Cone cone1 = new Cone(315, 800, -555, 0.58, 0.6);
+    public static Cone cone2 = new Cone(240, 800, -555, 0.58, 0.6);
+    public static Cone cone3 = new Cone(165, 800, -555, 0.58, 0.6);
+    public static Cone cone4 = new Cone(90, 800, -555, 0.58, 0.6);
+    public static Cone cone5 = new Cone(15, 800, -555, 0.58, 0.6);
+    public static Cone preload = new Cone(-1, -1, -555, -1, 0.63);
     public static int DROP_TICKS = -425, PRELOAD_OFFSET = -100;
 
     @Override
@@ -101,7 +101,7 @@ public class AutonomDreaptaMijloc extends CommandOpMode {
                 ),
                 new WaitCommand(300),
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> glisiereSystem.setToTicks(1450)),
+                        new InstantCommand(() -> glisiereSystem.setToTicks(1500)),
                         new InstantCommand(() -> glisiereSystem.turnUnghiToAngle(180))
                 ),
                 new InstantCommand(() -> drive.followTrajectorySequence(stack_traj)),
@@ -112,15 +112,18 @@ public class AutonomDreaptaMijloc extends CommandOpMode {
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() < DROP_TICKS + PRELOAD_OFFSET && glisiereSystem.getTicks() > 1000),
                                 new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
-                                new WaitCommand(250),
+                                new WaitCommand(500),
                                 new ParallelCommandGroup(
                                         new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.33)),
                                         new InstantCommand(() -> glisiereSystem.setToPosition(2)),
-                                        new InstantCommand(glisiereSystem::lowerUnghi)
+                                        new SequentialCommandGroup(
+                                                new WaitCommand(100),
+                                                new InstantCommand(glisiereSystem::lowerUnghi)
+                                        )
                                 )
                         )
                 ),
-                new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1100),
+                new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1250),
                 new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(100),
 
@@ -131,7 +134,7 @@ public class AutonomDreaptaMijloc extends CommandOpMode {
                 new ConeCommandMidRight(cone5, colectareSystem, turelaSystem, glisiereSystem),
 
                 new ParallelCommandGroup(
-                        new InstantCommand(colectareSystem::retractScissors),
+                        new InstantCommand(() -> colectareSystem.setScissorsPosition(0.3)),
                         new InstantCommand(() -> turelaSystem.setToTicks(825)),
                         new InstantCommand(() -> glisiereSystem.setToPosition(2))
                 ),
