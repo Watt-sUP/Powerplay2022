@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonom;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Command;
@@ -32,18 +34,19 @@ import java.util.Map;
 @Autonomous(name = "Autonom 5+1 Stanga (Sus)", group = "Autonom")
 public class AutonomStangaSus extends CommandOpMode {
 
-    public static Cone cone1 = new Cone(325, -825, 975, 0.53, 0.72);
-    public static Cone cone2 = new Cone(250, -825, 975, 0.53, 0.72);
-    public static Cone cone3 = new Cone(175, -825, 975, 0.53, 0.72);
-    public static Cone cone4 = new Cone(100, -825, 975, 0.53, 0.72);
-    public static Cone cone5 = new Cone(25, -825, 975, 0.53, 0.72);
+    public static Cone cone1 = new Cone(315, -810, 1010, 0.58, 0.53);
+    public static Cone cone2 = new Cone(240, -810, 1010, 0.58, 0.53);
+    public static Cone cone3 = new Cone(165, -810, 1010, 0.58, 0.53);
+    public static Cone cone4 = new Cone(90, -810, 1010, 0.58, 0.53);
+    public static Cone cone5 = new Cone(15, -810, 1010, 0.58, 0.53);
 
     public static int DROP_TICKS = 775, PRELOAD_OFFSET = 75;
-    public static Cone preload = new Cone(-1, -1, 975, -1, 0.75);
+    public static Cone preload = new Cone(-1, -1, 1010, -1, 0.51);
 
     @Override
     public void initialize() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         TrajectorySequence stack_traj = drive.trajectorySequenceBuilder(new Pose2d(-35.68, -64.07, Math.toRadians(90.00)))
                 .setConstraints(
@@ -60,6 +63,7 @@ public class AutonomStangaSus extends CommandOpMode {
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
                 )
                 .splineTo(new Vector2d(-60.75, -33.3), Math.toRadians(270.00))
+                .back(5)
                 .build();
 
         TrajectorySequence middle_traj = drive.trajectorySequenceBuilder(stack_traj.end())
@@ -87,6 +91,7 @@ public class AutonomStangaSus extends CommandOpMode {
                 new SimpleServo(hardwareMap, Config.claw, -360, 360),
                 new SimpleServo(hardwareMap, Config.foarfeca, -360, 360)
         );
+        colectareSystem.setClawPosition(0.25);
         GlisiereSubsystem glisiereSystem = new GlisiereSubsystem(
                 hardwareMap.dcMotor.get(Config.glisiera),
                 hardwareMap.dcMotor.get(Config.glisiera1),
@@ -94,6 +99,7 @@ public class AutonomStangaSus extends CommandOpMode {
         );
         TurelaSubsystem turelaSystem = new TurelaSubsystem(new Motor(hardwareMap, Config.turela));
         DetectorSubsystem detectorSystem = new DetectorSubsystem(hardwareMap, 0, 1, 2);
+        FtcDashboard.getInstance().startCameraStream(detectorSystem.getCamera(), 0);
 
         register(glisiereSystem);
         register(turelaSystem);
@@ -108,23 +114,29 @@ public class AutonomStangaSus extends CommandOpMode {
                 new WaitCommand(300),
                 new ParallelCommandGroup(
                         new InstantCommand(() -> glisiereSystem.setToPosition(3)),
-                        new InstantCommand(() -> glisiereSystem.turnUnghiToAngle(180))
+                        new InstantCommand(() -> glisiereSystem.turnUnghiToAngle(140))
                 ),
                 new InstantCommand(() -> drive.followTrajectorySequence(stack_traj)),
                 new ParallelCommandGroup(
                         new InstantCommand(colectareSystem::retractScissors),
-                        new InstantCommand(() -> glisiereSystem.setToTicks(1950)),
+                        new InstantCommand(() -> glisiereSystem.setToTicks(1900)),
                         new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.8)),
 
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() > DROP_TICKS + PRELOAD_OFFSET && glisiereSystem.getTicks() > 1850),
                                 new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
-                                new WaitCommand(350),
-                                new InstantCommand(() -> glisiereSystem.setToPosition(2)),
-                                new InstantCommand(glisiereSystem::lowerUnghi)
+                                new WaitCommand(400),
+                                new ParallelCommandGroup(
+                                        new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.33)),
+                                        new InstantCommand(() -> glisiereSystem.setToPosition(2)),
+                                        new SequentialCommandGroup(
+                                                new WaitCommand(100),
+                                                new InstantCommand(glisiereSystem::lowerUnghi)
+                                        )
+                                )
                         )
                 ),
-                new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1600),
+                new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1750),
                 new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(100),
 
@@ -135,7 +147,7 @@ public class AutonomStangaSus extends CommandOpMode {
                 new ConeCommandHighLeft(cone5, colectareSystem, turelaSystem, glisiereSystem),
 
                 new ParallelCommandGroup(
-                        new InstantCommand(colectareSystem::retractScissors),
+                        new InstantCommand(() -> colectareSystem.setScissorsPosition(0.3)),
                         new InstantCommand(() -> glisiereSystem.setToPosition(2)),
                         new InstantCommand(() -> turelaSystem.setToTicks(-825))
                 ),
@@ -167,6 +179,9 @@ public class AutonomStangaSus extends CommandOpMode {
             telemetry.update();
         }
 
-        schedule(new InstantCommand(detectorSystem::close).andThen(autonom));
+        schedule(new InstantCommand(() -> {
+            FtcDashboard.getInstance().stopCameraStream();
+            detectorSystem.close();
+        }).andThen(autonom));
     }
 }

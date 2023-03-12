@@ -47,7 +47,7 @@ public class GlisiereSubsystem extends SubsystemBase {
         this.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        this.unghi.setInverted(false);
+        this.unghi.setInverted(true);
         this.unghi.turnToAngle(160);
     }
 
@@ -125,7 +125,7 @@ public class GlisiereSubsystem extends SubsystemBase {
     }
 
     public void raiseUnghi() {
-        unghi.turnToAngle(75);
+        unghi.turnToAngle(110);
         stateUnghi = StateUnghi.Raised;
     }
 

@@ -34,7 +34,7 @@ public class ConeCommandMidLeft extends SequentialCommandGroup {
                         new InstantCommand(() -> colectareSystem.setScissorsPosition(0.35)),
                         new InstantCommand(() -> turelaSystem.setToTicks(cone.conePos, 0.8)),
                         new SequentialCommandGroup(
-                                new WaitUntilCommand(() -> turelaSystem.getTicks() < 0),
+                                new WaitUntilCommand(() -> turelaSystem.getTicks() < -150),
                                 new InstantCommand(() -> glisiereSystem.setToTicks(cone.glisPos))
                         )
                 ),
@@ -45,7 +45,7 @@ public class ConeCommandMidLeft extends SequentialCommandGroup {
                 new WaitCommand(300),
                 new ParallelCommandGroup(
                         new InstantCommand(() -> glisiereSystem.setToTicks(1450)),
-                        new InstantCommand(() -> glisiereSystem.turnUnghiToAngle(180))
+                        new InstantCommand(glisiereSystem::lowerUnghi)
                 ),
                 new WaitUntilCommand(() -> glisiereSystem.getTicks() > cone.glisPos + 400),
                 new ParallelCommandGroup(
@@ -54,12 +54,19 @@ public class ConeCommandMidLeft extends SequentialCommandGroup {
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() > AutonomStangaMijloc.DROP_TICKS),
                                 new InstantCommand(() -> colectareSystem.setScissorsPosition(cone.stickScissors)),
-                                new WaitCommand(250),
-                                new InstantCommand(() -> glisiereSystem.setToPosition(2)),
-                                new InstantCommand(glisiereSystem::lowerUnghi)
+                                new InstantCommand(() -> glisiereSystem.turnUnghiToAngle(180)),
+                                new WaitCommand(400),
+                                new ParallelCommandGroup(
+                                        new InstantCommand(() -> turelaSystem.setToTicks(cone.stickPos, 0.33)),
+                                        new InstantCommand(() -> glisiereSystem.setToPosition(2)),
+                                        new SequentialCommandGroup(
+                                                new WaitCommand(100),
+                                                new InstantCommand(glisiereSystem::lowerUnghi)
+                                        )
+                                )
                         )
                 ),
-                new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1100),
+                new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1250),
                 new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(100)
         );

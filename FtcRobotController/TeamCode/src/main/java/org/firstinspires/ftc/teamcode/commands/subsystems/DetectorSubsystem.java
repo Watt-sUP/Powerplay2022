@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.commands.subsystems;
 
+import androidx.annotation.Nullable;
+
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.vision.AprilTagDetector;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.Map;
@@ -61,5 +64,10 @@ public class DetectorSubsystem extends SubsystemBase {
      */
     public void close() {
         detector.closeAsync();
+    }
+
+    @Nullable
+    public OpenCvCamera getCamera() {
+        return detector.getCamera();
     }
 }
