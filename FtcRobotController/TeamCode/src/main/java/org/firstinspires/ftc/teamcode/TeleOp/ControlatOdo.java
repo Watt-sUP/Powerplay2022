@@ -12,7 +12,6 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.util.Direction;
-import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -31,7 +30,7 @@ public class ControlatOdo extends CommandOpMode {
     @Override
     public void initialize() {
 
-        PhotonCore.enable();
+//        PhotonCore.enable();
         ServoEx ghidaj = new SimpleServo(hardwareMap, Config.ghidaj, 0, 300);
         ghidaj.turnToAngle(150);
 
@@ -43,7 +42,7 @@ public class ControlatOdo extends CommandOpMode {
         );
         ColectareSubsystem colectareSystem = new ColectareSubsystem(
                 new SimpleServo(hardwareMap, Config.claw, -360, 360),
-                new SimpleServo(hardwareMap, Config.foarfeca, -360, 360), 0.3
+                new SimpleServo(hardwareMap, Config.foarfeca, -360, 360), 0.27
         );
         GlisiereSubsystem glisiereSystem = new GlisiereSubsystem(
                 hardwareMap.get(DcMotorEx.class, Config.glisiera),
