@@ -34,14 +34,14 @@ import java.util.Map;
 @Autonomous(name = "Autonom 5+1 Stanga (Sus)", group = "Autonom")
 public class AutonomStangaSus extends CommandOpMode {
 
-    public static Cone cone1 = new Cone(315, -810, 1010, 0.58, 0.53);
-    public static Cone cone2 = new Cone(240, -810, 1010, 0.58, 0.53);
-    public static Cone cone3 = new Cone(165, -810, 1010, 0.58, 0.53);
-    public static Cone cone4 = new Cone(90, -810, 1010, 0.58, 0.53);
-    public static Cone cone5 = new Cone(15, -810, 1010, 0.58, 0.53);
+    public static Cone cone1 = new Cone(315, -810, 975, 0.5, 0.58);
+    public static Cone cone2 = new Cone(240, -810, 975, 0.5, 0.58);
+    public static Cone cone3 = new Cone(165, -810, 975, 0.5, 0.58);
+    public static Cone cone4 = new Cone(90, -810, 975, 0.5, 0.58);
+    public static Cone cone5 = new Cone(15, -810, 975, 0.5, 0.58);
 
     public static int DROP_TICKS = 775, PRELOAD_OFFSET = 75;
-    public static Cone preload = new Cone(-1, -1, 1010, -1, 0.51);
+    public static Cone preload = new Cone(-1, -1, 975, -1, 0.58);
 
     @Override
     public void initialize() {
@@ -49,42 +49,32 @@ public class AutonomStangaSus extends CommandOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         TrajectorySequence stack_traj = drive.trajectorySequenceBuilder(new Pose2d(-35.68, -64.07, Math.toRadians(90.00)))
-                .setConstraints(
+                .splineTo(
+                        new Vector2d(-49.69, -12.45), Math.toRadians(180.00),
                         SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(40)
                 )
-                .splineTo(new Vector2d(-35.31, -26.46), Math.toRadians(89.12))
-                .splineTo(new Vector2d(-47.00, -12.45), Math.toRadians(180.00))
                 .build();
 
         TrajectorySequence left_traj = drive.trajectorySequenceBuilder(stack_traj.end())
-                .setConstraints(
-                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
-                )
+                .resetConstraints()
                 .splineTo(new Vector2d(-60.75, -33.3), Math.toRadians(270.00))
                 .back(5)
                 .build();
 
         TrajectorySequence middle_traj = drive.trajectorySequenceBuilder(stack_traj.end())
                 .resetConstraints()
-                .resetTurnConstraint()
                 .setReversed(true)
                 .splineTo(new Vector2d(-36.05, -34.94), Math.toRadians(270.00))
                 .setReversed(false)
                 .build();
 
         TrajectorySequence right_traj = drive.trajectorySequenceBuilder(stack_traj.end())
-                .setConstraints(
-                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(50)
-                )
+                .resetConstraints()
                 .setReversed(true)
                 .lineToConstantHeading(new Vector2d(-21.85, -12.45))
                 .splineTo(new Vector2d(-12.45, -36), Math.toRadians(270.00))
                 .setReversed(false)
-                .resetConstraints()
-                .resetTurnConstraint()
                 .build();
 
         ColectareSubsystem colectareSystem = new ColectareSubsystem(
