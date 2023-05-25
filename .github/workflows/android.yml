@@ -11,13 +11,13 @@ jobs:
           java-version: 11
 
       - name: Grant gradlew execution permission
-        working-directory: ./FtcRobotController
+        working-directory: .
         run: chmod +x gradlew
 
       - name: Test Project with Gradle
-        working-directory: ./FtcRobotController
+        working-directory: .
         run: ./gradlew --stacktrace
 
       - name: Build Project with Gradle
-        working-directory: ./FtcRobotController
+        working-directory: .
         run: ./gradlew build
