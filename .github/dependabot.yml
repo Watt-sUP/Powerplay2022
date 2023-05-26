@@ -1,14 +1,14 @@
 version: 2
 updates:
   - package-ecosystem: gradle
-    directory: /FtcRobotController/TeamCode
+    directory: /TeamCode
     schedule:
       interval: daily
   - package-ecosystem: gradle
-    directory: /FtcRobotController/FtcRobotController
+    directory: /FtcRobotController
     schedule:
       interval: weekly
   - package-ecosystem: gradle
-    directory: /FtcRobotController
+    directory: /
     schedule:
       interval: daily
