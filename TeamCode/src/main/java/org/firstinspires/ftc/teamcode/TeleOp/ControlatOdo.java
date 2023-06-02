@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -30,7 +32,6 @@ public class ControlatOdo extends CommandOpMode {
     @Override
     public void initialize() {
 
-//        PhotonCore.enable();
         ServoEx ghidaj = new SimpleServo(hardwareMap, Config.ghidaj, 0, 300);
         ghidaj.turnToAngle(150);
 
@@ -132,6 +133,7 @@ public class ControlatOdo extends CommandOpMode {
                     glisiereSystem.lowerUnghi();
                     colectareSystem.toggleClaw();
                 });
+
         driver2.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
                 .whenPressed(colectareSystem::toggleScissors);
     }

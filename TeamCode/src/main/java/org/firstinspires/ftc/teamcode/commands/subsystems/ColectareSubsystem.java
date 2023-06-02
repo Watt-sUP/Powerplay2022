@@ -11,13 +11,14 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
 public class ColectareSubsystem extends SubsystemBase {
     private final ServoEx claw, scissors;
     private double scissorsRetractedPos = 0.18;
-    private StateClaw stateClaw;
+    public StateClaw stateClaw;
     private StateScissors stateScissors;
 
-    private enum StateClaw {
+    public enum StateClaw {
         Opened,
         Closed
     }
+
     private enum StateScissors {
         Extended,
         Retracted,
