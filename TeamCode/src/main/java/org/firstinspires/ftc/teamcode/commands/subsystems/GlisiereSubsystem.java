@@ -25,6 +25,7 @@ public class GlisiereSubsystem extends SubsystemBase {
     private final DcMotor motor, motor2;
     private final ServoEx unghi;
     private StateUnghi stateUnghi = StateUnghi.Lowered;
+
     private enum StateUnghi {
         Raised,
         Lowered
@@ -124,13 +125,22 @@ public class GlisiereSubsystem extends SubsystemBase {
         motor2.setPower(0.2);
     }
 
+    /**
+     * Alters the angle of the claw servo.
+     *
+     * @param angle The angle to set the servo to
+     */
+    public void setUnghiToAngle(double angle) {
+        unghi.turnToAngle(angle);
+    }
+
     public void raiseUnghi() {
-        unghi.turnToAngle(110);
+        setUnghiToAngle(115);
         stateUnghi = StateUnghi.Raised;
     }
 
     public void lowerUnghi() {
-        unghi.turnToAngle(160);
+        setUnghiToAngle(165);
         stateUnghi = StateUnghi.Lowered;
     }
 
