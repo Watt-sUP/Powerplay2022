@@ -56,6 +56,16 @@ public class SensorSubsystem extends SubsystemBase {
                 isWithinThreshold(currentColor[2], colorThreshold[2]);
     }
 
+    public float[] getRGB() {
+        return new float[]{colorSensor.red(), colorSensor.green(), colorSensor.blue()};
+    }
+
+    public float[] getHSV() {
+        float[] currentColor = new float[3];
+        colorSensor.RGBtoHSV(colorSensor.red(), colorSensor.blue(), colorSensor.green(), currentColor);
+        return currentColor;
+    }
+
     public double getDistance() {
         return distanceSensor.getDistance(DistanceUnit.CM);
     }

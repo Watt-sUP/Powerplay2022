@@ -50,6 +50,8 @@ public class SensorTest extends CommandOpMode {
                             "\nHue: " + colorThreshold[0].first + "-" + colorThreshold[0].second +
                             "\nSaturation: " + colorThreshold[1].first + "-" + colorThreshold[1].second +
                             "\nValue: " + colorThreshold[2].first + "-" + colorThreshold[2].second);
+            telemetry.addData("Current RGB Values", sensorSystem.getRGB());
+            telemetry.addData("Current HSV Values", sensorSystem.getHSV());
             telemetry.addData("Color Found", sensorSystem.isColorDetected() ? "Yes" : "No");
             telemetry.update();
         }));
