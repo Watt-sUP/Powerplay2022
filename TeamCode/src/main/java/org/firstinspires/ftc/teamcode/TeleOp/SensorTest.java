@@ -17,9 +17,9 @@ import org.firstinspires.ftc.teamcode.commands.subsystems.SensorSubsystem;
 @TeleOp(name = "Sensor Test", group = "TeleOp")
 public class SensorTest extends CommandOpMode {
 
-    public static int HUE_MIN = 0, HUE_MAX = 360;
-    public static float SATURATION_MIN = 0, SATURATION_MAX = 1;
-    public static float VALUE_MIN = 0, VALUE_MAX = 1;
+    public static int HUE_MIN = 10 * 2, HUE_MAX = 60 * 2;
+    public static float SATURATION_MIN = (float) (150.0 / 255.0), SATURATION_MAX = 1;
+    public static float VALUE_MIN = (float) (115.0 / 255.0), VALUE_MAX = 1;
 
     @Override
     public void initialize() {
