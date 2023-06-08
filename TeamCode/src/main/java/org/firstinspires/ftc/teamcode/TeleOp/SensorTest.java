@@ -17,14 +17,14 @@ import org.firstinspires.ftc.teamcode.commands.subsystems.SensorSubsystem;
 @TeleOp(name = "Sensor Test", group = "TeleOp")
 public class SensorTest extends CommandOpMode {
 
-    public static int HUE_MIN = 10 * 2, HUE_MAX = 60 * 2;
-    public static float SATURATION_MIN = (float) (150.0 / 255.0), SATURATION_MAX = 1;
-    public static float VALUE_MIN = (float) (115.0 / 255.0), VALUE_MAX = 1;
+    public static int HUE_MIN = 320, HUE_MAX = 350;
+    public static double SATURATION_MIN = 0.45, SATURATION_MAX = 1;
+    public static double VALUE_MIN = 0.1, VALUE_MAX = 1;
 
     @Override
     public void initialize() {
         DriveSubsystem driveSystem = new DriveSubsystem(hardwareMap,
-                "left_front", "right_front", "left_back", "right_back");
+                "LF", "RF", "LB", "RB");
         SensorSubsystem sensorSystem = new SensorSubsystem(hardwareMap, "color");
 
 
@@ -38,20 +38,25 @@ public class SensorTest extends CommandOpMode {
         schedule(new InstantCommand(() ->
                 sensorSystem.setColorThreshold(
                         new Pair<>((float) HUE_MIN, (float) HUE_MAX),
-                        new Pair<>(SATURATION_MIN, SATURATION_MAX),
-                        new Pair<>(VALUE_MIN, VALUE_MAX)
+                        new Pair<>((float) SATURATION_MIN, (float) SATURATION_MAX),
+                        new Pair<>((float) VALUE_MIN, (float) VALUE_MAX)
                 ))
         );
         schedule(new RunCommand(() -> {
             Pair<Float, Float>[] colorThreshold = sensorSystem.getColorThreshold();
+            float[] rgb = sensorSystem.getRGB();
+            float[] hsv = sensorSystem.getHSV();
 
             telemetry.addData("Current Distance", sensorSystem.getDistance());
             telemetry.addLine("Current Color Threshold:" +
-                            "\nHue: " + colorThreshold[0].first + "-" + colorThreshold[0].second +
-                            "\nSaturation: " + colorThreshold[1].first + "-" + colorThreshold[1].second +
-                            "\nValue: " + colorThreshold[2].first + "-" + colorThreshold[2].second);
-            telemetry.addData("Current RGB Values", sensorSystem.getRGB());
-            telemetry.addData("Current HSV Values", sensorSystem.getHSV());
+                            "\n    Hue: " + colorThreshold[0].first + "-" + colorThreshold[0].second +
+                            "\n    Saturation: " + colorThreshold[1].first + "-" + colorThreshold[1].second +
+                            "\n    Value: " + colorThreshold[2].first + "-" + colorThreshold[2].second);
+            telemetry.addLine("Current RGB Values: " +
+                            "\n    Red: " + rgb[0] +
+                            "\n    Green: " + rgb[1] +
+                            "\n    Blue: " + rgb[2]);
+            telemetry.addData("Current HSV Values", "    Hue: " + hsv[0] + "\n    Saturation: " + hsv[1] + "\n    Value: " + hsv[2]);
             telemetry.addData("Color Found", sensorSystem.isColorDetected() ? "Yes" : "No");
             telemetry.update();
         }));

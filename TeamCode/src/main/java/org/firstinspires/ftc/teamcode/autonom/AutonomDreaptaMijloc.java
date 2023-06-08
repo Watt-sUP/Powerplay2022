@@ -34,12 +34,12 @@ import java.util.Map;
 @Autonomous(name = "Autonom 5+1 Dreapta (Mijloc)", group = "Autonom")
 public class AutonomDreaptaMijloc extends CommandOpMode {
 
-    public static Cone cone1 = new Cone(315, 780, -570, 0.53, 0.61);
-    public static Cone cone2 = new Cone(240, 780, -570, 0.53, 0.61);
-    public static Cone cone3 = new Cone(165, 780, -570, 0.53, 0.61);
-    public static Cone cone4 = new Cone(90, 780, -570, 0.53, 0.61);
-    public static Cone cone5 = new Cone(15, 780, -570, 0.53, 0.61);
-    public static Cone preload = new Cone(-1, -1, -570, -1, 0.64);
+    public static Cone cone1 = new Cone(315, 765, -590, 0.51, 0.59);
+    public static Cone cone2 = new Cone(240, 765, -590, 0.51, 0.59);
+    public static Cone cone3 = new Cone(165, 765, -590, 0.51, 0.59);
+    public static Cone cone4 = new Cone(90, 765, -590, 0.51, 0.59);
+    public static Cone cone5 = new Cone(15, 765, -590, 0.51, 0.59);
+    public static Cone preload = new Cone(-1, -1, -590, -1, 0.64);
     public static int DROP_TICKS = -425, PRELOAD_OFFSET = -100;
 
     @Override
