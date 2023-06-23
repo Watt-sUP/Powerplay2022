@@ -19,6 +19,7 @@ public class TurelaSubsystem extends SubsystemBase {
 
     /**
      * Initializes the subsystem without safety checks.
+     *
      * @param turelaMotor Motor object, used to control the turret
      */
     public TurelaSubsystem(@NonNull Motor turelaMotor) {
@@ -34,7 +35,8 @@ public class TurelaSubsystem extends SubsystemBase {
 
     /**
      * Initializes the subsystem with safety checks to avoid damage.
-     * @param turelaMotor Motor object, used to control the turret
+     *
+     * @param turelaMotor  Motor object, used to control the turret
      * @param safeSupplier Supplier that returns true if the turret is safe to move
      */
     public TurelaSubsystem(@NonNull Motor turelaMotor, Supplier<Boolean> safeSupplier) {
@@ -45,8 +47,9 @@ public class TurelaSubsystem extends SubsystemBase {
 
     /**
      * Moves the turret to a given direction.
+     *
      * @param direction Direction to move the turret to (LEFT, RIGHT, FORWARD)
-     * @param power Power value to move the turret with
+     * @param power     Power value to move the turret with
      */
     public void setToPosition(Direction direction, double power) {
         if (useSafety && !safeSupplier.get()) {
@@ -63,7 +66,18 @@ public class TurelaSubsystem extends SubsystemBase {
     }
 
     /**
+     * Moves the turret to a given direction with a default power value of 1.
+     *
+     * @param direction Direction to move the turret to (LEFT, RIGHT, FORWARD)
+     * @see #setToPosition(Direction direction, double power)
+     */
+    public void setToPosition(Direction direction) {
+        setToPosition(direction, 1.0);
+    }
+
+    /**
      * Moves the turret to a given number of ticks.
+     *
      * @param ticks Number of ticks to move the turret to
      * @param power Power value to move the turret with
      */
@@ -78,26 +92,51 @@ public class TurelaSubsystem extends SubsystemBase {
     }
 
     /**
-     * Moves the turret to a given direction with a default power value of 1.
-     * @param direction Direction to move the turret to (LEFT, RIGHT, FORWARD)
-     */
-    public void setToPosition(Direction direction) {
-        setToPosition(direction, 1.0);
-    }
-
-    /**
      * Moves the turret to a given number of ticks with a default power value of 1.
+     *
      * @param ticks Number of ticks to move the turret to
+     * @see #setToTicks(int ticks, double power)
      */
     public void setToTicks(int ticks) {
         setToTicks(ticks, 1.0);
     }
 
     /**
+     * Alters the target position of the turret by a given number of ticks. Also accepts negative values.
+     *
+     * @param ticks Number of ticks to add to the current target position
+     * @param power Power value to move the turret with
+     */
+    public void modifyTicks(int ticks, double power) {
+        setToTicks(motor.getTargetPosition() + ticks, power);
+    }
+
+    /**
+     * <p>Alters the target position of the turret by a given number of ticks. Also accepts negative values.</p>
+     * <p>Power value is defaulted to 1.</p>
+     *
+     * @param ticks Number of ticks to add to the current target position
+     * @see #modifyTicks(int ticks, double power)
+     */
+    public void modifyTicks(int ticks) {
+        modifyTicks(ticks, 1.0);
+    }
+
+    /**
      * Gets the current position of the turret.
+     *
      * @return Turret position measured in ticks
      */
     public int getTicks() {
         return motor.getCurrentPosition();
+    }
+
+    /**
+     * Returns true if the motor is currently advancing or retreating to a target position.
+     *
+     * @return True if busy, false otherwise
+     */
+    public boolean isBusy() {
+        return motor.isBusy();
     }
 }

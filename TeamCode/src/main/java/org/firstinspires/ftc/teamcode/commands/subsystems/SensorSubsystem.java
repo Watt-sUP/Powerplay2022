@@ -16,7 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class SensorSubsystem extends SubsystemBase {
     private final SensorColor colorSensor;
     private final SensorRevTOFDistance distanceSensor;
-    private Pair<Float, Float>[] colorThreshold = new Pair<>[]{
+    private Pair<Float, Float>[] colorThreshold = new Pair[]{
             new Pair<>(0f, 360f),
             new Pair<>(0f, 1f),
             new Pair<>(0f, 1f)
