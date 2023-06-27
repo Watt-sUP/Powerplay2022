@@ -72,7 +72,7 @@ public class ColectareSubsystem extends SubsystemBase {
     }
 
     public void extendScissors() {
-        scissors.setPosition(0.75);
+        scissors.setPosition(0.65);
         stateScissors = StateScissors.Extended;
     }
 

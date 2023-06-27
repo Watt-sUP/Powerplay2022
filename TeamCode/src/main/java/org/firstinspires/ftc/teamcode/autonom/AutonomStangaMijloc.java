@@ -15,7 +15,7 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.commands.ConeCommandHighLeft;
+import org.firstinspires.ftc.teamcode.commands.ConeCommandHighLeftOld;
 import org.firstinspires.ftc.teamcode.commands.ConeCommandMidLeft;
 import org.firstinspires.ftc.teamcode.commands.subsystems.ColectareSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.DetectorSubsystem;
@@ -131,7 +131,7 @@ public class AutonomStangaMijloc extends CommandOpMode {
                 new ConeCommandMidLeft(cone2, colectareSystem, turelaSystem, glisiereSystem),
                 new ConeCommandMidLeft(cone3, colectareSystem, turelaSystem, glisiereSystem),
                 new ConeCommandMidLeft(cone4, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandHighLeft(cone5, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandHighLeftOld(cone5, colectareSystem, turelaSystem, glisiereSystem),
 
                 new ParallelCommandGroup(
                         new InstantCommand(() -> colectareSystem.setScissorsPosition(0.3)),

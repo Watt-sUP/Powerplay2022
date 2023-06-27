@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.hardware.Cone;
  * <p>Helper command for scoring a cone.</p>
  * <p>This command will deposit the cone on the high junction when the robot is on the left side.</p>
  */
-public class ConeCommandHighLeft extends SequentialCommandGroup {
+public class ConeCommandHighLeftOld extends SequentialCommandGroup {
 
     /**
      * Runs a new command for scoring a cone.
@@ -28,7 +28,7 @@ public class ConeCommandHighLeft extends SequentialCommandGroup {
      * @param turelaSystem    The subsystem for the turret
      * @param glisiereSystem  The subsystem for the slides
      */
-    public ConeCommandHighLeft(@NonNull Cone cone, ColectareSubsystem colectareSystem, TurelaSubsystem turelaSystem, GlisiereSubsystem glisiereSystem) {
+    public ConeCommandHighLeftOld(@NonNull Cone cone, ColectareSubsystem colectareSystem, TurelaSubsystem turelaSystem, GlisiereSubsystem glisiereSystem) {
         addCommands(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> turelaSystem.setToTicks(cone.conePos, 0.8)),

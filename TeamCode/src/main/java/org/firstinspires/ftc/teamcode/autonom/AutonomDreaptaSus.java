@@ -15,8 +15,9 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.commands.ConeCommandHighRight;
+import org.firstinspires.ftc.teamcode.commands.ConeCommandHighRightOld;
 import org.firstinspires.ftc.teamcode.commands.subsystems.ColectareSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.DetectorSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.GlisiereSubsystem;
@@ -30,6 +31,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import java.util.HashMap;
 import java.util.Map;
 
+@Disabled
 @com.acmerobotics.dashboard.config.Config
 @Autonomous(name = "Autonom 5+1 Dreapta (Sus)", group = "Autonom")
 public class AutonomDreaptaSus extends CommandOpMode {
@@ -128,11 +130,11 @@ public class AutonomDreaptaSus extends CommandOpMode {
                 new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(100),
 
-                new ConeCommandHighRight(cone1, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandHighRight(cone2, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandHighRight(cone3, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandHighRight(cone4, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandHighRight(cone5, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandHighRightOld(cone1, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandHighRightOld(cone2, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandHighRightOld(cone3, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandHighRightOld(cone4, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandHighRightOld(cone5, colectareSystem, turelaSystem, glisiereSystem),
 
                 new ParallelCommandGroup(
                         new InstantCommand(() -> colectareSystem.setScissorsPosition(0.3)),

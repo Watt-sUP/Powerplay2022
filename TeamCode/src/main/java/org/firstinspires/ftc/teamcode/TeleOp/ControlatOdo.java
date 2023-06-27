@@ -41,7 +41,7 @@ public class ControlatOdo extends CommandOpMode {
         );
         ColectareSubsystem colectareSystem = new ColectareSubsystem(
                 new SimpleServo(hardwareMap, Config.claw, -360, 360),
-                new SimpleServo(hardwareMap, Config.foarfeca, -360, 360), 0.3
+                new SimpleServo(hardwareMap, Config.foarfeca, -360, 360), 0.2
         );
         GlisiereSubsystem glisiereSystem = new GlisiereSubsystem(
                 hardwareMap.get(DcMotorEx.class, Config.glisiera),
