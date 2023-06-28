@@ -108,7 +108,7 @@ public class TurelaSubsystem extends SubsystemBase {
      * @param power Power value to move the turret with
      */
     public void modifyTicks(int ticks, double power) {
-        setToTicks(motor.getTargetPosition() + ticks, power);
+        setToTicks(motor.getCurrentPosition() + ticks, power);
     }
 
     /**

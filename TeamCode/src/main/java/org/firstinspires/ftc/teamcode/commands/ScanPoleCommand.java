@@ -11,9 +11,10 @@ public class ScanPoleCommand extends CommandBase {
 
     private final TurelaSubsystem turela;
     private final SensorSubsystem sensor;
-    private Integer targetTicks;
-    private Double lastDistance = 1000.0, limit;
-    public static int TICK_CHANGE = 50;
+    private Double lastDistance;
+    private final Double limit;
+    public static int TICK_CHANGE = 20;
+    public static double POWER = 0.33;
 
     public enum Direction {
         LEFT,
@@ -21,42 +22,25 @@ public class ScanPoleCommand extends CommandBase {
     }
     private final Direction direction;
 
-    public ScanPoleCommand(TurelaSubsystem turela, SensorSubsystem sensor, Integer startPos, Direction direction, Double limit) {
+    public ScanPoleCommand(TurelaSubsystem turela, SensorSubsystem sensor, Direction direction, Double limit) {
         this.turela = turela;
         this.sensor = sensor;
-        this.targetTicks = startPos;
         this.direction = direction;
+        this.lastDistance = Double.MAX_VALUE;
         this.limit = limit;
 
-        turela.setToTicks(startPos);
         addRequirements(turela, sensor);
     }
 
-//    @Override
-//    public void initialize() {
-//        turela.setToTicks(targetTicks);
-//    }
-
     @Override
     public void execute() {
-
-        if (sensor.getDistance() > lastDistance) {
-            return;
-        }
-
         lastDistance = sensor.getDistance();
-        targetTicks = turela.getTicks();
-        turela.modifyTicks((direction == Direction.LEFT) ? TICK_CHANGE : -TICK_CHANGE, 0.5);
+        turela.modifyTicks((direction == Direction.LEFT) ? TICK_CHANGE : -TICK_CHANGE, POWER);
     }
 
     @Override
     public boolean isFinished() {
         double distance = sensor.getDistance();
-        return distance > lastDistance && lastDistance < 75.0;
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        turela.setToTicks(targetTicks);
+        return distance > lastDistance && lastDistance < limit;
     }
 }

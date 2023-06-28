@@ -20,7 +20,7 @@ public class GlisiereSubsystem extends SubsystemBase {
      * 3: Middle junction
      * 4: High junction
      */
-    private final int[] positions = {0, 300, 575, 1150, 1675};
+    private final int[] positions = {0, 300, 575, 1125, 1675};
     private boolean use_automations = true;
     private final DcMotor motor, motor2;
     private final ServoEx unghi;
