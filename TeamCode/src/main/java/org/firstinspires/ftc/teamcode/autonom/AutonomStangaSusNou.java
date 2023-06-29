@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonom;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
@@ -13,6 +15,7 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.commands.ConeLeftSensorCommand;
 import org.firstinspires.ftc.teamcode.commands.ScanPoleCommand;
 import org.firstinspires.ftc.teamcode.commands.subsystems.ColectareSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.DetectorSubsystem;
@@ -20,6 +23,7 @@ import org.firstinspires.ftc.teamcode.commands.subsystems.GlisiereSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.SensorSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.TurelaSubsystem;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.hardware.Cone;
 import org.firstinspires.ftc.teamcode.hardware.Config;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -29,8 +33,11 @@ import java.util.Map;
 @com.acmerobotics.dashboard.config.Config
 public class AutonomStangaSusNou extends CommandOpMode {
 
+    public static Cone cone1 = new Cone(340, -1600, -500, 0.8, 0.8);
+
     @Override
     public void initialize() {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         TrajectorySequence stack = drive.trajectorySequenceBuilder(new Pose2d(-33.83, -64.44, Math.toRadians(90.00)))
                 .lineTo(new Vector2d(-34.02, -12.81))
@@ -65,22 +72,33 @@ public class AutonomStangaSusNou extends CommandOpMode {
         register(turelaSystem);
         register(colectareSystem);
         register(detectorSystem);
+        register(sensorSystem);
 
         SequentialCommandGroup auto = new SequentialCommandGroup(
+                // Grab preload
                 new ParallelCommandGroup(
                         new InstantCommand(() -> drive.setPoseEstimate(stack.start())),
                         new InstantCommand(colectareSystem::toggleClaw)
                 ),
                 new WaitCommand(300),
+                // Drive
                 new ParallelCommandGroup(
                         new InstantCommand(glisiereSystem::raiseUnghi),
-                        new InstantCommand(() -> glisiereSystem.setToPosition(3))
+                        new InstantCommand(() -> glisiereSystem.setToPosition(3)),
+                        new InstantCommand(() -> turelaSystem.setToTicks(-575, 0.5))
                 ),
                 new InstantCommand(() -> drive.followTrajectorySequence(stack)),
-                new InstantCommand(() -> turelaSystem.setToTicks(-575, 0.5)),
                 new WaitUntilCommand(() -> !turelaSystem.isBusy()),
+                // Score preload
                 new ScanPoleCommand(turelaSystem, sensorSystem, ScanPoleCommand.Direction.RIGHT, 20.0),
-                new InstantCommand(() -> colectareSystem.setScissorsPosition(0.25))
+                new InstantCommand(() -> colectareSystem.setScissorsPosition(0.25)),
+                new WaitCommand(200),
+                new InstantCommand(() -> {
+                    colectareSystem.openClaw();
+                    glisiereSystem.lowerUnghi();
+                }),
+                new ConeLeftSensorCommand(cone1, ConeLeftSensorCommand.Poles.DANGER_HIGH,
+                        colectareSystem, turelaSystem, glisiereSystem, sensorSystem)
         );
 
         while (!isStarted()) {
@@ -99,7 +117,7 @@ public class AutonomStangaSusNou extends CommandOpMode {
 
         schedule(auto.alongWith(new RunCommand(() -> {
             telemetry.addData("Turret Ticks", turelaSystem.getTicks());
-            telemetry.addData("Sensor Distance", sensorSystem.getDistance());
+            telemetry.addData("Sensor Distance (CM)", sensorSystem.getDistance());
             telemetry.update();
         })));
     }

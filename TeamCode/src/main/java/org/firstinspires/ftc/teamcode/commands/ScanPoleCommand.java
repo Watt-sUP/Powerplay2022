@@ -13,7 +13,8 @@ public class ScanPoleCommand extends CommandBase {
     private final SensorSubsystem sensor;
     private Double lastDistance;
     private final Double limit;
-    public static int TICK_CHANGE = 20;
+    public static int TICK_CHANGE = 25;
+    private Integer target_ticks;
     public static double POWER = 0.33;
 
     public enum Direction {
@@ -27,6 +28,7 @@ public class ScanPoleCommand extends CommandBase {
         this.sensor = sensor;
         this.direction = direction;
         this.lastDistance = Double.MAX_VALUE;
+        this.target_ticks = turela.getTicks();
         this.limit = limit;
 
         addRequirements(turela, sensor);
@@ -41,6 +43,21 @@ public class ScanPoleCommand extends CommandBase {
     @Override
     public boolean isFinished() {
         double distance = sensor.getDistance();
-        return distance > lastDistance && lastDistance < limit;
+        int ticks = turela.getTicks();
+
+        if (distance > lastDistance && lastDistance < limit)
+            return true;
+
+        if (distance < lastDistance)
+            target_ticks = ticks;
+
+        return false;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        if (!interrupted) {
+            turela.setToTicks(target_ticks, 0.33);
+        }
     }
 }

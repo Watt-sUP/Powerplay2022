@@ -152,4 +152,8 @@ public class GlisiereSubsystem extends SubsystemBase {
     public int getTicks() {
         return motor.getCurrentPosition();
     }
+
+    public boolean isBusy() {
+        return motor.isBusy() && motor2.isBusy();
+    }
 }
