@@ -46,7 +46,7 @@ public class ControlatTomoiu extends CommandOpMode {
         );
         ColectareSubsystem colectareSystem = new ColectareSubsystem(
                 new SimpleServo(hardwareMap, Config.claw, -360, 360),
-                new SimpleServo(hardwareMap, Config.foarfeca, 0, 300), 0.2
+                new SimpleServo(hardwareMap, Config.foarfeca, 0, 300), 0.3
         );
         GlisiereSubsystem glisiereSystem = new GlisiereSubsystem(
                 hardwareMap.get(DcMotorEx.class, Config.glisiera),
@@ -102,7 +102,7 @@ public class ControlatTomoiu extends CommandOpMode {
                 .whenPressed(new SequentialCommandGroup(
                         // Raises the sliders and rotates the turret to the front
                         new InstantCommand(() -> glisiereSystem.setToPosition(4)),
-                        new WaitUntilCommand(() -> glisiereSystem.position != 0),
+                        new WaitUntilCommand(() -> glisiereSystem.position != 0 && glisiereSystem.getTicks() > 200),
                         new InstantCommand(() -> turelaSystem.setToPosition(Direction.FORWARD))
                 ));
         driver2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
@@ -127,7 +127,7 @@ public class ControlatTomoiu extends CommandOpMode {
 
         // Lowers the slides by 160 ticks
         driver2.getGamepadButton(GamepadKeys.Button.B)
-                .whenPressed(() -> glisiereSystem.modifyTicks(-160));
+                .whenPressed(() -> glisiereSystem.modifyTicks(-120));
 
         // Collector controls below
         driver2.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)

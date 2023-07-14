@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.commands;
 
+import static java.lang.Math.abs;
+
+import android.util.Pair;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 
@@ -11,24 +15,19 @@ public class ScanPoleCommand extends CommandBase {
 
     private final TurelaSubsystem turela;
     private final SensorSubsystem sensor;
-    private Double lastDistance;
+    private Double minDistance;
     private final Double limit;
-    public static int TICK_CHANGE = 25;
+    public static int TICK_CHANGE = 50;
     private Integer target_ticks;
     public static double POWER = 0.33;
+    private final Pair<Integer, Integer> interval;
 
-    public enum Direction {
-        LEFT,
-        RIGHT
-    }
-    private final Direction direction;
-
-    public ScanPoleCommand(TurelaSubsystem turela, SensorSubsystem sensor, Direction direction, Double limit) {
+    public ScanPoleCommand(TurelaSubsystem turela, SensorSubsystem sensor, Pair<Integer, Integer> interval, Double limit) {
         this.turela = turela;
         this.sensor = sensor;
-        this.direction = direction;
-        this.lastDistance = Double.MAX_VALUE;
-        this.target_ticks = turela.getTicks();
+        this.interval = interval;
+        this.minDistance = Double.MAX_VALUE;
+        this.target_ticks = interval.first;
         this.limit = limit;
 
         addRequirements(turela, sensor);
@@ -36,8 +35,7 @@ public class ScanPoleCommand extends CommandBase {
 
     @Override
     public void execute() {
-        lastDistance = sensor.getDistance();
-        turela.modifyTicks((direction == Direction.LEFT) ? TICK_CHANGE : -TICK_CHANGE, POWER);
+        turela.modifyTicks((interval.first < interval.second) ? TICK_CHANGE : -TICK_CHANGE, POWER);
     }
 
     @Override
@@ -45,11 +43,13 @@ public class ScanPoleCommand extends CommandBase {
         double distance = sensor.getDistance();
         int ticks = turela.getTicks();
 
-        if (distance > lastDistance && lastDistance < limit)
+        if (abs(ticks) > abs(interval.second) && minDistance < limit)
             return true;
 
-        if (distance < lastDistance)
+        if (distance < minDistance) {
+            minDistance = distance;
             target_ticks = ticks;
+        }
 
         return false;
     }
@@ -57,7 +57,7 @@ public class ScanPoleCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         if (!interrupted) {
-            turela.setToTicks(target_ticks, 0.33);
+            turela.setToTicks(target_ticks, 0.2);
         }
     }
 }

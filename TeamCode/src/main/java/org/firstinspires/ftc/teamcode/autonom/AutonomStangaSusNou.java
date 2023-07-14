@@ -14,9 +14,9 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.commands.ConeLeftSensorCommand;
-import org.firstinspires.ftc.teamcode.commands.ScanPoleCommand;
 import org.firstinspires.ftc.teamcode.commands.subsystems.ColectareSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.DetectorSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.GlisiereSubsystem;
@@ -29,6 +29,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.util.Map;
 
+@Disabled
 @Autonomous
 @com.acmerobotics.dashboard.config.Config
 public class AutonomStangaSusNou extends CommandOpMode {
@@ -90,7 +91,7 @@ public class AutonomStangaSusNou extends CommandOpMode {
                 new InstantCommand(() -> drive.followTrajectorySequence(stack)),
                 new WaitUntilCommand(() -> !turelaSystem.isBusy()),
                 // Score preload
-                new ScanPoleCommand(turelaSystem, sensorSystem, ScanPoleCommand.Direction.RIGHT, 20.0),
+                //new ScanPoleCommand(turelaSystem, sensorSystem, ScanPoleCommand.Direction.RIGHT, 20.0),
                 new InstantCommand(() -> colectareSystem.setScissorsPosition(0.25)),
                 new WaitCommand(200),
                 new InstantCommand(() -> {

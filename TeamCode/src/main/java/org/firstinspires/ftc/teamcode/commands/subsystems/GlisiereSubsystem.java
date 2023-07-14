@@ -20,16 +20,10 @@ public class GlisiereSubsystem extends SubsystemBase {
      * 3: Middle junction
      * 4: High junction
      */
-    private final int[] positions = {0, 300, 575, 1125, 1675};
+    public final int[] positions = {0, 325, 500, 925, 1350};
     private boolean use_automations = true;
     private final DcMotor motor, motor2;
     private final ServoEx unghi;
-    private StateUnghi stateUnghi = StateUnghi.Lowered;
-
-    private enum StateUnghi {
-        Raised,
-        Lowered
-    }
 
     /**
      * Creates a new instance of the subsystem.
@@ -49,7 +43,7 @@ public class GlisiereSubsystem extends SubsystemBase {
         this.motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         this.unghi.setInverted(true);
-        this.unghi.turnToAngle(160);
+        this.unghi.turnToAngle(150);
     }
 
     public GlisiereSubsystem(DcMotor motor, DcMotor motor2, ServoEx unghi, boolean use_automations) {
@@ -135,13 +129,11 @@ public class GlisiereSubsystem extends SubsystemBase {
     }
 
     public void raiseUnghi() {
-        setUnghiToAngle(115);
-        stateUnghi = StateUnghi.Raised;
+        setUnghiToAngle(105);
     }
 
     public void lowerUnghi() {
-        setUnghiToAngle(165);
-        stateUnghi = StateUnghi.Lowered;
+        setUnghiToAngle(150);
     }
 
     /**

@@ -44,7 +44,7 @@ public class ConeLeftSensorCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> turelaSystem.setToTicks(cone.stickPos, 0.66)),
                 new WaitUntilCommand(() -> !turelaSystem.isBusy()),
                 new InstantCommand(() -> colectareSystem.setScissorsPosition(0.67)),
-                new ScanPoleCommand(turelaSystem, sensorSystem, ScanPoleCommand.Direction.LEFT, 50.0),
+                //new ScanPoleCommand(turelaSystem, sensorSystem, ScanPoleCommand.Direction.LEFT, 50.0),
                 new WaitUntilCommand(() -> !turelaSystem.isBusy()),
                 new InstantCommand(() -> colectareSystem.setScissorsPosition(cone.stickScissors))
         );

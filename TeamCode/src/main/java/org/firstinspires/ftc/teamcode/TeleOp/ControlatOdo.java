@@ -41,7 +41,7 @@ public class ControlatOdo extends CommandOpMode {
         );
         ColectareSubsystem colectareSystem = new ColectareSubsystem(
                 new SimpleServo(hardwareMap, Config.claw, -360, 360),
-                new SimpleServo(hardwareMap, Config.foarfeca, -360, 360), 0.2
+                new SimpleServo(hardwareMap, Config.foarfeca, -360, 360), 0.3
         );
         GlisiereSubsystem glisiereSystem = new GlisiereSubsystem(
                 hardwareMap.get(DcMotorEx.class, Config.glisiera),
@@ -98,8 +98,8 @@ public class ControlatOdo extends CommandOpMode {
                 .whenPressed(new ParallelCommandGroup(
                         // Raises the sliders and rotates the turret to the front
                         new InstantCommand(() -> glisiereSystem.setToPosition(4)),
-                        new WaitUntilCommand(() -> glisiereSystem.position != 0)
-                                .andThen(new InstantCommand(() -> turelaSystem.setToPosition(Direction.FORWARD)))
+                        new WaitUntilCommand(() -> glisiereSystem.position != 0 && glisiereSystem.getTicks() > 200)
+                        .andThen(new InstantCommand(() -> turelaSystem.setToPosition(Direction.FORWARD)))
                 ));
         driver2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(new SequentialCommandGroup(
@@ -123,7 +123,7 @@ public class ControlatOdo extends CommandOpMode {
 
         // Lowers the slides a bit
         driver2.getGamepadButton(GamepadKeys.Button.B)
-                .whenPressed(() -> glisiereSystem.modifyTicks(-160));
+                .whenPressed(() -> glisiereSystem.modifyTicks(-120));
 
         // Collector controls below
         driver2.getGamepadButton(GamepadKeys.Button.A)

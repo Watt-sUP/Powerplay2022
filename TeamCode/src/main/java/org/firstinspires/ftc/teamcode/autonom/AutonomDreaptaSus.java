@@ -15,7 +15,6 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.commands.ConeCommandHighRightOld;
 import org.firstinspires.ftc.teamcode.commands.subsystems.ColectareSubsystem;
@@ -31,7 +30,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import java.util.HashMap;
 import java.util.Map;
 
-@Disabled
+//@Disabled
 @com.acmerobotics.dashboard.config.Config
 @Autonomous(name = "Autonom 5+1 Dreapta (Sus)", group = "Autonom")
 public class AutonomDreaptaSus extends CommandOpMode {

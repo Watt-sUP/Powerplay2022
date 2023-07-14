@@ -11,7 +11,6 @@ import com.arcrobotics.ftclib.util.Direction;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.DriveCommand;
-import org.firstinspires.ftc.teamcode.commands.ScanPoleCommand;
 import org.firstinspires.ftc.teamcode.commands.subsystems.ColectareSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.GlisiereSubsystem;
@@ -62,10 +61,10 @@ public class SensorTest extends CommandOpMode {
         driver.getGamepadButton(GamepadKeys.Button.B)
                 .whenPressed(new InstantCommand(() -> turelaSystem.setToPosition(Direction.RIGHT)));
 
-        driver.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(new ScanPoleCommand(turelaSystem, sensorSystem, ScanPoleCommand.Direction.LEFT, 50.0), true);
-        driver.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(new ScanPoleCommand(turelaSystem, sensorSystem, ScanPoleCommand.Direction.RIGHT, 50.0), true);
+//        driver.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+//                .whenPressed(new ScanPoleCommand(turelaSystem, sensorSystem, ScanPoleCommand.Direction.LEFT, 50.0), true);
+//        driver.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+//                .whenPressed(new ScanPoleCommand(turelaSystem, sensorSystem, ScanPoleCommand.Direction.RIGHT, 50.0), true);
 
         schedule(new RunCommand(() -> {
             telemetry.addData("Current Distance", sensorSystem.getDistance());
