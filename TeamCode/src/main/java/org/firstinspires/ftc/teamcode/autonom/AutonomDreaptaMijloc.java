@@ -114,7 +114,7 @@ public class AutonomDreaptaMijloc extends CommandOpMode {
                 new WaitUntilCommand(() -> glisiereSystem.getTicks() > 400 && turelaSystem.getTicks() < -600),
                 new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
                 new WaitCommand(200),
-                new InstantCommand(() -> colectareSystem.plastic.turnToAngle(225)),
+                new InstantCommand(() -> colectareSystem.plastic.turnToAngle(220)),
                 new WaitUntilCommand(() -> !turelaSystem.isBusy()),
                 new WaitCommand(300),
                 new InstantCommand(() -> {
@@ -133,6 +133,7 @@ public class AutonomDreaptaMijloc extends CommandOpMode {
                 new ConeCommandMidRight(cone4, colectareSystem, turelaSystem, glisiereSystem),
                 new ConeCommandHighRight(cone5, colectareSystem, turelaSystem, glisiereSystem),
 
+                new WaitCommand(200),
                 new InstantCommand(() -> {
                     colectareSystem.setScissorsPosition(0.3);
                     turelaSystem.setToPosition(Direction.FORWARD);

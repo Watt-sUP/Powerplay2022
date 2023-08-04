@@ -117,7 +117,7 @@ public class AutonomDreaptaSus extends CommandOpMode {
                 new WaitCommand(200),
                 new InstantCommand(() -> {
                     turelaSystem.setToTicks(preload.stickPos, 0.45);
-                    colectareSystem.plastic.turnToAngle(225);
+                    colectareSystem.plastic.turnToAngle(220);
                 }),
                 new WaitUntilCommand(() -> !turelaSystem.isBusy()),
                 new WaitCommand(300),
@@ -137,6 +137,7 @@ public class AutonomDreaptaSus extends CommandOpMode {
                 new ConeCommandHighRight(cone4, colectareSystem, turelaSystem, glisiereSystem),
                 new ConeCommandHighRight(cone5, colectareSystem, turelaSystem, glisiereSystem),
 
+                new WaitCommand(200),
                 new InstantCommand(() -> {
                     colectareSystem.setScissorsPosition(0.3);
                     turelaSystem.setToPosition(Direction.FORWARD);

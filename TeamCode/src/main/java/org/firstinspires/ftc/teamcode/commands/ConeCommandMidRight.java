@@ -54,7 +54,7 @@ public class ConeCommandMidRight extends SequentialCommandGroup {
                                 new WaitUntilCommand(() -> glisiereSystem.getTicks() > 400 && turelaSystem.getTicks() < -600),
                                 new InstantCommand(() -> colectareSystem.setScissorsPosition(cone.stickScissors)),
                                 new WaitCommand(200),
-                                new InstantCommand(() -> colectareSystem.plastic.turnToAngle(225))
+                                new InstantCommand(() -> colectareSystem.plastic.turnToAngle(220))
                         )
                 ),
                 new WaitUntilCommand(() -> !turelaSystem.isBusy()),

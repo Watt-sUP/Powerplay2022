@@ -56,7 +56,7 @@ public class ConeCommandHighRight extends SequentialCommandGroup {
                 new WaitCommand(200),
                 new InstantCommand(() -> {
                     turelaSystem.setToTicks(cone.stickPos, 0.5);
-                    colectareSystem.plastic.turnToAngle(225);
+                    colectareSystem.plastic.turnToAngle(220);
                 }),
                 new WaitUntilCommand(() -> !turelaSystem.isBusy()),
                 new WaitCommand(300),
