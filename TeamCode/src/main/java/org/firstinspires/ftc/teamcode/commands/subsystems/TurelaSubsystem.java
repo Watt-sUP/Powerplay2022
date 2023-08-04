@@ -6,12 +6,13 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.util.Direction;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import java.util.Hashtable;
 import java.util.function.Supplier;
 
 public class TurelaSubsystem extends SubsystemBase {
-    private final DcMotor motor;
+    private final DcMotorEx motor;
     private final Hashtable<Direction, Integer> posDict;
     private boolean useSafety;
     private Supplier<Boolean> safeSupplier;
@@ -23,7 +24,7 @@ public class TurelaSubsystem extends SubsystemBase {
      * @param turelaMotor Motor object, used to control the turret
      */
     public TurelaSubsystem(@NonNull Motor turelaMotor) {
-        this.motor = turelaMotor.motor;
+        this.motor = (DcMotorEx) turelaMotor.motor;
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.posDict = new Hashtable<>();
         useSafety = false;
@@ -139,4 +140,6 @@ public class TurelaSubsystem extends SubsystemBase {
     public boolean isBusy() {
         return motor.isBusy();
     }
+
+
 }

@@ -10,13 +10,11 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.commands.ConeCommandHighLeftOld;
-import org.firstinspires.ftc.teamcode.commands.ConeCommandMidLeft;
 import org.firstinspires.ftc.teamcode.commands.subsystems.ColectareSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.DetectorSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.GlisiereSubsystem;
@@ -30,6 +28,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import java.util.HashMap;
 import java.util.Map;
 
+@Disabled
 @com.acmerobotics.dashboard.config.Config
 @Autonomous(name = "Autonom 5+1 Stanga (Mijloc)", group = "Autonom")
 public class AutonomStangaMijloc extends CommandOpMode {
@@ -40,7 +39,7 @@ public class AutonomStangaMijloc extends CommandOpMode {
     public static Cone cone3 = new Cone(165, -820, 525, 0.5, 0.62);
     public static Cone cone4 = new Cone(90, -820, 525, 0.5, 0.62);
     public static Cone cone5 = new Cone(15, -820, 975, 0.5, 0.63);
-    public static int DROP_TICKS = 375, PRELOAD_OFFSET = 50;
+    public static int DROP_TICKS = 375;
 
     @Override
     public void initialize() {
@@ -77,7 +76,8 @@ public class AutonomStangaMijloc extends CommandOpMode {
 
         ColectareSubsystem colectareSystem = new ColectareSubsystem(
                 new SimpleServo(hardwareMap, Config.claw, -360, 360),
-                new SimpleServo(hardwareMap, Config.foarfeca, -360, 360)
+                new SimpleServo(hardwareMap, Config.foarfeca, -360, 360),
+                new SimpleServo(hardwareMap, "GHIDAJ", 0, 300)
         );
         colectareSystem.setClawPosition(0.25);
         GlisiereSubsystem glisiereSystem = new GlisiereSubsystem(
@@ -101,37 +101,37 @@ public class AutonomStangaMijloc extends CommandOpMode {
                 ),
                 new WaitCommand(300),
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> glisiereSystem.setToTicks(1500)),
+                        new InstantCommand(() -> glisiereSystem.setToTicks(1000)),
                         new InstantCommand(() -> glisiereSystem.turnUnghiToAngle(180))
                 ),
                 new InstantCommand(() -> drive.followTrajectorySequence(stack_traj)),
-                new ParallelCommandGroup(
-                        new InstantCommand(colectareSystem::retractScissors),
-                        new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.8)),
-
-                        new SequentialCommandGroup(
-                                new WaitUntilCommand(() -> turelaSystem.getTicks() > DROP_TICKS + PRELOAD_OFFSET && glisiereSystem.getTicks() > 1000),
-                                new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
-                                new WaitCommand(500),
-                                new ParallelCommandGroup(
-                                        new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.33)),
-                                        new InstantCommand(() -> glisiereSystem.setToPosition(2)),
-                                        new SequentialCommandGroup(
-                                                new WaitCommand(100),
-                                                new InstantCommand(glisiereSystem::lowerUnghi)
-                                        )
-                                )
-                        )
-                ),
-                new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1250),
-                new InstantCommand(colectareSystem::toggleClaw),
-                new WaitCommand(100),
-
-                new ConeCommandMidLeft(cone1, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandMidLeft(cone2, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandMidLeft(cone3, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandMidLeft(cone4, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandHighLeftOld(cone5, colectareSystem, turelaSystem, glisiereSystem),
+//                new ParallelCommandGroup(
+//                        new InstantCommand(colectareSystem::retractScissors),
+//                        new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.8)),
+//
+//                        new SequentialCommandGroup(
+//                                new WaitUntilCommand(() -> turelaSystem.getTicks() > DROP_TICKS + PRELOAD_OFFSET && glisiereSystem.getTicks() > 1000),
+//                                new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
+//                                new WaitCommand(500),
+//                                new ParallelCommandGroup(
+//                                        new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.33)),
+//                                        new InstantCommand(() -> glisiereSystem.setToPosition(2)),
+//                                        new SequentialCommandGroup(
+//                                                new WaitCommand(100),
+//                                                new InstantCommand(glisiereSystem::lowerUnghi)
+//                                        )
+//                                )
+//                        )
+//                ),
+//                new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1250),
+//                new InstantCommand(colectareSystem::toggleClaw),
+//                new WaitCommand(100),
+//
+//                new ConeCommandMidLeft(cone1, colectareSystem, turelaSystem, glisiereSystem),
+//                new ConeCommandMidLeft(cone2, colectareSystem, turelaSystem, glisiereSystem),
+//                new ConeCommandMidLeft(cone3, colectareSystem, turelaSystem, glisiereSystem),
+//                new ConeCommandMidLeft(cone4, colectareSystem, turelaSystem, glisiereSystem),
+//                new ConeCommandHighLeftOld(cone5, colectareSystem, turelaSystem, glisiereSystem),
 
                 new ParallelCommandGroup(
                         new InstantCommand(() -> colectareSystem.setScissorsPosition(0.3)),

@@ -14,9 +14,10 @@ import org.firstinspires.ftc.teamcode.commands.subsystems.TurelaSubsystem;
 import org.firstinspires.ftc.teamcode.hardware.Cone;
 
 /**
- * Helper command for scoring a cone.
+ * <p>Helper command for scoring a cone.</p>
+ * <p>This command will deposit the cone on the high junction when the robot is on the right side.</p>
  */
-public class ConeCommandMidRight extends SequentialCommandGroup {
+public class ConeCommandHighRight extends SequentialCommandGroup {
 
     /**
      * Runs a new command for scoring a cone.
@@ -26,13 +27,14 @@ public class ConeCommandMidRight extends SequentialCommandGroup {
      * @param turelaSystem    The subsystem for the turret
      * @param glisiereSystem  The subsystem for the slides
      */
-    public ConeCommandMidRight(@NonNull Cone cone, ColectareSubsystem colectareSystem, TurelaSubsystem turelaSystem, GlisiereSubsystem glisiereSystem) {
+    public ConeCommandHighRight(@NonNull Cone cone, ColectareSubsystem colectareSystem, TurelaSubsystem turelaSystem, GlisiereSubsystem glisiereSystem) {
         addCommands(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> {
                             colectareSystem.setScissorsPosition(0.4);
-                            turelaSystem.setToTicks(cone.conePos, 0.8);
+                            turelaSystem.setToTicks(cone.conePos, 0.9);
                         }),
+
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() > -300),
                                 new InstantCommand(() -> glisiereSystem.setToTicks(cone.glisPos))
@@ -43,32 +45,30 @@ public class ConeCommandMidRight extends SequentialCommandGroup {
                 new WaitCommand(250),
                 new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(300),
-                new InstantCommand(() -> glisiereSystem.setToTicks(1100), glisiereSystem),
+                new InstantCommand(() -> glisiereSystem.setToTicks(1625)),
                 new WaitUntilCommand(() -> glisiereSystem.getTicks() > cone.glisPos + 400),
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> {
-                            colectareSystem.retractScissors();
-                            turelaSystem.setToTicks(cone.stickPos, 0.5);
-                        }),
-                        new SequentialCommandGroup(
-                                new WaitUntilCommand(() -> glisiereSystem.getTicks() > 400 && turelaSystem.getTicks() < -600),
-                                new InstantCommand(() -> colectareSystem.setScissorsPosition(cone.stickScissors)),
-                                new WaitCommand(200),
-                                new InstantCommand(() -> colectareSystem.plastic.turnToAngle(225))
-                        )
-                ),
+                new InstantCommand(() -> {
+                    colectareSystem.retractScissors();
+                    turelaSystem.setToTicks(cone.stickPos + 75);
+                }),
+                new WaitUntilCommand(() -> turelaSystem.getTicks() < cone.stickPos * 0.4),
+                new InstantCommand(() -> colectareSystem.setScissorsPosition(cone.stickScissors)),
+                new WaitCommand(200),
+                new InstantCommand(() -> {
+                    turelaSystem.setToTicks(cone.stickPos, 0.5);
+                    colectareSystem.plastic.turnToAngle(225);
+                }),
                 new WaitUntilCommand(() -> !turelaSystem.isBusy()),
                 new WaitCommand(300),
                 new InstantCommand(() -> {
-                    colectareSystem.setScissorsPosition(0.5);
+                    colectareSystem.setScissorsPosition(0.45);
                     glisiereSystem.setToTicks(500);
                 }),
                 new WaitCommand(200),
                 new InstantCommand(() -> {
                     colectareSystem.toggleClaw();
                     colectareSystem.plastic.turnToAngle(0);
-                }),
-                new WaitCommand(100)
+                })
         );
         addRequirements(colectareSystem, turelaSystem, glisiereSystem);
     }

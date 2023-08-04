@@ -7,16 +7,17 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.arcrobotics.ftclib.util.Direction;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.commands.ConeCommandHighRightOld;
+import org.firstinspires.ftc.teamcode.commands.ConeCommandHighRight;
+import org.firstinspires.ftc.teamcode.commands.ConeCommandMidRight;
 import org.firstinspires.ftc.teamcode.commands.subsystems.ColectareSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.DetectorSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.GlisiereSubsystem;
@@ -35,13 +36,12 @@ import java.util.Map;
 @Autonomous(name = "Autonom 5+1 Dreapta (Sus)", group = "Autonom")
 public class AutonomDreaptaSus extends CommandOpMode {
 
-    public static int DROP_TICKS = -800, PRELOAD_OFFSET = -100;
-    public static Cone preload = new Cone(-1, -1, -1040, -1, 0.6);
-    public static Cone cone1 = new Cone(315, 750, -1025, 0.52, 0.6);
-    public static Cone cone2 = new Cone(240, 750, -1025, 0.52, 0.5);
-    public static Cone cone3 = new Cone(165, 750, -1025, 0.52, 0.6);
-    public static Cone cone4 = new Cone(90, 750, -1025, 0.52, 0.6);
-    public static Cone cone5 = new Cone(15, 750, -1025, 0.52, 0.6);
+    public static Cone preload = new Cone(-1, -1, -1900, -1, 0.55);
+    public static Cone cone1 = new Cone(265, 0, -1375, 0.56, 0.6);
+    public static Cone cone2 = new Cone(190, 0, -1900, 0.56, 0.55);
+    public static Cone cone3 = new Cone(115, 0, -1900, 0.56, 0.55);
+    public static Cone cone4 = new Cone(75, 0, -1900, 0.56, 0.55);
+    public static Cone cone5 = new Cone(15, 0, -1900, 0.56, 0.55);
 
     @Override
     public void initialize() {
@@ -73,12 +73,12 @@ public class AutonomDreaptaSus extends CommandOpMode {
                 .setReversed(true)
                 .splineTo(new Vector2d(-11.89, 20.74), Math.toRadians(90.00))
                 .setReversed(false)
-                .lineToConstantHeading(new Vector2d(-11.89, 35.86))
                 .build();
 
         ColectareSubsystem colectareSystem = new ColectareSubsystem(
                 new SimpleServo(hardwareMap, Config.claw, -360, 360),
-                new SimpleServo(hardwareMap, Config.foarfeca, -360, 360)
+                new SimpleServo(hardwareMap, Config.foarfeca, -360, 360),
+                new SimpleServo(hardwareMap, "PLASTIC", 0, 300)
         );
         colectareSystem.setClawPosition(0.25);
         GlisiereSubsystem glisiereSystem = new GlisiereSubsystem(
@@ -96,50 +96,52 @@ public class AutonomDreaptaSus extends CommandOpMode {
         register(detectorSystem);
 
         SequentialCommandGroup autonom = new SequentialCommandGroup(
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> drive.setPoseEstimate(stack_traj.start())),
-                        new InstantCommand(colectareSystem::toggleClaw)
-                ),
+                new InstantCommand(() -> {
+                    drive.setPoseEstimate(stack_traj.start());
+                    colectareSystem.toggleClaw();
+                }),
                 new WaitCommand(300),
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> glisiereSystem.setToPosition(3)),
-                        new InstantCommand(() -> glisiereSystem.turnUnghiToAngle(140))
-                ),
+                new InstantCommand(() -> {
+                    glisiereSystem.setToPosition(3);
+                    glisiereSystem.lowerUnghi();
+                }),
                 new InstantCommand(() -> drive.followTrajectorySequence(stack_traj)),
-                new ParallelCommandGroup(
-                        new InstantCommand(colectareSystem::retractScissors),
-                        new InstantCommand(() -> glisiereSystem.setToTicks(1900)),
-                        new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.8)),
 
-                        new SequentialCommandGroup(
-                                new WaitUntilCommand(() -> glisiereSystem.getTicks() > 1850 && turelaSystem.getTicks() < DROP_TICKS + PRELOAD_OFFSET),
-                                new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
-                                new WaitCommand(400),
-                                new ParallelCommandGroup(
-                                        new InstantCommand(() -> turelaSystem.setToTicks(preload.stickPos, 0.33)),
-                                        new InstantCommand(() -> glisiereSystem.setToPosition(2)),
-                                        new SequentialCommandGroup(
-                                                new WaitCommand(100),
-                                                new InstantCommand(glisiereSystem::lowerUnghi)
-                                        )
-                                )
-                        )
-                ),
-                new WaitUntilCommand(() -> glisiereSystem.getTicks() < 1750),
-                new InstantCommand(colectareSystem::toggleClaw),
-                new WaitCommand(100),
+                new InstantCommand(() -> {
+                    glisiereSystem.setToTicks(1625);
+                    colectareSystem.retractScissors();
+                    turelaSystem.setToTicks(preload.stickPos + 75);
+                }),
+                new WaitUntilCommand(() -> turelaSystem.getTicks() < preload.stickPos * 0.4),
+                new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
+                new WaitCommand(200),
+                new InstantCommand(() -> {
+                    turelaSystem.setToTicks(preload.stickPos, 0.45);
+                    colectareSystem.plastic.turnToAngle(225);
+                }),
+                new WaitUntilCommand(() -> !turelaSystem.isBusy()),
+                new WaitCommand(300),
+                new InstantCommand(() -> {
+                    colectareSystem.setScissorsPosition(0.5);
+                    glisiereSystem.setToTicks(500);
+                }),
+                new WaitCommand(200),
+                new InstantCommand(() -> {
+                    colectareSystem.toggleClaw();
+                    colectareSystem.plastic.turnToAngle(0);
+                }),
 
-                new ConeCommandHighRightOld(cone1, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandHighRightOld(cone2, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandHighRightOld(cone3, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandHighRightOld(cone4, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandHighRightOld(cone5, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandMidRight(cone1, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandHighRight(cone2, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandHighRight(cone3, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandHighRight(cone4, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandHighRight(cone5, colectareSystem, turelaSystem, glisiereSystem),
 
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> colectareSystem.setScissorsPosition(0.3)),
-                        new InstantCommand(() -> glisiereSystem.setToPosition(2)),
-                        new InstantCommand(() -> turelaSystem.setToTicks(825))
-                ),
+                new InstantCommand(() -> {
+                    colectareSystem.setScissorsPosition(0.3);
+                    turelaSystem.setToPosition(Direction.FORWARD);
+                    glisiereSystem.setToPosition(2);
+                }),
                 new SelectCommand(
                         new HashMap<Object, Command>() {
                             {

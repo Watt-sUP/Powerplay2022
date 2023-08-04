@@ -46,7 +46,8 @@ public class ControlatTomoiu extends CommandOpMode {
         );
         ColectareSubsystem colectareSystem = new ColectareSubsystem(
                 new SimpleServo(hardwareMap, Config.claw, -360, 360),
-                new SimpleServo(hardwareMap, Config.foarfeca, 0, 300), 0.3
+                new SimpleServo(hardwareMap, Config.foarfeca, 0, 300),
+                new SimpleServo(hardwareMap, "PLASTIC", 0, 300), 0.25
         );
         GlisiereSubsystem glisiereSystem = new GlisiereSubsystem(
                 hardwareMap.get(DcMotorEx.class, Config.glisiera),
@@ -65,7 +66,10 @@ public class ControlatTomoiu extends CommandOpMode {
         register(colectareSystem);
         schedule(new RunCommand(() -> {
             telemetry.addLine((int) time.seconds() + " seconds elapsed OpMode start");
-            telemetry.addLine("Current Power Limit: " + driveSystem.getPowerLimit());
+//            telemetry.addData("Current Power Limit", driveSystem.getPowerLimit());
+//            sensorSystem.getRGB(telemetry);
+//            telemetry.addData("Turret Busy", turelaSystem.isBusy() ? "Yes" : "No");
+//            telemetry.addData("Sliders Busy", glisiereSystem.isBusy() ? "Yes" : "No");
             telemetry.update();
         }));
 
@@ -125,9 +129,9 @@ public class ControlatTomoiu extends CommandOpMode {
         driver2.getGamepadButton(GamepadKeys.Button.X)
                 .whenPressed(() -> glisiereSystem.setToPosition(glisiereSystem.position - 1));
 
-        // Lowers the slides by 160 ticks
+        // Lowers the slides by 60 ticks
         driver2.getGamepadButton(GamepadKeys.Button.B)
-                .whenPressed(() -> glisiereSystem.modifyTicks(-120));
+                .whenPressed(() -> glisiereSystem.modifyTicks(-60));
 
         // Collector controls below
         driver2.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)

@@ -41,7 +41,8 @@ public class ControlatOdo extends CommandOpMode {
         );
         ColectareSubsystem colectareSystem = new ColectareSubsystem(
                 new SimpleServo(hardwareMap, Config.claw, -360, 360),
-                new SimpleServo(hardwareMap, Config.foarfeca, -360, 360), 0.3
+                new SimpleServo(hardwareMap, Config.foarfeca, -360, 360),
+                new SimpleServo(hardwareMap, "PLASTIC", 0, 300), 0.25
         );
         GlisiereSubsystem glisiereSystem = new GlisiereSubsystem(
                 hardwareMap.get(DcMotorEx.class, Config.glisiera),
@@ -52,6 +53,7 @@ public class ControlatOdo extends CommandOpMode {
                 new Motor(hardwareMap, Config.turela),
                 () -> glisiereSystem.position != 0
         );
+//        SensorSubsystem sensorSystem = new SensorSubsystem(hardwareMap, "distance");
         time.reset();
 
         register(driveSystem);
@@ -61,6 +63,9 @@ public class ControlatOdo extends CommandOpMode {
         schedule(new RunCommand(() -> {
             telemetry.addLine((int) time.seconds() + " seconds elapsed OpMode start");
             telemetry.addData("Current Power Limit", driveSystem.getPowerLimit());
+//            sensorSystem.getHSV(telemetry);
+//            telemetry.addData("Turret Busy", turelaSystem.isBusy() ? "Yes" : "No");
+//            telemetry.addData("Sliders Busy", glisiereSystem.isBusy() ? "Yes" : "No");
             telemetry.update();
         }));
 
@@ -123,7 +128,7 @@ public class ControlatOdo extends CommandOpMode {
 
         // Lowers the slides a bit
         driver2.getGamepadButton(GamepadKeys.Button.B)
-                .whenPressed(() -> glisiereSystem.modifyTicks(-120));
+                .whenPressed(() -> glisiereSystem.modifyTicks(-60));
 
         // Collector controls below
         driver2.getGamepadButton(GamepadKeys.Button.A)

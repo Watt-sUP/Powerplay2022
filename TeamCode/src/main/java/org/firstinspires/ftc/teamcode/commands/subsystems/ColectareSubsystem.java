@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.commands.subsystems;
 
-import androidx.annotation.NonNull;
-
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 
@@ -10,7 +8,8 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
  */
 public class ColectareSubsystem extends SubsystemBase {
     private final ServoEx claw, scissors;
-    private double scissorsRetractedPos = 0.275;
+    public final ServoEx plastic;
+    private double scissorsRetractedPos = 0.225;
     public StateClaw stateClaw;
     private StateScissors stateScissors;
 
@@ -30,22 +29,24 @@ public class ColectareSubsystem extends SubsystemBase {
      * @param claw ServoEx object controlling the claw
      * @param scissors ServoEx object controlling the scissors
      */
-    public ColectareSubsystem(@NonNull ServoEx claw, @NonNull ServoEx scissors) {
+    public ColectareSubsystem(ServoEx claw, ServoEx scissors, ServoEx plastic) {
         this.claw = claw;
+        this.plastic = plastic;
         this.scissors = scissors;
 
         this.claw.setInverted(true);
         this.scissors.setInverted(true);
 
         this.claw.setPosition(0.4);
+        this.plastic.turnToAngle(0);
         this.scissors.setPosition(scissorsRetractedPos);
 
         stateClaw = StateClaw.Opened;
         stateScissors = StateScissors.Retracted;
     }
 
-    public ColectareSubsystem(@NonNull ServoEx claw, @NonNull ServoEx scissors, double scissorsInitPos) {
-        this(claw, scissors);
+    public ColectareSubsystem(ServoEx claw, ServoEx scissors, ServoEx plastic, double scissorsInitPos) {
+        this(claw, scissors, plastic);
         scissorsRetractedPos = scissorsInitPos;
         this.scissors.setPosition(scissorsRetractedPos);
     }

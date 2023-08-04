@@ -15,6 +15,7 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.commands.ConeCommandHighLeftOld;
 import org.firstinspires.ftc.teamcode.commands.subsystems.ColectareSubsystem;
@@ -30,7 +31,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import java.util.HashMap;
 import java.util.Map;
 
-//@Disabled
+@Disabled
 @com.acmerobotics.dashboard.config.Config
 @Autonomous(name = "Autonom 5+1 Stanga (Sus)", group = "Autonom")
 public class AutonomStangaSus extends CommandOpMode {
@@ -80,7 +81,8 @@ public class AutonomStangaSus extends CommandOpMode {
 
         ColectareSubsystem colectareSystem = new ColectareSubsystem(
                 new SimpleServo(hardwareMap, Config.claw, -360, 360),
-                new SimpleServo(hardwareMap, Config.foarfeca, -360, 360)
+                new SimpleServo(hardwareMap, Config.foarfeca, -360, 360),
+                new SimpleServo(hardwareMap, "PLASTIC", 0, 300)
         );
         colectareSystem.setClawPosition(0.25);
         GlisiereSubsystem glisiereSystem = new GlisiereSubsystem(
@@ -170,9 +172,17 @@ public class AutonomStangaSus extends CommandOpMode {
             telemetry.update();
         }
 
-        schedule(new InstantCommand(() -> {
-            FtcDashboard.getInstance().stopCameraStream();
-            detectorSystem.close();
-        }).andThen(autonom));
+        schedule(new SequentialCommandGroup(
+                new InstantCommand(() -> colectareSystem.setScissorsPosition(0.6)),
+                new WaitCommand(500),
+                new InstantCommand(() -> {
+                    colectareSystem.plastic.turnToAngle(232);
+                    detectorSystem.close();
+                })
+        ));
+//        schedule(new InstantCommand(() -> {
+//            FtcDashboard.getInstance().stopCameraStream();
+//            detectorSystem.close();
+//        }).andThen(autonom));
     }
 }
