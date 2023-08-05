@@ -45,7 +45,7 @@ public class ConeCommandHighRight extends SequentialCommandGroup {
                 new WaitCommand(250),
                 new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(300),
-                new InstantCommand(() -> glisiereSystem.setToTicks(1625)),
+                new InstantCommand(() -> glisiereSystem.setToTicks(1525)),
                 new WaitUntilCommand(() -> glisiereSystem.getTicks() > cone.glisPos + 400),
                 new InstantCommand(() -> {
                     colectareSystem.retractScissors();
@@ -55,7 +55,7 @@ public class ConeCommandHighRight extends SequentialCommandGroup {
                 new InstantCommand(() -> colectareSystem.setScissorsPosition(cone.stickScissors)),
                 new WaitCommand(200),
                 new InstantCommand(() -> {
-                    turelaSystem.setToTicks(cone.stickPos, 0.5);
+                    turelaSystem.setToTicks(cone.stickPos, 0.45);
                     colectareSystem.plastic.turnToAngle(220);
                 }),
                 new WaitUntilCommand(() -> !turelaSystem.isBusy()),
@@ -64,7 +64,7 @@ public class ConeCommandHighRight extends SequentialCommandGroup {
                     colectareSystem.setScissorsPosition(0.45);
                     glisiereSystem.setToTicks(500);
                 }),
-                new WaitCommand(200),
+                new WaitCommand(300),
                 new InstantCommand(() -> {
                     colectareSystem.toggleClaw();
                     colectareSystem.plastic.turnToAngle(0);

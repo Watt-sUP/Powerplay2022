@@ -36,12 +36,12 @@ import java.util.Map;
 @Autonomous(name = "Autonom 5+1 Dreapta (Sus)", group = "Autonom")
 public class AutonomDreaptaSus extends CommandOpMode {
 
-    public static Cone preload = new Cone(-1, -1, -1900, -1, 0.55);
-    public static Cone cone1 = new Cone(265, 0, -1375, 0.56, 0.6);
-    public static Cone cone2 = new Cone(190, 0, -1900, 0.56, 0.55);
-    public static Cone cone3 = new Cone(115, 0, -1900, 0.56, 0.55);
-    public static Cone cone4 = new Cone(75, 0, -1900, 0.56, 0.55);
-    public static Cone cone5 = new Cone(15, 0, -1900, 0.56, 0.55);
+    public static Cone preload = new Cone(-1, -1, -1875, -1, 0.6);
+    public static Cone cone1 = new Cone(265, -25, -1375, 0.56, 0.59);
+    public static Cone cone2 = new Cone(190, -25, -1875, 0.56, 0.6);
+    public static Cone cone3 = new Cone(160, -25, -1875, 0.56, 0.59);
+    public static Cone cone4 = new Cone(75, -25, -1875, 0.56, 0.59);
+    public static Cone cone5 = new Cone(15, -25, -1875, 0.56, 0.59);
 
     @Override
     public void initialize() {
@@ -108,7 +108,7 @@ public class AutonomDreaptaSus extends CommandOpMode {
                 new InstantCommand(() -> drive.followTrajectorySequence(stack_traj)),
 
                 new InstantCommand(() -> {
-                    glisiereSystem.setToTicks(1625);
+                    glisiereSystem.setToTicks(1525);
                     colectareSystem.retractScissors();
                     turelaSystem.setToTicks(preload.stickPos + 75);
                 }),
@@ -125,7 +125,7 @@ public class AutonomDreaptaSus extends CommandOpMode {
                     colectareSystem.setScissorsPosition(0.5);
                     glisiereSystem.setToTicks(500);
                 }),
-                new WaitCommand(200),
+                new WaitCommand(300),
                 new InstantCommand(() -> {
                     colectareSystem.toggleClaw();
                     colectareSystem.plastic.turnToAngle(0);

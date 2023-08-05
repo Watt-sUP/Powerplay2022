@@ -43,12 +43,12 @@ public class ConeCommandMidRight extends SequentialCommandGroup {
                 new WaitCommand(250),
                 new InstantCommand(colectareSystem::toggleClaw),
                 new WaitCommand(300),
-                new InstantCommand(() -> glisiereSystem.setToTicks(1100), glisiereSystem),
+                new InstantCommand(() -> glisiereSystem.setToTicks(1075), glisiereSystem),
                 new WaitUntilCommand(() -> glisiereSystem.getTicks() > cone.glisPos + 400),
                 new ParallelCommandGroup(
                         new InstantCommand(() -> {
                             colectareSystem.retractScissors();
-                            turelaSystem.setToTicks(cone.stickPos, 0.5);
+                            turelaSystem.setToTicks(cone.stickPos, 0.45);
                         }),
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> glisiereSystem.getTicks() > 400 && turelaSystem.getTicks() < -600),
