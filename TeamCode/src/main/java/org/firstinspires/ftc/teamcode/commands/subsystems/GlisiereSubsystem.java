@@ -6,6 +6,8 @@ import com.arcrobotics.ftclib.util.MathUtils;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 /**
  * Command-based subsystem for the sliders mechanism.
  */
@@ -24,6 +26,7 @@ public class GlisiereSubsystem extends SubsystemBase {
     private boolean use_automations = true;
     private final DcMotor motor, motor2;
     private final ServoEx unghi;
+    public int lastAngle = 150;
 
     /**
      * Creates a new instance of the subsystem.
@@ -95,7 +98,8 @@ public class GlisiereSubsystem extends SubsystemBase {
     }
 
     public void turnUnghiToAngle(double degrees) {
-        unghi.turnToAngle(degrees);
+        unghi.turnToAngle(degrees, AngleUnit.DEGREES);
+        lastAngle = (int) degrees;
     }
 
     /**
@@ -119,21 +123,14 @@ public class GlisiereSubsystem extends SubsystemBase {
         motor2.setPower(0.2);
     }
 
-    /**
-     * Alters the angle of the claw servo.
-     *
-     * @param angle The angle to set the servo to
-     */
-    public void setUnghiToAngle(double angle) {
-        unghi.turnToAngle(angle);
-    }
-
     public void raiseUnghi() {
-        setUnghiToAngle(105);
+        turnUnghiToAngle(105);
+        lastAngle = 105;
     }
 
     public void lowerUnghi() {
-        setUnghiToAngle(150);
+        turnUnghiToAngle(150);
+        lastAngle = 150;
     }
 
     /**

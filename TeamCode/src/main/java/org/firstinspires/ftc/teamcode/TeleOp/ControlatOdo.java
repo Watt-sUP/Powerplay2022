@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -104,7 +106,7 @@ public class ControlatOdo extends CommandOpMode {
                         // Raises the sliders and rotates the turret to the front
                         new InstantCommand(() -> glisiereSystem.setToPosition(4)),
                         new WaitUntilCommand(() -> glisiereSystem.position != 0 && glisiereSystem.getTicks() > 200)
-                        .andThen(new InstantCommand(() -> turelaSystem.setToPosition(Direction.FORWARD)))
+                                .andThen(new InstantCommand(() -> turelaSystem.setToPosition(Direction.FORWARD)))
                 ));
         driver2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(new SequentialCommandGroup(
@@ -120,6 +122,13 @@ public class ControlatOdo extends CommandOpMode {
         driver2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(() -> glisiereSystem.setToPosition(0));
 
+        driver2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+                .whenPressed(new SequentialCommandGroup(
+                        new InstantCommand(() -> colectareSystem.setClawPosition(0.66)),
+                        new WaitCommand(100),
+                        new InstantCommand(() -> glisiereSystem.turnUnghiToAngle(250))
+                ));
+
         // Raise and lower the sliders by 1 position
         driver2.getGamepadButton(GamepadKeys.Button.Y)
                 .whenPressed(() -> glisiereSystem.setToPosition(glisiereSystem.position + 1));
@@ -129,13 +138,23 @@ public class ControlatOdo extends CommandOpMode {
         // Lowers the slides a bit
         driver2.getGamepadButton(GamepadKeys.Button.B)
                 .whenPressed(() -> glisiereSystem.modifyTicks(-60));
+        driver2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+                .whenPressed(() -> glisiereSystem.modifyTicks(60));
 
         // Collector controls below
         driver2.getGamepadButton(GamepadKeys.Button.A)
-                .whenPressed(() -> {
-                    glisiereSystem.lowerUnghi();
-                    colectareSystem.toggleClaw();
-                });
+                .whenPressed(new ConditionalCommand(
+                        new SequentialCommandGroup(
+                                new InstantCommand(colectareSystem::closeClaw),
+                                new WaitCommand(200),
+                                new InstantCommand(glisiereSystem::lowerUnghi)
+                        ),
+                        new InstantCommand(() -> {
+                            colectareSystem.toggleClaw();
+                            glisiereSystem.lowerUnghi();
+                        }),
+                        () -> glisiereSystem.lastAngle > 160
+                ));
 
         driver2.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
                 .whenPressed(colectareSystem::toggleScissors);
