@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.autonom.AutonomStangaSus;
 import org.firstinspires.ftc.teamcode.commands.subsystems.ColectareSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.GlisiereSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.TurelaSubsystem;
-import org.firstinspires.ftc.teamcode.hardware.Cone;
+import org.firstinspires.ftc.teamcode.commands.helpers.Cone;
 
 /**
  * <p>Helper command for scoring a cone.</p>

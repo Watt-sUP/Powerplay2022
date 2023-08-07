@@ -1,13 +1,20 @@
-package org.firstinspires.ftc.teamcode.hardware;
+package org.firstinspires.ftc.teamcode.commands.helpers;
 
 /**
  * <p>Helper class for storing cone data.</p>
  * <p>Made for autonomous purposes.</p>
  */
 public class Cone {
-    public int stickPos, glisPos;
-    public int conePos;
-    public double coneScissors, stickScissors;
+    public int stickPos = 0;
+    public int conePos = 0;
+    public int glisPos;
+    public double coneScissors = 0;
+    public double stickScissors = 0;
+    public enum Junctions {
+        Middle,
+        High
+    }
+    public Junctions targetJunction;
 
     /**
      * Creates a new cone object
@@ -22,5 +29,10 @@ public class Cone {
         this.conePos = conePos;
         this.coneScissors = coneScissors;
         this.stickScissors = stickScissors;
+    }
+
+    public Cone(Junctions junction, int glisPos) {
+        targetJunction = junction;
+        this.glisPos = glisPos;
     }
 }

@@ -16,15 +16,14 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.util.Direction;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.commands.ConeCommandHighRight;
-import org.firstinspires.ftc.teamcode.commands.ConeCommandMidRight;
+import org.firstinspires.ftc.teamcode.commands.ConeCommandRight;
+import org.firstinspires.ftc.teamcode.commands.helpers.Cone;
 import org.firstinspires.ftc.teamcode.commands.subsystems.ColectareSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.DetectorSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.GlisiereSubsystem;
 import org.firstinspires.ftc.teamcode.commands.subsystems.TurelaSubsystem;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.hardware.Cone;
 import org.firstinspires.ftc.teamcode.hardware.Config;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -36,12 +35,11 @@ import java.util.Map;
 @Autonomous(name = "Autonom 5+1 Dreapta (Sus)", group = "Autonom")
 public class AutonomDreaptaSus extends CommandOpMode {
 
-    public static Cone preload = new Cone(-1, -1, -1875, -1, 0.6);
-    public static Cone cone1 = new Cone(265, -25, -1375, 0.56, 0.59);
-    public static Cone cone2 = new Cone(190, -25, -1875, 0.56, 0.6);
-    public static Cone cone3 = new Cone(160, -25, -1875, 0.56, 0.59);
-    public static Cone cone4 = new Cone(75, -25, -1875, 0.56, 0.59);
-    public static Cone cone5 = new Cone(15, -25, -1875, 0.56, 0.59);
+    public static Cone cone1 = new Cone(Cone.Junctions.Middle, 265);
+    public static Cone cone2 = new Cone(Cone.Junctions.High, 190);
+    public static Cone cone3 = new Cone(Cone.Junctions.High, 160);
+    public static Cone cone4 = new Cone(Cone.Junctions.High, 75);
+    public static Cone cone5 = new Cone(Cone.Junctions.High, 15);
 
     @Override
     public void initialize() {
@@ -108,15 +106,15 @@ public class AutonomDreaptaSus extends CommandOpMode {
                 new InstantCommand(() -> drive.followTrajectorySequence(stack_traj)),
 
                 new InstantCommand(() -> {
-                    glisiereSystem.setToTicks(1525);
                     colectareSystem.retractScissors();
-                    turelaSystem.setToTicks(preload.stickPos + 75);
+                    glisiereSystem.setToTicks(ConeCommandRight.highJunction.sliderPosition);
+                    turelaSystem.setToTicks(ConeCommandRight.highJunction.turretPosition);
                 }),
-                new WaitUntilCommand(() -> turelaSystem.getTicks() < preload.stickPos * 0.4),
-                new InstantCommand(() -> colectareSystem.setScissorsPosition(preload.stickScissors)),
+                new WaitUntilCommand(() -> turelaSystem.getTicks() < ConeCommandRight.highJunction.turretPosition * 0.4),
+                new InstantCommand(() -> colectareSystem.setScissorsPosition(ConeCommandRight.highJunction.scissorsPosition)),
                 new WaitCommand(200),
                 new InstantCommand(() -> {
-                    turelaSystem.setToTicks(preload.stickPos, 0.45);
+                    turelaSystem.setToTicks(ConeCommandRight.highJunction.turretPosition, 0.45);
                     colectareSystem.plastic.turnToAngle(220);
                 }),
                 new WaitUntilCommand(() -> !turelaSystem.isBusy()),
@@ -131,11 +129,11 @@ public class AutonomDreaptaSus extends CommandOpMode {
                     colectareSystem.plastic.turnToAngle(0);
                 }),
 
-                new ConeCommandMidRight(cone1, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandHighRight(cone2, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandHighRight(cone3, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandHighRight(cone4, colectareSystem, turelaSystem, glisiereSystem),
-                new ConeCommandHighRight(cone5, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandRight(cone1, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandRight(cone2, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandRight(cone3, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandRight(cone4, colectareSystem, turelaSystem, glisiereSystem),
+                new ConeCommandRight(cone5, colectareSystem, turelaSystem, glisiereSystem),
 
                 new WaitCommand(200),
                 new InstantCommand(() -> {
