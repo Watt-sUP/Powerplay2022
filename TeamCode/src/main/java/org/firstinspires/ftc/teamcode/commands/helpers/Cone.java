@@ -5,11 +5,11 @@ package org.firstinspires.ftc.teamcode.commands.helpers;
  * <p>Made for autonomous purposes.</p>
  */
 public class Cone {
-    public int stickPos = 0;
-    public int conePos = 0;
+    private int stickPos = 0;
+    private int conePos = 0;
     public int glisPos;
-    public double coneScissors = 0;
-    public double stickScissors = 0;
+    private double coneScissors = 0;
+    private double stickScissors = 0;
     public enum Junctions {
         Middle,
         High

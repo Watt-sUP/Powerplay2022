@@ -65,9 +65,6 @@ public class ControlatOdo extends CommandOpMode {
         schedule(new RunCommand(() -> {
             telemetry.addLine((int) time.seconds() + " seconds elapsed OpMode start");
             telemetry.addData("Current Power Limit", driveSystem.getPowerLimit());
-//            sensorSystem.getHSV(telemetry);
-//            telemetry.addData("Turret Busy", turelaSystem.isBusy() ? "Yes" : "No");
-//            telemetry.addData("Sliders Busy", glisiereSystem.isBusy() ? "Yes" : "No");
             telemetry.update();
         }));
 

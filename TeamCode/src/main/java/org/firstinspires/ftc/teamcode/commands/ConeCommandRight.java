@@ -24,9 +24,9 @@ import java.util.HashMap;
 @Config
 public class ConeCommandRight extends SequentialCommandGroup {
 
-    public static Location highJunction = new Location(0.59, -1875, 1525),
-            midJunction = new Location(0.6, -1375, 1075),
-            stack = new Location(0.56, 0, 500);
+    public static Location highJunction = new Location(0.51, -1900, 1525),
+            midJunction = new Location(0.53, -1400, 1125),
+            stack = new Location(0.52, -15, 500);
 
     /**
      * Runs a new command for scoring a cone.
@@ -40,14 +40,14 @@ public class ConeCommandRight extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new InstantCommand(() -> {
                             colectareSystem.setScissorsPosition(0.4);
-                            turelaSystem.setToTicks(cone.conePos, 0.9);
+                            turelaSystem.setToTicks(stack.turretPosition, 0.9);
                         }),
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> turelaSystem.getTicks() > -300),
                                 new InstantCommand(() -> glisiereSystem.setToTicks(cone.glisPos))
                         )
                 ),
-                new WaitUntilCommand(() -> turelaSystem.getTicks() + 50 > cone.conePos && glisiereSystem.getTicks() < cone.glisPos + 50),
+                new WaitUntilCommand(() -> turelaSystem.getTicks() + 50 > stack.turretPosition && glisiereSystem.getTicks() < cone.glisPos + 50),
                 new InstantCommand(() -> colectareSystem.setScissorsPosition(stack.scissorsPosition)),
                 new WaitCommand(250),
                 new InstantCommand(colectareSystem::toggleClaw),
@@ -72,7 +72,7 @@ public class ConeCommandRight extends SequentialCommandGroup {
                                     new WaitCommand(200),
                                     new InstantCommand(() -> {
                                         colectareSystem.plastic.turnToAngle(220);
-                                        turelaSystem.setToTicks(highJunction.turretPosition, 0.45);
+                                        turelaSystem.setToTicks(highJunction.turretPosition, 0.33);
                                     })
                             ));
                             put(Cone.Junctions.Middle, new SequentialCommandGroup(
@@ -88,10 +88,16 @@ public class ConeCommandRight extends SequentialCommandGroup {
                         }},
                         () -> cone.targetJunction
                 ),
-                new WaitUntilCommand(() -> !turelaSystem.isBusy()),
+                new SelectCommand(
+                        new HashMap<Object, Command>() {{
+                            put(Cone.Junctions.High, new WaitUntilCommand(() -> turelaSystem.getTicks() < highJunction.turretPosition + 50));
+                            put(Cone.Junctions.Middle, new WaitUntilCommand(() -> turelaSystem.getTicks() < midJunction.turretPosition + 50));
+                        }},
+                        () -> cone.targetJunction
+                ),
                 new WaitCommand(300),
                 new InstantCommand(() -> {
-                    colectareSystem.setScissorsPosition(cone.targetJunction == Cone.Junctions.High ? 0.45 : 0.5);
+                    colectareSystem.setScissorsPosition(0.5);
                     glisiereSystem.setToTicks(stack.sliderPosition);
                 }),
                 new WaitCommand(250),
